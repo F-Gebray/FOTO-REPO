@@ -1,16 +1,28 @@
-# React + Vite
+# 🏨 Modern Booking App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A responsive React-based booking platform featuring a scalable folder architecture and reusable components.
 
-Currently, two official plugins are available:
+## 🚀 Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+[View Live Site](https://vercel.com)
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Dynamic Routing**: Smooth navigation between home, listings, and details.
+- **Reusable UI**: Modular component architecture (Navbar, Layout, Protected Routes).
+- **Responsive Design**: Fully optimized for mobile, tablet, and desktop views.
+- **State Management**: Efficient data handling for property listings.
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Frontend**: React.js, Vite
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React / Heroicons
+- **Deployment**: Vercel
+
+## 📦 Installation & Setup
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com
+   ```
