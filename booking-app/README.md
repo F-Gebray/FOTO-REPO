@@ -20,9 +20,25 @@ A responsive React-based booking platform featuring a scalable folder architectu
 - **Icons**: Lucide React / Heroicons
 - **Deployment**: Vercel
 
+## ⚙️ Backend Features
+
+- **RESTful API**: Secure endpoints for user authentication and booking management.
+- **User Authentication**: Secure Login and Registration using hashed passwords (bcrypt).
+- **Protected Routes**: Middleware to ensure only authorized users can make reservations.
+- **Database Integration**: Scalable data storage for users and booking listings.
+
 ## 📦 Installation & Setup
 
-1. Clone the repository:
+## 📦 Backend Setup
+
+1. Navigate to the backend folder:
+
+   ```bash
+   cd ../backend
+
+   ```
+
+2. Clone the repository:
    ```bash
    git clone https://github.com
    ```
