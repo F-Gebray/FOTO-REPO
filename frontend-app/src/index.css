@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/* 1. Reset the browser defaults */
+:root,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #020617; /* Matches slate-950 */
+  color: white;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+/* 2. Fix the Vite Root Container */
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block; /* Vite often sets this to 'flex' which centers things */
+}
+
+/* 3. Smooth scrolling for the whole app */
+html {
+  scroll-behavior: smooth;
+}
