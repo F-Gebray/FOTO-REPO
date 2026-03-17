@@ -175,7 +175,7 @@ const Contact = () => {
                 <FiMail size={18} /> <span>fitwigebray8@gmail.com</span>
               </a>
               <a
-                href="https://github.com/fitwi-Gebray"
+                href="https://github.com/fitwi-Gebray/portfolio-project"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-[0.75rem] text-[#9ca3af] hover:text-[#e5e7eb] transition-colors text-[0.95rem]"
