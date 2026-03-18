@@ -62,25 +62,25 @@ export default function Details() {
   };
 
   const handleReserve = async () => {
-    // 🔐 Validate first
     if (!validateInputs()) return;
 
     try {
-      const response = await fetch("http://localhost:5000/api/reservations", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        "https://YOUR-BACKEND-URL.com/api/reservations", // 🔥 CHANGE THIS
+        {
+          method: "POST",
+          credentials: "include", // 🔥 REQUIRED
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            listingId: item.id,
+            listingName: item.name,
+            checkIn: selectedDate,
+            totalPrice: item.price,
+          }),
         },
-        body: JSON.stringify({
-          listingId: item.id,
-          listingName: item.name,
-          guestName,
-          guestEmail,
-          checkIn: selectedDate,
-          totalPrice: item.price,
-        }),
-      });
+      );
 
       if (response.status === 401) {
         return Swal.fire({
@@ -92,7 +92,7 @@ export default function Details() {
           cancelButtonText: "Register",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate("/login");
+            navigate("/login", { state: { from: window.location.pathname } });
           } else if (result.dismiss === Swal.DismissReason.cancel) {
             navigate("/register");
           }
@@ -102,7 +102,6 @@ export default function Details() {
       const data = await response.json();
 
       if (data.success) {
-        // Clear form
         setGuestName("");
         setGuestEmail("");
         setSelectedDate("");
