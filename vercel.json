@@ -1,14 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "api/server.js", "use": "@vercel/node" },
-    { "src": "booking-app/dist/**", "use": "@vercel/static" }
-  ],
+  "builds": [{ "src": "api/server.js", "use": "@vercel/node" }],
   "routes": [
     { "src": "/api/(.*)", "dest": "api/server.js" },
-
-    { "src": "/assets/(.*)", "dest": "/booking-app/dist/assets/$1" },
-
-    { "src": "/(.*)", "dest": "/booking-app/dist/index.html" }
+    { "handle": "filesystem" },
+    { "src": "/(.*)", "dest": "booking-api/dist/index.html" }
   ]
 }
