@@ -26,6 +26,7 @@ export default function Login() {
       });
 
       const data = await res.json();
+      console.log("Submitting login form with data:", formData);
 
       if (data.success) {
         // Save token to localStorage for Navbar/ProtectedRoute logic
