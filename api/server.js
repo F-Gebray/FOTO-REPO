@@ -25,8 +25,8 @@ const app = express();
 // CORS CONFIG
 // ===============================
 const allowedOrigins = [
-  "http://localhost:5173",
-  "https://fitwi-booking.vercel.app",
+  "http://localhost:5173", // local dev
+  "https://fitwi-booking-eq7tfgxio-fitwis-projects.vercel.app",
 ];
 
 app.use(
