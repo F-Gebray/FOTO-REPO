@@ -24,3 +24,20 @@ body {
 html {
   scroll-behavior: smooth;
 }
+/* Emergency fallback for inputs if Tailwind fails to inject */
+input,
+select,
+textarea {
+  background-color: #1e293b; /* slate-800 */
+  border: 1px solid #334155; /* slate-700 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+input::placeholder {
+  color: #94a3b8; /* slate-400 */
+}
