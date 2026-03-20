@@ -16,14 +16,17 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        credentials: "include", // 🔥 REQUIRED for cookies
-        headers: {
-          "Content-Type": "application/json",
+      const res = await fetch(
+        "https://fitwis-projects-backend.vercel.app/api/auth/login",
+        {
+          method: "POST",
+          credentials: "include", // 🔥 REQUIRED for cookies
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
         },
-        body: JSON.stringify(formData),
-      });
+      );
 
       const data = await res.json();
       console.log("Submitting login form with data:", formData);
