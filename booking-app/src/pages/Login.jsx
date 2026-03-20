@@ -1,7 +1,21 @@
+// booking-app/src/pages/Login.jsx
 import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
-import { handleLogin } from "../api/auth"; // Import API helper
+
+// ✅ API helper function
+const API_BASE = import.meta.env.VITE_API_BASE;
+
+export const handleLogin = async (formData) => {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
+    method: "POST",
+    credentials: "include", // required to handle cookies
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(formData),
+  });
+  const data = await res.json();
+  return data;
+};
 
 export default function Login() {
   const [formData, setFormData] = useState({
@@ -17,10 +31,10 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const data = await handleLogin(formData); // ✅ Use API helper
+      const data = await handleLogin(formData); // 🔥 Use helper
 
       if (data.success) {
-        // Save token to localStorage if present
+        // Save token if present
         if (data.token) localStorage.setItem("token", data.token);
 
         Swal.fire({
@@ -50,7 +64,7 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-160px)] px-6">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
-        {/* Header Section */}
+        {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black text-white tracking-tight uppercase">
             Login<span className="text-slate-500">.</span>
@@ -60,7 +74,7 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Form Section */}
+        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">
