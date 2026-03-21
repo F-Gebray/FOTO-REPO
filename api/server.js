@@ -25,8 +25,8 @@ const app = express();
 // CORS CONFIG
 // ===============================
 const allowedOrigins = [
-  "http://localhost:5173", // local dev
-  "https://fitwi-booking-eq7tfgxio-fitwis-projects.vercel.app",
+  "http://localhost:5173",
+  "https://portfolio-project-two-lyart.vercel.app", // ✅ Add this one
 ];
 
 app.use(
@@ -140,13 +140,50 @@ app.post("/api/auth/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none",
+      sameSite: "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.json({ success: true, user: { name: user.name, email: user.email } });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
+  }
+});
+// CREATE RESERVATION (Add this to your server.js)
+app.post("/api/reservations", verifyToken, async (req, res) => {
+  await connectDB(); // Ensure DB is connected for serverless
+  try {
+    const {
+      listingId,
+      listingName,
+      checkIn,
+      totalPrice,
+      guestName,
+      guestEmail,
+    } = req.body;
+
+    const newReservation = new Reservation({
+      user: req.userId, // From verifyToken middleware
+      listingId,
+      listingName,
+      checkIn,
+      totalPrice,
+      guestName,
+      guestEmail,
+    });
+
+    await newReservation.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Reservation confirmed!",
+      reservation: newReservation,
+    });
+  } catch (err) {
+    console.error("Reservation Error:", err);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to save reservation" });
   }
 });
 

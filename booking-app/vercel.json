@@ -6,10 +6,22 @@
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     },
-    { "src": "api/**/*.js", "use": "@vercel/node" }
+    {
+      "src": "portfolio-project/server.js",
+      "use": "@vercel/node"
+    }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/(.*)", "dest": "/booking-app/dist/index.html" }
+    {
+      "src": "/api/(.*)",
+      "dest": "portfolio-project/server.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "booking-app/dist/index.html"
+    }
   ]
 }

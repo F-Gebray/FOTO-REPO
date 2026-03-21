@@ -34,17 +34,18 @@ export default function Login() {
       const data = await handleLogin(formData); // 🔥 Use helper
 
       if (data.success) {
-        // Save token if present
-        if (data.token) localStorage.setItem("token", data.token);
+        localStorage.setItem("token", data.token);
 
         Swal.fire({
           title: "Welcome back!",
           icon: "success",
-          background: "#0f172a",
-          color: "#fff",
+          timer: 1000,
+          showConfirmButton: false,
+          willClose: () => {
+            // ✅ Force a page reload to the target destination
+            window.location.href = from;
+          },
         });
-
-        navigate(from, { replace: true });
       } else {
         Swal.fire({
           title: "Login Failed",
