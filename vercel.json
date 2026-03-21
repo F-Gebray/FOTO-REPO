@@ -12,7 +12,6 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "api/server.js" },
-    { "src": "/assets/(.*)", "dest": "booking-app/dist/assets/$1" },
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "booking-app/dist/index.html" }
   ]
