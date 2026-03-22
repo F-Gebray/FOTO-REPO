@@ -41,10 +41,9 @@ export default function Login() {
           icon: "success",
           timer: 1000,
           showConfirmButton: false,
-          willClose: () => {
-            // ✅ Force a page reload to the target destination
-            window.location.href = from;
-          },
+        }).then(() => {
+          // Use replace to avoid "back button" loops and ghost clicks
+          window.location.replace(from);
         });
       } else {
         Swal.fire({
