@@ -9,7 +9,7 @@ const API_BASE = import.meta.env.VITE_API_BASE;
 export const handleLogin = async (formData) => {
   const res = await fetch(`${API_BASE}/api/auth/login`, {
     method: "POST",
-    credentials: "include", // required to handle cookies
+    credentials: "include", // Required for cookies/sessions
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(formData),
   });
@@ -25,37 +25,45 @@ export default function Login() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // ✅ Fallback to "/" if no previous location exists
   const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const data = await handleLogin(formData); // 🔥 Use helper
+      const data = await handleLogin(formData);
 
       if (data.success) {
         localStorage.setItem("token", data.token);
 
+        // ✅ Updated SweetAlert to prevent mobile focus/file glitches
         Swal.fire({
           title: "Welcome back!",
           icon: "success",
-          timer: 1000,
+          timer: 1200,
           showConfirmButton: false,
+          allowOutsideClick: false, // Prevents ghost clicks during redirect
+          focusConfirm: false, // Prevents browser from jumping to next input
         }).then(() => {
-          // Use replace to avoid "back button" loops and ghost clicks
-          window.location.replace(from);
+          // ✅ USE NAVIGATE INSTEAD OF WINDOW.LOCATION
+          // This keeps it within React, fixing the PC File Explorer popup
+          // and ensuring it works perfectly on mobile browsers.
+          navigate(from, { replace: true });
         });
       } else {
         Swal.fire({
           title: "Login Failed",
           text: data.message || "Invalid credentials",
           icon: "error",
+          confirmButtonColor: "#000",
         });
       }
     } catch (error) {
       Swal.fire({
         title: "Server Error",
-        text: "Backend not reachable. Make sure your backend is deployed and VITE_API_BASE is correct.",
+        text: "Backend not reachable. Ensure VITE_API_BASE is correct in Vercel settings.",
         icon: "error",
       });
     }
@@ -64,7 +72,6 @@ export default function Login() {
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-160px)] px-6">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
-        {/* Header */}
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black text-white tracking-tight uppercase">
             Login<span className="text-slate-500">.</span>
@@ -74,7 +81,6 @@ export default function Login() {
           </p>
         </div>
 
-        {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-[10px] font-black uppercase tracking-widest text-slate-500 mb-2 ml-1">
@@ -110,7 +116,7 @@ export default function Login() {
 
           <button
             type="submit"
-            className="w-full bg-white text-slate-950 font-black py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-slate-200 transition-all shadow-lg shadow-white/5 active:scale-[0.98]"
+            className="w-full bg-white text-slate-950 font-black py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-slate-200 transition-all shadow-lg active:scale-[0.98]"
           >
             Sign In
           </button>
