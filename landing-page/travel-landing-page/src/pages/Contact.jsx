@@ -22,6 +22,7 @@ const Contact = () => {
 
     setIsSending(true);
 
+    // We use sendForm which takes the names from your <input> tags automatically
     emailjs
       .sendForm(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
@@ -35,10 +36,12 @@ const Contact = () => {
         setMessage("");
 
         Swal.fire({
-          title: "Message Sent!",
-          text: "Thank you! I'll get back to you as soon as possible.",
+          title: "Sent!",
+          text: "Your message has been delivered successfully.",
           icon: "success",
-          confirmButtonColor: "#18181b",
+          background: "#18181b",
+          color: "#fff",
+          confirmButtonColor: "#3b82f6",
         });
       })
       .catch((err) => {
@@ -47,8 +50,10 @@ const Contact = () => {
 
         Swal.fire({
           title: "Error!",
-          text: "Something went wrong. Please try again later.",
+          text: "The recipient address might be missing or invalid.",
           icon: "error",
+          background: "#18181b",
+          color: "#fff",
         });
       });
   };
@@ -64,22 +69,16 @@ const Contact = () => {
           {/* Sidebar */}
           <div className="lg:col-span-2 bg-zinc-900 p-10 text-white flex flex-col justify-between relative overflow-hidden">
             <div className="absolute -top-20 -left-20 w-64 h-64 bg-zinc-800 rounded-full opacity-50"></div>
-
             <div className="relative z-10">
-              <h3 className="text-3xl font-bold mb-2">Let's Talk</h3>
+              <h3 className="text-3xl font-bold mb-2">Contact Me</h3>
               <p className="text-zinc-400 mb-10">
-                Have a project? I'd love to help you build it.
+                Professional communication and project inquiries.
               </p>
-
               <div className="space-y-8">
-                <a
-                  href="mailto:fitwigebray8@gmail.com"
-                  className="group flex items-center gap-5"
-                >
-                  <div className="bg-zinc-800 p-4 rounded-2xl group-hover:bg-zinc-700 transition-colors">
-                    <FiMail size={22} className="text-zinc-100" />
+                <div className="flex items-center gap-5">
+                  <div className="bg-zinc-800 p-4 rounded-2xl">
+                    <FiMail size={22} />
                   </div>
-
                   <div>
                     <p className="text-xs text-zinc-500 uppercase tracking-widest">
                       Email me
@@ -88,13 +87,11 @@ const Contact = () => {
                       fitwigebray8@gmail.com
                     </span>
                   </div>
-                </a>
-
+                </div>
                 <div className="flex items-center gap-5">
                   <div className="bg-zinc-800 p-4 rounded-2xl">
-                    <FiMapPin size={22} className="text-zinc-100" />
+                    <FiMapPin size={22} />
                   </div>
-
                   <div>
                     <p className="text-xs text-zinc-500 uppercase tracking-widest">
                       Location
@@ -106,26 +103,6 @@ const Contact = () => {
                 </div>
               </div>
             </div>
-
-            <div className="relative z-10 pt-12 flex gap-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noreferrer"
-                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
-              >
-                <FiGithub size={20} />
-              </a>
-
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
-              >
-                <FiLinkedin size={20} />
-              </a>
-            </div>
           </div>
 
           {/* Form */}
@@ -136,18 +113,26 @@ const Contact = () => {
                   type="text"
                   name="user_name"
                   required
-                  placeholder="Full Name"
+                  placeholder="your-name"
                   className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
                 />
-
                 <input
                   type="email"
                   name="user_email"
                   required
-                  placeholder="Email Address"
+                  placeholder="your.email@example.com"
                   className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
                 />
               </div>
+
+              {/* RECIPIENT FIELD - REQUIRED FOR THE FIX */}
+              <input
+                type="email"
+                name="recipient_email"
+                required
+                placeholder="recipient@example.com"
+                className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl border border-sky-500/30 outline-none focus:ring-2 focus:ring-zinc-600"
+              />
 
               <textarea
                 name="message"
@@ -156,7 +141,7 @@ const Contact = () => {
                 maxLength={MAX_CHARS}
                 required
                 rows="4"
-                placeholder="Your message..."
+                placeholder="Type your message here..."
                 className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none resize-none focus:ring-2 focus:ring-zinc-600"
               />
 
@@ -167,7 +152,7 @@ const Contact = () => {
               <button
                 type="submit"
                 disabled={isSending}
-                className="w-full flex items-center justify-center gap-3 bg-zinc-900 text-white font-bold py-5 rounded-2xl hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
+                className="w-full flex items-center justify-center gap-3 bg-white text-black font-bold py-5 rounded-2xl hover:bg-zinc-200 transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
               >
                 {isSending ? (
                   <FiLoader className="animate-spin" />
@@ -175,7 +160,7 @@ const Contact = () => {
                   <FiSend className="text-xl" />
                 )}
                 <span className="tracking-wide">
-                  {isSending ? "Sending..." : "Send Message"}
+                  {isSending ? "Sending..." : "Send"}
                 </span>
               </button>
             </form>
