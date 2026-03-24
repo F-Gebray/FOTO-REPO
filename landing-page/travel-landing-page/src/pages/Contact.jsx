@@ -1,188 +1,221 @@
-import { useRef, useState } from "react";
+import { useState, useActionState, useEffect } from "react";
 import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 import {
   FiMail,
   FiGithub,
   FiLinkedin,
-  FiSend,
-  FiMapPin,
-  FiLoader,
+  FiRotateCcw,
+  FiUser,
 } from "react-icons/fi";
 
 const Contact = () => {
-  const formRef = useRef();
-  const [isSending, setIsSending] = useState(false);
-  const [message, setMessage] = useState("");
+  const [msgLength, setMsgLength] = useState(0);
   const MAX_CHARS = 500;
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    if (isSending) return;
+  async function handleEmailAction(prevState, formData) {
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    setIsSending(true);
+    // We pull the friend's email from the form data
+    const templateParams = {
+      user_name: formData.get("user_name"),
+      user_email: formData.get("user_email"), // Your friend's reply-to
+      recipient_email: formData.get("recipient_email"), // THE FIX: Who receives it
+      message: formData.get("message"),
+    };
 
-    emailjs
-      .sendForm(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        formRef.current,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
-      )
-      .then(() => {
-        setIsSending(false);
-        formRef.current.reset();
-        setMessage("");
+    try {
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      return {
+        success: true,
+        text: "Message sent successfully!",
+        timestamp: Date.now(),
+      };
+    } catch (error) {
+      console.error("EmailJS Error:", error);
+      return {
+        success: false,
+        text: "Something went wrong. Please try again.",
+        timestamp: Date.now(),
+      };
+    }
+  }
 
-        Swal.fire({
-          title: "Message Sent!",
-          text: "Thank you! I'll get back to you as soon as possible.",
-          icon: "success",
-          confirmButtonColor: "#18181b",
-        });
-      })
-      .catch((err) => {
-        console.error("EmailJS Error:", err);
-        setIsSending(false);
+  const [state, formAction, isPending] = useActionState(handleEmailAction, {
+    success: null,
+    text: "",
+  });
 
-        Swal.fire({
-          title: "Error!",
-          text: "Something went wrong. Please try again later.",
-          icon: "error",
-        });
+  useEffect(() => {
+    if (state.success === true) {
+      Swal.fire({
+        title: "Message Sent!",
+        text: "Your message has been delivered to your friend!",
+        icon: "success",
+        background: "#111827",
+        color: "#e5e7eb",
+        iconColor: "#3b82f6",
+        confirmButtonColor: "#1f2937",
+        customClass: {
+          popup: "rounded-[20px] border border-[#1f2937] shadow-2xl",
+        },
       });
-  };
+      setMsgLength(0);
+    } else if (state.success === false) {
+      Swal.fire({
+        title: "Error",
+        text: state.text,
+        icon: "error",
+        background: "#111827",
+        color: "#e5e7eb",
+        confirmButtonColor: "#dc2626",
+      });
+    }
+  }, [state.timestamp, state.success, state.text]);
 
   return (
-    <section className="relative min-h-screen bg-zinc-950 text-white py-32 px-6 overflow-hidden">
-      {/* Background blobs */}
-      <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-sky-600/20 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[150px]" />
+    <div className="w-full max-w-[1100px] mx-auto px-6 py-[4.5rem]">
+      <div className="flex justify-between items-end mb-8">
+        <div>
+          <div className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem] rounded-full border border-[#1f2937] bg-[rgba(15,23,42,0.9)] text-[#9ca3af] mb-4">
+            Share your site
+          </div>
+          <h2 className="text-[1.5rem] font-bold text-[#e5e7eb]">
+            Send an Update
+          </h2>
+        </div>
+      </div>
 
-      <div className="relative max-w-5xl mx-auto">
-        <div className="bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-5 border border-zinc-800">
-          {/* Sidebar */}
-          <div className="lg:col-span-2 bg-zinc-900 p-10 text-white flex flex-col justify-between relative overflow-hidden">
-            <div className="absolute -top-20 -left-20 w-64 h-64 bg-zinc-800 rounded-full opacity-50"></div>
-
-            <div className="relative z-10">
-              <h3 className="text-3xl font-bold mb-2">Let's Talk</h3>
-              <p className="text-zinc-400 mb-10">
-                Have a project? I'd love to help you build it.
-              </p>
-
-              <div className="space-y-8">
-                <a
-                  href="mailto:fitwigebray8@gmail.com"
-                  className="group flex items-center gap-5"
-                >
-                  <div className="bg-zinc-800 p-4 rounded-2xl group-hover:bg-zinc-700 transition-colors">
-                    <FiMail size={22} className="text-zinc-100" />
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-zinc-500 uppercase tracking-widest">
-                      Email me
-                    </p>
-                    <span className="text-sm font-medium">
-                      fitwigebray8@gmail.com
-                    </span>
-                  </div>
-                </a>
-
-                <div className="flex items-center gap-5">
-                  <div className="bg-zinc-800 p-4 rounded-2xl">
-                    <FiMapPin size={22} className="text-zinc-100" />
-                  </div>
-
-                  <div>
-                    <p className="text-xs text-zinc-500 uppercase tracking-widest">
-                      Location
-                    </p>
-                    <span className="text-sm font-medium">
-                      Remote / Worldwide
-                    </span>
-                  </div>
-                </div>
-              </div>
+      <div className="grid grid-cols-1 lg:grid-cols-[1.8fr_1fr] gap-[3rem]">
+        <form
+          action={formAction}
+          className="bg-[#111827] border border-[#1f2937] rounded-[20px] p-[1.5rem] md:p-[2rem] shadow-[0_14px_30px_rgba(0,0,0,0.5)] flex flex-col gap-6"
+        >
+          {/* SENDER INFO */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[0.9rem] font-medium text-[#e5e7eb]">
+                Your Name
+              </label>
+              <input
+                className="w-full bg-[#030712] border border-[#1f2937] rounded-lg px-4 py-[0.6rem] text-[#e5e7eb] outline-none focus:border-[#3b82f6] transition-all placeholder:text-[#374151]"
+                type="text"
+                name="user_name"
+                placeholder="Fitwi Gebray"
+                required
+              />
             </div>
 
-            <div className="relative z-10 pt-12 flex gap-4">
-              <a
-                href="https://github.com"
-                target="_blank"
-                rel="noreferrer"
-                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
-              >
-                <FiGithub size={20} />
-              </a>
-
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noreferrer"
-                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
-              >
-                <FiLinkedin size={20} />
-              </a>
+            <div className="flex flex-col gap-2">
+              <label className="text-[0.9rem] font-medium text-[#e5e7eb]">
+                Your Email
+              </label>
+              <input
+                className="w-full bg-[#030712] border border-[#1f2937] rounded-lg px-4 py-[0.6rem] text-[#e5e7eb] outline-none focus:border-[#3b82f6] transition-all placeholder:text-[#374151]"
+                type="email"
+                name="user_email"
+                placeholder="your-email@example.com"
+                required
+              />
             </div>
           </div>
 
-          {/* Form */}
-          <div className="lg:col-span-3 p-10 lg:p-14">
-            <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <input
-                  type="text"
-                  name="user_name"
-                  required
-                  placeholder="Full Name"
-                  className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
-                />
+          {/* RECIPIENT INFO - THE FIX */}
+          <div className="flex flex-col gap-2">
+            <label className="text-[0.9rem] font-medium text-[#3b82f6]">
+              Friend's Email (Recipient)
+            </label>
+            <input
+              className="w-full bg-[#030712] border border-[#3b82f6]/30 rounded-lg px-4 py-[0.6rem] text-[#e5e7eb] outline-none focus:border-[#3b82f6] transition-all placeholder:text-[#374151]"
+              type="email"
+              name="recipient_email"
+              placeholder="gere-email@example.com"
+              required
+            />
+          </div>
 
-                <input
-                  type="email"
-                  name="user_email"
-                  required
-                  placeholder="Email Address"
-                  className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
-                />
-              </div>
-
-              <textarea
-                name="message"
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                maxLength={MAX_CHARS}
-                required
-                rows="4"
-                placeholder="Your message..."
-                className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none resize-none focus:ring-2 focus:ring-zinc-600"
-              />
-
-              <div className="text-right text-xs text-zinc-400">
-                {message.length} / {MAX_CHARS}
-              </div>
-
-              <button
-                type="submit"
-                disabled={isSending}
-                className="w-full flex items-center justify-center gap-3 bg-zinc-900 text-white font-bold py-5 rounded-2xl hover:bg-zinc-800 transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
+          {/* MESSAGE */}
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-between items-center">
+              <label className="text-[0.9rem] font-medium text-[#e5e7eb]">
+                Message
+              </label>
+              <span
+                className={`text-[0.8rem] ${msgLength >= MAX_CHARS ? "text-red-600" : "text-[#9ca3af]"}`}
               >
-                {isSending ? (
-                  <FiLoader className="animate-spin" />
-                ) : (
-                  <FiSend className="text-xl" />
-                )}
-                <span className="tracking-wide">
-                  {isSending ? "Sending..." : "Send Message"}
-                </span>
-              </button>
-            </form>
+                {msgLength} / {MAX_CHARS}
+              </span>
+            </div>
+            <textarea
+              className="w-full bg-[#030712] border border-[#1f2937] rounded-lg px-4 py-[0.6rem] text-[#e5e7eb] outline-none focus:border-[#3b82f6] transition-all placeholder:text-[#374151] min-h-[140px] resize-none"
+              name="message"
+              placeholder="Hi Gere! I'm launching my website..."
+              maxLength={MAX_CHARS}
+              onChange={(e) => setMsgLength(e.target.value.length)}
+              required
+            />
+          </div>
+
+          <div className="flex gap-[0.9rem] pt-2">
+            <button
+              type="submit"
+              disabled={isPending}
+              className="rounded-full px-[1.5rem] py-[0.7rem] text-[0.9rem] inline-flex items-center gap-[0.5rem] cursor-pointer border-none transition-all active:scale-95 bg-gradient-to-br from-[#3b82f6] to-[#a855f7] text-[#eff6ff] shadow-[0_15px_30px_rgba(37,99,235,0.4)] disabled:opacity-50"
+            >
+              <FiMail size={16} />
+              <span>{isPending ? "Sending..." : "Send to Friend"}</span>
+            </button>
+
+            <button
+              type="reset"
+              onClick={() => setMsgLength(0)}
+              disabled={isPending}
+              className="rounded-full px-[1.2rem] py-[0.6rem] text-[0.9rem] inline-flex items-center gap-[0.45rem] cursor-pointer border border-[#374151] bg-[#030712] text-[#9ca3af] hover:text-[#e5e7eb] disabled:opacity-50"
+            >
+              <FiRotateCcw size={16} />
+              <span>Clear</span>
+            </button>
+          </div>
+        </form>
+
+        {/* SIDE INFO */}
+        <div className="flex flex-col gap-6">
+          <div className="bg-[#111827] border border-[#1f2937] rounded-[24px] p-[1.5rem] shadow-xl">
+            <h3 className="text-[#e5e7eb] font-semibold mb-4 flex items-center gap-2">
+              <FiUser className="text-[#3b82f6]" /> Developer Info
+            </h3>
+            <div className="flex flex-col gap-4">
+              <a
+                href="mailto:fitwigebray8@gmail.com"
+                className="text-[#9ca3af] hover:text-[#3b82f6] text-sm truncate"
+              >
+                fitwigebray8@gmail.com
+              </a>
+              <div className="flex gap-4">
+                <a
+                  href="https://github.com/fitwi-Gebray"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 bg-[#030712] rounded-full text-[#9ca3af] hover:text-white border border-[#1f2937]"
+                >
+                  <FiGithub size={20} />
+                </a>
+                <a
+                  href="https://linkedin.com"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="p-2 bg-[#030712] rounded-full text-[#9ca3af] hover:text-white border border-[#1f2937]"
+                >
+                  <FiLinkedin size={20} />
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
