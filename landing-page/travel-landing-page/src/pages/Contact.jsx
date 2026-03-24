@@ -18,26 +18,31 @@ const Contact = () => {
     const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // We pull the friend's email from the form data
     const templateParams = {
       user_name: formData.get("user_name"),
-      user_email: formData.get("user_email"), // Your friend's reply-to
-      recipient_email: formData.get("recipient_email"), // THE FIX: Who receives it
+      user_email: formData.get("user_email"),
+      recipient_email: formData.get("recipient_email"),
       message: formData.get("message"),
     };
 
+    // DEBUG LOG: Check your browser console!
+    console.log("Sending to:", templateParams.recipient_email);
+
+    if (!templateParams.recipient_email) {
+      return {
+        success: false,
+        text: "Recipient email is missing from the form.",
+      };
+    }
+
     try {
       await emailjs.send(serviceId, templateId, templateParams, publicKey);
-      return {
-        success: true,
-        text: "Message sent successfully!",
-        timestamp: Date.now(),
-      };
+      return { success: true, text: "Message sent!", timestamp: Date.now() };
     } catch (error) {
       console.error("EmailJS Error:", error);
       return {
         success: false,
-        text: "Something went wrong. Please try again.",
+        text: error.text || "Failed to send.",
         timestamp: Date.now(),
       };
     }
