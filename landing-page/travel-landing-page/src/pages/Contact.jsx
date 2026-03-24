@@ -22,12 +22,18 @@ const Contact = () => {
 
     setIsSending(true);
 
-    // We use sendForm which takes the names from your <input> tags automatically
+    const templateParams = {
+      user_name: formRef.current.user_name.value,
+      user_email: formRef.current.user_email.value,
+      recipient_email: formRef.current.recipient_email.value,
+      message: message,
+    };
+
     emailjs
-      .sendForm(
+      .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        formRef.current,
+        templateParams, // Pass the params here instead of the form ref
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       )
       .then(() => {
@@ -37,7 +43,7 @@ const Contact = () => {
 
         Swal.fire({
           title: "Sent!",
-          text: "Your message has been delivered successfully.",
+          text: "Your message has been delivered.",
           icon: "success",
           background: "#18181b",
           color: "#fff",
@@ -50,7 +56,7 @@ const Contact = () => {
 
         Swal.fire({
           title: "Error!",
-          text: "The recipient address might be missing or invalid.",
+          text: "The recipient address is missing or invalid.",
           icon: "error",
           background: "#18181b",
           color: "#fff",
@@ -72,8 +78,9 @@ const Contact = () => {
             <div className="relative z-10">
               <h3 className="text-3xl font-bold mb-2">Contact Me</h3>
               <p className="text-zinc-400 mb-10">
-                Professional communication and project inquiries.
+                Professional inquiries and project updates.
               </p>
+
               <div className="space-y-8">
                 <div className="flex items-center gap-5">
                   <div className="bg-zinc-800 p-4 rounded-2xl">
@@ -103,6 +110,25 @@ const Contact = () => {
                 </div>
               </div>
             </div>
+
+            <div className="relative z-10 pt-12 flex gap-4">
+              <a
+                href="https://github.com/fitwi-Gebray"
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
+              >
+                <FiGithub size={20} />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noreferrer"
+                className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
+              >
+                <FiLinkedin size={20} />
+              </a>
+            </div>
           </div>
 
           {/* Form */}
@@ -125,13 +151,13 @@ const Contact = () => {
                 />
               </div>
 
-              {/* RECIPIENT FIELD - REQUIRED FOR THE FIX */}
+              {/* RECIPIENT FIELD */}
               <input
                 type="email"
                 name="recipient_email"
                 required
                 placeholder="recipient@example.com"
-                className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl border border-sky-500/30 outline-none focus:ring-2 focus:ring-zinc-600"
+                className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl border border-sky-500/20 outline-none focus:ring-2 focus:ring-zinc-600"
               />
 
               <textarea
