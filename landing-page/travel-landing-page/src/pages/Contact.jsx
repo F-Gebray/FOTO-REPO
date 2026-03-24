@@ -20,12 +20,23 @@ const Contact = () => {
     e.preventDefault();
     if (isSending) return;
 
+    // Validation
+    if (!message.trim()) {
+      return Swal.fire({
+        title: "Empty message!",
+        text: "Please type a message before sending.",
+        icon: "warning",
+        background: "#18181b",
+        color: "#fff",
+      });
+    }
+
     setIsSending(true);
 
+    // Template params without user-controlled recipient
     const templateParams = {
       user_name: formRef.current.user_name.value,
       user_email: formRef.current.user_email.value,
-      recipient_email: formRef.current.recipient_email.value,
       message: message,
     };
 
@@ -33,12 +44,12 @@ const Contact = () => {
       .send(
         import.meta.env.VITE_EMAILJS_SERVICE_ID,
         import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-        templateParams, // Pass the params here instead of the form ref
+        templateParams,
         import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
       )
       .then(() => {
         setIsSending(false);
-        formRef.current.reset();
+        e.target.reset();
         setMessage("");
 
         Swal.fire({
@@ -56,7 +67,7 @@ const Contact = () => {
 
         Swal.fire({
           title: "Error!",
-          text: "The recipient address is missing or invalid.",
+          text: "Something went wrong while sending your message.",
           icon: "error",
           background: "#18181b",
           color: "#fff",
@@ -95,6 +106,7 @@ const Contact = () => {
                     </span>
                   </div>
                 </div>
+
                 <div className="flex items-center gap-5">
                   <div className="bg-zinc-800 p-4 rounded-2xl">
                     <FiMapPin size={22} />
@@ -120,8 +132,9 @@ const Contact = () => {
               >
                 <FiGithub size={20} />
               </a>
+
               <a
-                href="https://linkedin.com"
+                href="https://www.linkedin.com/in/fitwi-gebray-teklemichael-4aa1a02a4/"
                 target="_blank"
                 rel="noreferrer"
                 className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
@@ -151,15 +164,7 @@ const Contact = () => {
                 />
               </div>
 
-              {/* RECIPIENT FIELD */}
-              <input
-                type="email"
-                name="recipient_email"
-                required
-                placeholder="recipient@example.com"
-                className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl border border-sky-500/20 outline-none focus:ring-2 focus:ring-zinc-600"
-              />
-
+              {/* Message */}
               <textarea
                 name="message"
                 value={message}
@@ -177,7 +182,7 @@ const Contact = () => {
 
               <button
                 type="submit"
-                disabled={isSending}
+                disabled={isSending || !message.trim()}
                 className="w-full flex items-center justify-center gap-3 bg-white text-black font-bold py-5 rounded-2xl hover:bg-zinc-200 transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
               >
                 {isSending ? (
