@@ -26,7 +26,7 @@ const projects = [
       "SweetAlert2",
       "React Router",
     ],
-    liveUrl: "https://fitwi-booking.vercel.app",
+    liveUrl: "https://portfolio-project-two-lyart.vercel.app/",
     githubUrl: "https://github.com/fitwi-Gebray/fitwi-Booking",
   },
 
