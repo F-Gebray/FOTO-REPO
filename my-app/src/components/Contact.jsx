@@ -21,7 +21,6 @@ const Contact = () => {
     const templateParams = {
       user_name: formData.get("user_name"),
       user_email: formData.get("user_email"),
-      recipient_email: formData.get("recipient_email"),
       message: formData.get("message"),
     };
 
@@ -107,20 +106,6 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* RECIPIENT INFO */}
-          <div className="flex flex-col gap-2">
-            <label className="text-[0.9rem] font-medium text-[#e5e7eb]">
-              Recipient Email
-            </label>
-            <input
-              className="w-full bg-[#030712] border border-[#1f2937] rounded-lg px-4 py-[0.6rem] text-[#e5e7eb] outline-none focus:border-[#3b82f6] transition-all placeholder:text-[#374151]"
-              type="email"
-              name="recipient_email"
-              placeholder="recipient@example.com"
-              required
-            />
-          </div>
-
           {/* MESSAGE */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
@@ -128,7 +113,9 @@ const Contact = () => {
                 Message
               </label>
               <span
-                className={`text-[0.8rem] ${msgLength >= MAX_CHARS ? "text-red-600" : "text-[#9ca3af]"}`}
+                className={`text-[0.8rem] ${
+                  msgLength >= MAX_CHARS ? "text-red-600" : "text-[#9ca3af]"
+                }`}
               >
                 {msgLength} / {MAX_CHARS}
               </span>
