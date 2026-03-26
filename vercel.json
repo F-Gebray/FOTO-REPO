@@ -7,21 +7,12 @@
       "config": { "distDir": "dist" }
     },
     {
-      "src": "booking-app/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
-    },
-    {
       "src": "api/**/*.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-
-    { "src": "/booking/(.*)", "dest": "/booking-app/$1" },
-    { "src": "/booking", "dest": "/booking-app/index.html" },
-
-    { "src": "/.*", "dest": "/my-app/$1" }
+    { "src": "/.*", "dest": "/my-app/dist/$1" }
   ]
 }
