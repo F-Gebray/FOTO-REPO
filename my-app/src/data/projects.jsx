@@ -38,7 +38,8 @@ const projects = [
       "A modern, user-friendly travel planning application built with React, Vite, and Material UI. Features a full-screen hero section, intuitive destination search, and responsive layout, designed to deliver a seamless experience across devices.",
     tech: ["React", "Vite", "Material UI", "CSS", "JavaScript"],
     liveUrl: "https://travel-planner-app-five-pearl.vercel.app/",
-    githubUrl: "https://github.com/fitwi-Gebray/travel-planner-page",
+    githubUrl:
+      "https://github.com/F-Gebray/FG-portfolio/tree/main/landing-page/travel-landing-page",
   },
 ];
 
