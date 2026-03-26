@@ -27,7 +27,7 @@ const projects = [
       "React Router",
     ],
     liveUrl: "https://booking-app-sigma-azure.vercel.app/",
-    githubUrl: "https://github.com/fitwi-Gebray/fitwi-Booking",
+    githubUrl: "https://github.com/F-Gebray/FG-Booking",
   },
 
   {
