@@ -15,27 +15,27 @@ const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-// Models (Ensure these paths are correct relative to api/server.js)
+// Models
 const User = require("./models/User");
 const Reservation = require("./models/Reservation");
 
 const app = express();
 
 // ===============================
-// CORS CONFIG
+// CORS CONFIG (FIXED)
 // ===============================
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://portfolio-project-two-lyart.vercel.app", // ✅ Add this one
+  "https://portfolio-project-two-lyart.vercel.app",
+  "https://booking-app-sigma-azure.vercel.app", // ✅ Your production frontend
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
       if (
-        allowedOrigins.indexOf(origin) !== -1 ||
+        allowedOrigins.includes(origin) ||
         process.env.NODE_ENV !== "production"
       ) {
         callback(null, true);
@@ -47,6 +47,9 @@ app.use(
   }),
 );
 
+// ⭐ REQUIRED FOR PREFLIGHT REQUESTS ⭐
+app.options("*", cors());
+
 // ===============================
 // Middleware
 // ===============================
@@ -54,24 +57,16 @@ app.use(express.json());
 app.use(cookieParser());
 
 // ===============================
-// DATABASE CONNECTION (Serverless Optimized)
+// DATABASE CONNECTION
 // ===============================
 const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  console.error("❌ MONGODB_URI is missing in .env file");
-}
 
 let isConnected = false;
 const connectDB = async () => {
   if (isConnected) return;
-  try {
-    await mongoose.connect(MONGODB_URI);
-    isConnected = true;
-    console.log("✅ MongoDB Connected");
-  } catch (err) {
-    console.error("❌ MongoDB Connection Error:", err.message);
-  }
+  await mongoose.connect(MONGODB_URI);
+  isConnected = true;
+  console.log("✅ MongoDB Connected");
 };
 
 // ===============================
@@ -81,14 +76,14 @@ const connectDB = async () => {
 // TEST ROUTE
 app.get("/api/test", (req, res) => {
   res.json({
-    message: "✅ Backend is working!",
+    message: "Backend OK",
     env: process.env.NODE_ENV || "development",
   });
 });
 
 const JWT_SECRET = process.env.JWT_SECRET || "SUPER_SECRET_KEY";
 
-// VERIFY TOKEN MIDDLEWARE
+// VERIFY TOKEN
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token)
@@ -113,8 +108,7 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ success: false, message: "Exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword });
-    await user.save();
+    await new User({ name, email, password: hashedPassword }).save();
 
     res.status(201).json({ success: true, message: "Registered" });
   } catch (err) {
@@ -122,7 +116,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// LOGIN
+// LOGIN (FIXED COOKIE SETTINGS)
 app.post("/api/auth/login", async (req, res) => {
   await connectDB();
   try {
@@ -140,7 +134,7 @@ app.post("/api/auth/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "lax",
+      sameSite: "none", // ⭐ Required for cross-origin cookies
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -149,9 +143,10 @@ app.post("/api/auth/login", async (req, res) => {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 });
-// CREATE RESERVATION (Add this to your server.js)
+
+// CREATE RESERVATION
 app.post("/api/reservations", verifyToken, async (req, res) => {
-  await connectDB(); // Ensure DB is connected for serverless
+  await connectDB();
   try {
     const {
       listingId,
@@ -163,7 +158,7 @@ app.post("/api/reservations", verifyToken, async (req, res) => {
     } = req.body;
 
     const newReservation = new Reservation({
-      user: req.userId, // From verifyToken middleware
+      user: req.userId,
       listingId,
       listingName,
       checkIn,
@@ -180,7 +175,6 @@ app.post("/api/reservations", verifyToken, async (req, res) => {
       reservation: newReservation,
     });
   } catch (err) {
-    console.error("Reservation Error:", err);
     res
       .status(500)
       .json({ success: false, message: "Failed to save reservation" });
@@ -188,19 +182,15 @@ app.post("/api/reservations", verifyToken, async (req, res) => {
 });
 
 // ===============================
-// LOCAL SERVER START
+// LOCAL SERVER (DEV ONLY)
 // ===============================
-const PORT = process.env.PORT || 5000;
-
-// This ensures it runs locally but doesn't interfere with Vercel
 if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
-    console.log(`🚀 Server running locally at http://localhost:${PORT}`);
-    connectDB(); // Pre-connect locally
+    console.log(`🚀 Local server on http://localhost:${PORT}`);
+    connectDB();
   });
 }
 
-// ===============================
 // EXPORT FOR VERCEL
-// ===============================
 module.exports = app;
