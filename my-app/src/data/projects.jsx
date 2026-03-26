@@ -26,7 +26,7 @@ const projects = [
       "SweetAlert2",
       "React Router",
     ],
-    liveUrl: "https://booking-app-sigma-azure.vercel.app/",
+    liveUrl: "https://my-booking-app-phi.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FG-Booking",
   },
 

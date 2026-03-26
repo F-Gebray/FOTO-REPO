@@ -40,7 +40,7 @@ const About = () => {
               Demonstrates routing, reusable components, and scalable folder
               structure.
               <a
-                href="https://fg-portfolio-smoky.vercel.app"
+                href="https://my-booking-app-phi.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
