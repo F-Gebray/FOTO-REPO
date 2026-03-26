@@ -1,13 +1,5 @@
 {
   "version": 2,
-  "projects": {
-    "my-app": {
-      "rootDirectory": "my-app"
-    },
-    "booking-app": {
-      "rootDirectory": "booking-app"
-    }
-  },
   "builds": [
     {
       "src": "my-app/package.json",
@@ -26,8 +18,10 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
+
     { "src": "/booking/(.*)", "dest": "/booking-app/$1" },
     { "src": "/booking", "dest": "/booking-app/index.html" },
+
     { "src": "/.*", "dest": "/my-app/$1" }
   ]
 }
