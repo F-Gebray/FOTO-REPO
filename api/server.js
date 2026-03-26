@@ -8,6 +8,7 @@ dns.setServers(["8.8.8.8", "8.8.4.4"]);
 // Imports
 // ===============================
 const express = require("express");
+const serverless = require("serverless-http");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
@@ -22,12 +23,12 @@ const Reservation = require("./models/Reservation");
 const app = express();
 
 // ===============================
-// CORS CONFIG (FIXED)
+// CORS CONFIG
 // ===============================
 const allowedOrigins = [
   "http://localhost:5173",
   "https://portfolio-project-two-lyart.vercel.app",
-  "https://booking-app-sigma-azure.vercel.app", // ✅ Your production frontend
+  "https://booking-app-sigma-azure.vercel.app",
 ];
 
 app.use(
@@ -47,8 +48,25 @@ app.use(
   }),
 );
 
-// ⭐ REQUIRED FOR PREFLIGHT REQUESTS ⭐
-app.options("*", cors());
+// ===============================
+// HANDLE ALL OPTIONS (preflight) SAFELY
+// ===============================
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+    );
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, PATCH, DELETE, OPTIONS",
+    );
+    res.header("Access-Control-Allow-Credentials", "true");
+    return res.sendStatus(204); // No Content
+  }
+  next();
+});
 
 // ===============================
 // Middleware
@@ -60,14 +78,14 @@ app.use(cookieParser());
 // DATABASE CONNECTION
 // ===============================
 const MONGODB_URI = process.env.MONGODB_URI;
-
 let isConnected = false;
-const connectDB = async () => {
+
+async function connectDB() {
   if (isConnected) return;
   await mongoose.connect(MONGODB_URI);
   isConnected = true;
   console.log("✅ MongoDB Connected");
-};
+}
 
 // ===============================
 // ROUTES
@@ -83,7 +101,7 @@ app.get("/api/test", (req, res) => {
 
 const JWT_SECRET = process.env.JWT_SECRET || "SUPER_SECRET_KEY";
 
-// VERIFY TOKEN
+// VERIFY TOKEN MIDDLEWARE
 const verifyToken = (req, res, next) => {
   const token = req.cookies.token;
   if (!token)
@@ -98,6 +116,10 @@ const verifyToken = (req, res, next) => {
   }
 };
 
+// ===============================
+// AUTH ROUTES
+// ===============================
+
 // REGISTER
 app.post("/api/auth/register", async (req, res) => {
   await connectDB();
@@ -108,6 +130,7 @@ app.post("/api/auth/register", async (req, res) => {
       return res.status(400).json({ success: false, message: "Exists" });
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     await new User({ name, email, password: hashedPassword }).save();
 
     res.status(201).json({ success: true, message: "Registered" });
@@ -116,7 +139,7 @@ app.post("/api/auth/register", async (req, res) => {
   }
 });
 
-// LOGIN (FIXED COOKIE SETTINGS)
+// LOGIN
 app.post("/api/auth/login", async (req, res) => {
   await connectDB();
   try {
@@ -134,17 +157,22 @@ app.post("/api/auth/login", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none", // ⭐ Required for cross-origin cookies
+      sameSite: "none", // required for cross-origin login
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    res.json({ success: true, user: { name: user.name, email: user.email } });
+    res.json({
+      success: true,
+      user: { name: user.name, email: user.email },
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 });
 
-// CREATE RESERVATION
+// ===============================
+// RESERVATION ROUTE
+// ===============================
 app.post("/api/reservations", verifyToken, async (req, res) => {
   await connectDB();
   try {
@@ -175,19 +203,20 @@ app.post("/api/reservations", verifyToken, async (req, res) => {
       reservation: newReservation,
     });
   } catch (err) {
-    res
-      .status(500)
-      .json({ success: false, message: "Failed to save reservation" });
+    res.status(500).json({
+      success: false,
+      message: "Failed to save reservation",
+    });
   }
 });
 
 // ===============================
-// LOCAL SERVER (DEV ONLY)
+// LOCAL SERVER ONLY
 // ===============================
 if (process.env.NODE_ENV !== "production") {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
-    console.log(`🚀 Local server on http://localhost:${PORT}`);
+    console.log(`🚀 Local server running at http://localhost:${PORT}`);
     connectDB();
   });
 }
