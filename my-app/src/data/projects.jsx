@@ -8,7 +8,7 @@ const projects = [
     description:
       "A modern, production-ready admin dashboard featuring interactive analytics charts, dynamic user tables, and a dark mode toggle. Built with React, Vite, Material UI, and Recharts, designed for scalability, responsiveness, and clean UI composition.",
     tech: ["React", "Vite", "Material UI", "Recharts", "JavaScript"],
-    liveUrl: "https://dashboard-theta-beryl-44.vercel.app/",
+    liveUrl: "https://travel-plan-xi.vercel.app/",
     githubUrl: "https://github.com/fitwi-Gebray/portfolio-project",
   },
 
