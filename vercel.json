@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "booking-app/package.json",
+      "src": "my-app/package.json",
       "use": "@vercel/static-build",
       "config": { "distDir": "dist" }
     },
@@ -12,19 +12,14 @@
     }
   ],
   "routes": [
-    {
-      "src": "/login",
-      "status": 308,
-      "dest": "https://portfolio-project-two-lyart.vercel.app"
-    },
     { "src": "/api/(.*)", "dest": "api/server.js" },
-    { "src": "/assets/(.*)", "dest": "booking-app/assets/$1" },
-    { "src": "/favicon.svg", "dest": "booking-app/favicon.svg" },
-    { "src": "/icons.svg", "dest": "booking-app/icons.svg" },
+    { "src": "/assets/(.*)", "dest": "my-app/assets/$1" },
+    { "src": "/favicon.svg", "dest": "my-app/favicon.svg" },
+    { "src": "/icons.svg", "dest": "my-app/icons.svg" },
     { "handle": "filesystem" },
     {
-      "src": "/(?!(api|assets|favicon.svg|icons.svg)).*",
-      "dest": "booking-app/index.html"
+      "src": "/.*",
+      "dest": "my-app/index.html"
     }
   ]
 }
