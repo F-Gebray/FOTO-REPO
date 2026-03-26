@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/* 1. Reset the browser defaults */
+:root,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #020617; /* Matches slate-950 */
+  color: white;
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+}
+
+/* 2. Fix the Vite Root Container */
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: block; /* Vite often sets this to 'flex' which centers things */
+}
+
+/* 3. Smooth scrolling for the whole app */
+html {
+  scroll-behavior: smooth;
+}
+/* Emergency fallback for inputs if Tailwind fails to inject */
+input,
+select,
+textarea {
+  background-color: #1e293b; /* slate-800 */
+  border: 1px solid #334155; /* slate-700 */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+input::placeholder {
+  color: #94a3b8; /* slate-400 */
+}
+/* Add this to index.css to force borders on Vercel */
+input {
+  border: 1px solid #334155 !important; /* slate-700 */
+  background-color: #020617 !important; /* slate-950 */
+  display: block !important;
+  visibility: visible !important;
+}
