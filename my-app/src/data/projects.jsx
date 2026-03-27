@@ -27,7 +27,7 @@ const projects = [
       "React Router",
     ],
     liveUrl: "https://foto-repo-booking.vercel.app/",
-    githubUrl: "https://github.com/fitwi-Gebray/portfolio-project",
+    githubUrl: "https://github.com/F-Gebray/FG-portfolio",
   },
 
   {
@@ -38,7 +38,7 @@ const projects = [
       "A modern, user-friendly travel planning application built with React, Vite, and Material UI. Features a full-screen hero section, intuitive destination search, and responsive layout, designed to deliver a seamless experience across devices.",
     tech: ["React", "Vite", "Material UI", "CSS", "JavaScript"],
     liveUrl: "https://foto-repo-travel-app.vercel.app/",
-    githubUrl: "https://github.com/fitwi-Gebray/portfolio-project",
+    githubUrl: "https://github.com/F-Gebray/FG-portfolio",
   },
 ];
 
