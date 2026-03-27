@@ -40,7 +40,7 @@ const About = () => {
               Demonstrates routing, reusable components, and scalable folder
               structure.
               <a
-                href="https://my-booking-app-phi.vercel.app/"
+                href="https://foto-repo-booking.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
@@ -55,7 +55,7 @@ const About = () => {
               Analytics charts, tables, and dark mode built with React and
               Recharts.
               <a
-                href="https://dashboard-theta-beryl-44.vercel.app/"
+                href="https://foto-repo-dashboard.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
@@ -70,7 +70,7 @@ const About = () => {
               Full-screen UI, destination search, and responsive design built
               with React.
               <a
-                href="https://travel-planner-app-five-pearl.vercel.app/"
+                href="https://foto-repo-travel-app.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"

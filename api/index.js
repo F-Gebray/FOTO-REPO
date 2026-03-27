@@ -58,7 +58,7 @@ async function connectDB() {
 // ===============================
 app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
 
-app.post("/api/auth/login", async (req, res) => {
+app.post("/auth/login", async (req, res) => {
   await connectDB();
   try {
     const { email, password } = req.body;
@@ -83,7 +83,7 @@ app.post("/api/auth/login", async (req, res) => {
   }
 });
 
-app.post("/api/reservations", async (req, res) => {
+app.post("/reservations", async (req, res) => {
   await connectDB();
   try {
     const newRes = new Reservation(req.body);

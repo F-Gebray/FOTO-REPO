@@ -8,7 +8,7 @@ const projects = [
     description:
       "A modern, production-ready admin dashboard featuring interactive analytics charts, dynamic user tables, and a dark mode toggle. Built with React, Vite, Material UI, and Recharts, designed for scalability, responsiveness, and clean UI composition.",
     tech: ["React", "Vite", "Material UI", "Recharts", "JavaScript"],
-    liveUrl: "https://travel-plan-xi.vercel.app/",
+    liveUrl: "https://foto-repo-dashboard.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FG-portfolio",
   },
 
@@ -26,7 +26,7 @@ const projects = [
       "SweetAlert2",
       "React Router",
     ],
-    liveUrl: "https://booking-app-sigma-azure.vercel.app/",
+    liveUrl: "https://foto-repo-booking.vercel.app/",
     githubUrl: "https://github.com/fitwi-Gebray/portfolio-project",
   },
 
@@ -37,7 +37,7 @@ const projects = [
     description:
       "A modern, user-friendly travel planning application built with React, Vite, and Material UI. Features a full-screen hero section, intuitive destination search, and responsive layout, designed to deliver a seamless experience across devices.",
     tech: ["React", "Vite", "Material UI", "CSS", "JavaScript"],
-    liveUrl: "https://travel-planner-app-five-pearl.vercel.app/",
+    liveUrl: "https://foto-repo-travel-app.vercel.app/",
     githubUrl: "https://github.com/fitwi-Gebray/portfolio-project",
   },
 ];

@@ -1,7 +1,7 @@
 const API_BASE = import.meta.env.VITE_API_BASE;
 
 export const handleLogin = async (formData) => {
-  const res = await fetch(`${API_BASE}/api/auth/login`, {
+  const res = await fetch("/api/auth/login", {
     method: "POST",
     credentials: "include", // Required for cookies
     headers: { "Content-Type": "application/json" },
