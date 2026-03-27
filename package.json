@@ -9,16 +9,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fitwi-Gebray/portfolio-project.git"
+    "url": "https://github.com/F-Gebray/FOTO-REPO"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "bugs": {
-    "url": "https://github.com/fitwi-Gebray/portfolio-project/issues"
+    "url": "https://github.com/F-Gebray/FOTO-REPO"
   },
-  "homepage": "https://github.com/fitwi-Gebray/portfolio-project#readme",
+  "homepage": "https://github.com/F-Gebray/FOTO-REPO#readme",
   "dependencies": {
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
