@@ -1,17 +1,34 @@
-import express from "express";
-import nodemailer from "nodemailer";
-import cors from "cors";
-import dotenv from "dotenv";
-
-dotenv.config();
+const express = require("express");
+const nodemailer = require("nodemailer");
+const cors = require("cors");
+require("dotenv").config();
 
 const app = express();
-app.use(cors());
+
+// Monorepo-friendly CORS
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (
+        !origin ||
+        origin.includes(".vercel.app") ||
+        origin.includes("localhost")
+      ) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS Blocked"));
+      }
+    },
+    credentials: true,
+  }),
+);
+
 app.use(express.json());
 
 const MY_EMAIL = process.env.EMAIL_USER;
 
-app.post("/api/send-email", async (req, res) => {
+// Matches your vercel.json rewrite: /landing-api/(.*)
+app.post("/landing-api/send-email", async (req, res) => {
   const { user_name, user_email, message } = req.body;
 
   if (!user_name || !user_email || !message) {
@@ -23,7 +40,7 @@ app.post("/api/send-email", async (req, res) => {
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS, // Use an App Password here!
+        pass: process.env.EMAIL_PASS, // 16-character Google App Password
       },
       tls: {
         rejectUnauthorized: false,
@@ -49,5 +66,5 @@ app.post("/api/send-email", async (req, res) => {
   }
 });
 
-// CRITICAL: Export the app for Vercel Serverless Functions
-export default app;
+// Use module.exports because this folder is "type": "commonjs"
+module.exports = app;

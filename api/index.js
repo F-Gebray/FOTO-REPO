@@ -1,14 +1,7 @@
-// ===============================
-// DNS FIX (Node v20+)
-// ===============================
 const dns = require("node:dns");
-dns.setServers(["8.8.8.8", "8.8.4.4"]);
+dns.setServers(["8.8.8.8", "8.8.4.4"]); // Critical for MongoDB on Vercel
 
-// ===============================
-// Imports
-// ===============================
 const express = require("express");
-const serverless = require("serverless-http");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
@@ -23,203 +16,85 @@ const Reservation = require("./models/Reservation");
 const app = express();
 
 // ===============================
-// CORS CONFIG
+// SIMPLIFIED CORS (Monorepo Friendly)
 // ===============================
-const allowedOrigins = [
-  "http://localhost:5173",
-  "https://portfolio-project-two-lyart.vercel.app",
-  "https://booking-app-sigma-azure.vercel.app",
-];
-
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true);
+      // 1. Allow if there's no origin (like a mobile app or server-to-server)
+      // 2. Allow any .vercel.app domain (all your monorepo apps)
+      // 3. Allow localhost (for your VS Code testing)
       if (
-        allowedOrigins.includes(origin) ||
-        process.env.NODE_ENV !== "production"
+        !origin ||
+        origin.includes(".vercel.app") ||
+        origin.includes("localhost")
       ) {
         callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        callback(new Error("CORS Blocked: Origin not recognized"));
       }
     },
     credentials: true,
   }),
 );
 
-// ===============================
-// HANDLE ALL OPTIONS (preflight) SAFELY
-// ===============================
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Origin, X-Requested-With, Content-Type, Accept, Authorization",
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, PATCH, DELETE, OPTIONS",
-    );
-    res.header("Access-Control-Allow-Credentials", "true");
-    return res.sendStatus(204); // No Content
-  }
-  next();
-});
-
-// ===============================
-// Middleware
-// ===============================
 app.use(express.json());
 app.use(cookieParser());
 
 // ===============================
-// DATABASE CONNECTION
+// DATABASE
 // ===============================
-const MONGODB_URI = process.env.MONGODB_URI;
 let isConnected = false;
-
 async function connectDB() {
   if (isConnected) return;
-  await mongoose.connect(MONGODB_URI);
+  if (!process.env.MONGODB_URI)
+    throw new Error("MONGODB_URI is missing in Vercel Settings");
+  await mongoose.connect(process.env.MONGODB_URI);
   isConnected = true;
-  console.log("✅ MongoDB Connected");
 }
 
 // ===============================
 // ROUTES
 // ===============================
+app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
 
-// TEST ROUTE
-app.get("/api/test", (req, res) => {
-  res.json({
-    message: "Backend OK",
-    env: process.env.NODE_ENV || "development",
-  });
-});
-
-const JWT_SECRET = process.env.JWT_SECRET || "SUPER_SECRET_KEY";
-
-// VERIFY TOKEN MIDDLEWARE
-const verifyToken = (req, res, next) => {
-  const token = req.cookies.token;
-  if (!token)
-    return res.status(401).json({ success: false, message: "Required" });
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET);
-    req.userId = decoded.id;
-    next();
-  } catch (err) {
-    return res.status(401).json({ success: false, message: "Invalid Token" });
-  }
-};
-
-// ===============================
-// AUTH ROUTES
-// ===============================
-
-// REGISTER
-app.post("/api/auth/register", async (req, res) => {
-  await connectDB();
-  try {
-    const { name, email, password } = req.body;
-    const existingUser = await User.findOne({ email });
-    if (existingUser)
-      return res.status(400).json({ success: false, message: "Exists" });
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    await new User({ name, email, password: hashedPassword }).save();
-
-    res.status(201).json({ success: true, message: "Registered" });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});
-
-// LOGIN
 app.post("/api/auth/login", async (req, res) => {
   await connectDB();
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-
     if (!user || !(await bcrypt.compare(password, user.password))) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid Credentials" });
     }
-
-    const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "7d" });
-
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "key", {
+      expiresIn: "7d",
+    });
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none", // required for cross-origin login
+      sameSite: "none",
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-
-    res.json({
-      success: true,
-      user: { name: user.name, email: user.email },
-    });
+    res.json({ success: true, user: { name: user.name, email: user.email } });
   } catch (err) {
     res.status(500).json({ success: false, message: "Server Error" });
   }
 });
 
-// ===============================
-// RESERVATION ROUTE
-// ===============================
-app.post("/api/reservations", verifyToken, async (req, res) => {
+app.post("/api/reservations", async (req, res) => {
   await connectDB();
   try {
-    const {
-      listingId,
-      listingName,
-      checkIn,
-      totalPrice,
-      guestName,
-      guestEmail,
-    } = req.body;
-
-    const newReservation = new Reservation({
-      user: req.userId,
-      listingId,
-      listingName,
-      checkIn,
-      totalPrice,
-      guestName,
-      guestEmail,
-    });
-
-    await newReservation.save();
-
-    res.status(201).json({
-      success: true,
-      message: "Reservation confirmed!",
-      reservation: newReservation,
-    });
+    const newRes = new Reservation(req.body);
+    await newRes.save();
+    res.status(201).json({ success: true, message: "Saved!" });
   } catch (err) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to save reservation",
-    });
+    res.status(500).json({ success: false });
   }
 });
 
 // ===============================
-// LOCAL SERVER ONLY
-// ===============================
-if (process.env.NODE_ENV !== "production") {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`🚀 Local server running at http://localhost:${PORT}`);
-    connectDB();
-  });
-}
-
 // EXPORT FOR VERCEL
+// ===============================
 module.exports = app;
