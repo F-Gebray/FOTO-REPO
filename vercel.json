@@ -1,18 +1,23 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.js" },
     {
-      "src": "my-app/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist" }
+      "source": "/landing-api/(.*)",
+      "destination": "/landing-page/travel-landing-page/backend/index.js"
     },
     {
-      "src": "api/server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    { "src": "/api/(.*)", "dest": "/api/server.js" },
-    { "src": "/(.*)", "dest": "/my-app/$1" }
+      "source": "/landing-page/(.*)",
+      "destination": "/landing-page/travel-landing-page/dist/index.html"
+    },
+    {
+      "source": "/booking/(.*)",
+      "destination": "/booking-app/dist/index.html"
+    },
+    {
+      "source": "/dashboard/(.*)",
+      "destination": "/dashboard/dist/index.html"
+    },
+    { "source": "/(.*)", "destination": "/my-app/dist/index.html" }
   ]
 }

@@ -9,10 +9,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// The recipient is always you
 const MY_EMAIL = process.env.EMAIL_USER;
 
-app.post("/send-email", async (req, res) => {
+app.post("/api/send-email", async (req, res) => {
   const { user_name, user_email, message } = req.body;
 
   if (!user_name || !user_email || !message) {
@@ -24,17 +23,17 @@ app.post("/send-email", async (req, res) => {
       service: "gmail",
       auth: {
         user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        pass: process.env.EMAIL_PASS, // Use an App Password here!
       },
       tls: {
-        rejectUnauthorized: false, // <--- allow self-signed certificates
+        rejectUnauthorized: false,
       },
     });
 
     await transporter.sendMail({
-      from: `"Portfolio Contact" <${MY_EMAIL}>`, // sender is you
-      replyTo: user_email, // replies go to user
-      to: MY_EMAIL, // you always receive it
+      from: `"Portfolio Contact" <${MY_EMAIL}>`,
+      replyTo: user_email,
+      to: MY_EMAIL,
       subject: `New message from ${user_name}`,
       html: `
         <p><strong>Name:</strong> ${user_name}</p>
@@ -50,7 +49,5 @@ app.post("/send-email", async (req, res) => {
   }
 });
 
-const PORT = 5001;
-app.listen(PORT, () =>
-  console.log(`Backend running at http://localhost:${PORT}`),
-);
+// CRITICAL: Export the app for Vercel Serverless Functions
+export default app;
