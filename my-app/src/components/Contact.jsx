@@ -175,7 +175,7 @@ const Contact = () => {
               </a>
               <div className="flex gap-4 border-t border-[#1f2937] pt-4">
                 <a
-                  href="https://github.com/fitwi-Gebray"
+                  href="https://github.com/F-Gebray/FG-portfolio"
                   target="_blank"
                   rel="noreferrer"
                   className="p-2 bg-[#030712] rounded-full text-[#9ca3af] hover:text-white border border-[#1f2937] transition-all"
