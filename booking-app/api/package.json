@@ -1,7 +1,6 @@
 {
   "name": "api",
   "version": "1.0.0",
-  "types": "commonJS",
   "description": "",
   "main": "index.js",
   "scripts": {
