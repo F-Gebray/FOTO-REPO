@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FiHome, FiCompass, FiMail, FiInfo } from "react-icons/fi";
+import { FiHome, FiCompass, FiMail, FiInfo, FiMenu, FiX } from "react-icons/fi";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
 
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white/5 backdrop-blur-lg shadow-none px-6 py-4">
@@ -19,8 +20,8 @@ export default function Navbar() {
           Travel-Now
         </button>
 
-        {/* Navigation Links */}
-        <div className="flex items-center gap-6">
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-6">
           <Link
             to="/"
             className="flex items-center gap-1 text-white hover:text-sky-400 transition-colors"
@@ -49,7 +50,52 @@ export default function Navbar() {
             <FiInfo /> About
           </Link>
         </div>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-white text-3xl"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <FiX /> : <FiMenu />}
+        </button>
       </div>
+
+      {/* Mobile Dropdown Menu */}
+      {open && (
+        <div className="md:hidden flex flex-col items-start gap-4 mt-4 px-2 pb-4">
+          <Link
+            to="/"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors"
+          >
+            <FiHome /> Home
+          </Link>
+
+          <Link
+            to="/explore"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors"
+          >
+            <FiCompass /> Explore
+          </Link>
+
+          <Link
+            to="/contact"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors"
+          >
+            <FiMail /> Contact
+          </Link>
+
+          <Link
+            to="/about"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2 text-white hover:text-sky-400 transition-colors"
+          >
+            <FiInfo /> About
+          </Link>
+        </div>
+      )}
     </nav>
   );
 }
