@@ -1,7 +1,28 @@
 {
   "version": 2,
+  "builds": [
+    {
+      "src": "my-app/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "my-app/dist" }
+    },
+    {
+      "src": "booking-app/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "booking-app/dist" }
+    },
+    {
+      "src": "dashboard/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "dashboard/dist" }
+    },
+    {
+      "src": "landing-page/travel-landing-page/package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "landing-page/travel-landing-page/dist" }
+    }
+  ],
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index.js" },
     {
       "source": "/landing-api/(.*)",
       "destination": "/landing-page/api/send-email.js"
