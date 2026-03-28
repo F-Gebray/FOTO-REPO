@@ -1,27 +1,4 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "my-app/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "my-app/dist" }
-    },
-    {
-      "src": "booking-app/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "booking-app/dist" }
-    },
-    {
-      "src": "dashboard/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dashboard/dist" }
-    },
-    {
-      "src": "landing-page/travel-landing-page/package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "landing-page/travel-landing-page/dist" }
-    }
-  ],
   "rewrites": [
     {
       "source": "/landing-api/(.*)",
@@ -29,16 +6,19 @@
     },
     {
       "source": "/landing-page/(.*)",
-      "destination": "/landing-page/travel-landing-page/dist/index.html"
+      "destination": "/landing-page/travel-landing-page/dist/$1"
     },
     {
       "source": "/booking/(.*)",
-      "destination": "/booking-app/dist/index.html"
+      "destination": "/booking-app/dist/$1"
     },
     {
       "source": "/dashboard/(.*)",
-      "destination": "/dashboard/dist/index.html"
+      "destination": "/dashboard/dist/$1"
     },
-    { "source": "/(.*)", "destination": "/my-app/dist/index.html" }
+    {
+      "source": "/((?!landing-page|booking|dashboard).*)",
+      "destination": "/my-app/dist/$1"
+    }
   ]
 }
