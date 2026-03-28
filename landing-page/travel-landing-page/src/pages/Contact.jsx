@@ -35,9 +35,10 @@ const Contact = () => {
       user_email: formRef.current.user_email.value.trim(),
       message: message.trim(),
     };
+    const API_URL = import.meta.env.VITE_CONTACT_API;
 
     try {
-      const res = await fetch("http://localhost:5001/send-email", {
+      const res = await fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
