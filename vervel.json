@@ -1,4 +1,9 @@
 {
+  "functions": {
+    "booking-app/api/index.js": {
+      "runtime": "nodejs18.x"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
