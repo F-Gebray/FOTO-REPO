@@ -4,7 +4,7 @@
     { "source": "/api/(.*)", "destination": "/api/index.js" },
     {
       "source": "/landing-api/(.*)",
-      "destination": "/landing-page/travel-landing-page/backend/index.js"
+      "destination": "/landing-page/api/send-email.js"
     },
     {
       "source": "/landing-page/(.*)",
