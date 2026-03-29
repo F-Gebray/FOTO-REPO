@@ -10,10 +10,10 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 // Models
-app.use("/api/auth", require("./routes/auth"));
 const User = require("./models/User");
 const Reservation = require("./models/Reservation");
 
+// Create Express app BEFORE using it
 const app = express();
 
 // ===============================
@@ -22,9 +22,6 @@ const app = express();
 app.use(
   cors({
     origin: function (origin, callback) {
-      // 1. Allow if there's no origin (like a mobile app or server-to-server)
-      // 2. Allow any .vercel.app domain (all your monorepo apps)
-      // 3. Allow localhost (for your VS Code testing)
       if (
         !origin ||
         origin.includes(".vercel.app") ||
@@ -57,32 +54,9 @@ async function connectDB() {
 // ===============================
 // ROUTES
 // ===============================
-app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
+app.use("/api/auth", require("./routes/auth"));
 
-app.post("/api/auth/login", async (req, res) => {
-  await connectDB();
-  try {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid Credentials" });
-    }
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET || "key", {
-      expiresIn: "7d",
-    });
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-    });
-    res.json({ success: true, user: { name: user.name, email: user.email } });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Server Error" });
-  }
-});
+app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
 
 app.post("/api/reservations", async (req, res) => {
   await connectDB();
