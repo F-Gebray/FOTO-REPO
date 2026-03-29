@@ -10,6 +10,7 @@ const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
 // Models
+app.use("/api/auth", require("./routes/auth"));
 const User = require("./models/User");
 const Reservation = require("./models/Reservation");
 
