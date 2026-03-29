@@ -1,25 +1,21 @@
 {
   "version": 2,
   "functions": {
-    "booking-app/api/index.js": {
+    "booking-api/index.js": {
       "runtime": "nodejs18.x"
     },
-    "landing-page/api/send-email.js": {
+    "landing-page/api/*.js": {
       "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/booking-app/api/index.js"
+      "destination": "/booking-api/index.js"
     },
     {
       "source": "/landing-api/(.*)",
-      "destination": "/landing-page/api/send-email.js"
-    },
-    {
-      "source": "/landing-page/(.*)",
-      "destination": "/landing-page/travel-landing-page/dist/$1"
+      "destination": "/landing-page/api/$1"
     },
     {
       "source": "/booking/(.*)",
@@ -30,7 +26,11 @@
       "destination": "/dashboard/dist/$1"
     },
     {
-      "source": "/((?!landing-page|booking|dashboard).*)",
+      "source": "/landing-page/(.*)",
+      "destination": "/landing-page/travel-landing-page/dist/$1"
+    },
+    {
+      "source": "/((?!booking|dashboard|landing-page).*)",
       "destination": "/my-app/dist/$1"
     }
   ]
