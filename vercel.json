@@ -3,9 +3,6 @@
   "functions": {
     "booking-api/index.js": {
       "runtime": "nodejs18.x"
-    },
-    "landing-page/api/*.js": {
-      "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
@@ -15,7 +12,7 @@
     },
     {
       "source": "/landing-api/(.*)",
-      "destination": "/landing-page/api/$1"
+      "destination": "/landing-page/api/index.js"
     },
     {
       "source": "/booking/(.*)",
@@ -30,7 +27,7 @@
       "destination": "/landing-page/travel-landing-page/dist/$1"
     },
     {
-      "source": "/((?!booking|dashboard|landing-page).*)",
+      "source": "/((?!api|booking|dashboard|landing-page).*)",
       "destination": "/my-app/dist/$1"
     }
   ]
