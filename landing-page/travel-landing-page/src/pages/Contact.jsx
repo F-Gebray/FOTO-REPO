@@ -130,7 +130,7 @@ const Contact = () => {
 
             <div className="relative z-10 pt-12 flex gap-4">
               <a
-                href="https://github.com/fitwi-Gebray"
+                href="https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page"
                 target="_blank"
                 rel="noreferrer"
                 className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
