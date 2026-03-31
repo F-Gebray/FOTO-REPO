@@ -11,7 +11,6 @@ const projects = [
     liveUrl: "https://foto-repo-dashboard.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/dashboard",
   },
-
   {
     id: 2,
     title: "Premium Architecture Booking Platform",

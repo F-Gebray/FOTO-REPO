@@ -70,7 +70,7 @@ const About = () => {
               Full-screen UI, destination search, and responsive design built
               with React.
               <a
-                href="https://foto-repo-travel-app.vercel.app/"
+                href="https://foto-repo-landing-page-i3z4nhown-fitwis-projects.vercel.app/"
                 target="_blank"
                 rel="noreferrer"
                 className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
