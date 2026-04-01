@@ -7,13 +7,20 @@ import Button from "../ui/Button";
 import Pill from "../ui/Pill";
 import Stat from "../ui/Stat";
 
+import useReveal from "../../hooks/useReveal"; // ⭐ ADD THIS
+
 const Hero = () => {
   const { availabilityText, heading, subtitle, meta, coreStack, stats } =
     heroData;
 
+  const reveal = useReveal();
+
   return (
     <section className="pt-20 pb-12 px-6 flex justify-center bg-[#0f172a]">
-      <div className="max-w-[1100px] w-full grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12 items-center">
+      <div
+        ref={reveal}
+        className="transition-all duration-700 opacity-0 translate-y-6 max-w-[1100px] w-full grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12 items-center"
+      >
         {/* LEFT SIDE */}
         <div className="flex flex-col items-start">
           <Pill>

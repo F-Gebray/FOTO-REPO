@@ -1,9 +1,11 @@
 import React from "react";
 import { skillGroups } from "../data/skills";
+import useStaggeredReveal from "../hooks/useStaggeredReveal"; // ⭐
 
 const Skills = () => {
+  const stagger = useStaggeredReveal(120); // ⭐ 120ms delay
+
   return (
-    /* section-inner + responsive padding matching your other sections */
     <div className="w-full max-w-[1100px] mx-auto px-6 py-16 md:py-24">
       {/* section-header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
@@ -22,15 +24,21 @@ const Skills = () => {
         </p>
       </div>
 
-      {/* skills-groups: Responsive grid matching the projects layout */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* skills-groups */}
+      <div
+        ref={stagger} // ⭐ STAGGERED ANIMATION
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
         {skillGroups.map((group) => (
           <div
             key={group.title}
-            className="bg-[radial-gradient(circle_at_top,#020617,#020617)] border border-[rgba(31,41,55,0.9)] rounded-[24px] p-[1.5rem] shadow-[0_18px_45px_rgba(15,23,42,0.75)] flex flex-col gap-4"
+            className="transition-all duration-700 opacity-0 translate-y-6
+            bg-[radial-gradient(circle_at_top,#020617,#020617)]
+            border border-[rgba(31,41,55,0.9)]
+            rounded-[24px] p-[1.5rem] shadow-[0_18px_45px_rgba(15,23,42,0.75)]
+            flex flex-col gap-4"
           >
             <div className="flex items-center gap-3">
-              {/* Small accent line next to the title */}
               <div className="w-1 h-4 bg-linear-to-b from-[#3b82f6] to-[#a855f7] rounded-full" />
               <h3 className="text-[1.1rem] font-bold text-[#e5e7eb]">
                 {group.title}

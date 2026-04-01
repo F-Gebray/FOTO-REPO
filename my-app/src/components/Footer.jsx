@@ -1,10 +1,16 @@
 import React from "react";
+import useReveal from "../hooks/useReveal"; // ⭐ ADD THIS
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
+  const reveal = useReveal(); // ⭐ ADD THIS
 
   return (
-    <footer className="w-full border-t border-[#1f2937] bg-[#020617] py-12 px-6 mt-auto">
+    <footer
+      ref={reveal} // ⭐ APPLY ANIMATION
+      className="transition-all duration-700 opacity-0 translate-y-6 
+      w-full border-t border-[#1f2937] bg-[#020617] py-12 px-6 mt-auto"
+    >
       <div className="max-w-[1100px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* LEFT: Branding & Copyright */}
         <div className="flex flex-col items-center md:items-start gap-2">

@@ -5,6 +5,8 @@ import Skills from "./components/Skills";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import Service from "./components/Service";
+import CTA from "./components/CTA";
 
 function App() {
   return (
@@ -14,15 +16,27 @@ function App() {
         <section id="home">
           <Hero />
         </section>
+
         <section id="projects" className="section">
           <Projects />
         </section>
+
         <section id="skills" className="section section-alt">
           <Skills />
         </section>
+
+        {/* ⭐ SERVICES SECTION — no .section class */}
+        <section id="services">
+          <Service />
+        </section>
+
+        {/* ⭐ OPTIONAL CTA SECTION */}
+        <CTA />
+
         <section id="about" className="section">
           <About />
         </section>
+
         <section id="contact" className="section section-alt">
           <Contact />
         </section>
