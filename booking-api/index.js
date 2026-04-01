@@ -36,6 +36,12 @@ app.use(
   }),
 );
 
+// ← Add this line right after
+app.options("*", cors());
+
+app.use(express.json());
+app.use(cookieParser());
+
 app.use(express.json());
 app.use(cookieParser());
 
