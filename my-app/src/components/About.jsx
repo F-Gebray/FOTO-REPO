@@ -67,7 +67,7 @@ const About = () => {
                 Analytics charts, tables, and dark mode built with React and
                 Recharts.
                 <a
-                  href="https://dashboard-d7c57e5f9-fitwis-projects.vercel.app/"
+                  href="https://dashboard-seven-psi-14.vercel.app/"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
