@@ -5,9 +5,7 @@ import Swal from "sweetalert2";
 
 // ✅ API helper function with trailing slash fix
 const API_BASE =
-  import.meta.env.VITE_API_BASE ||
-  "https://booking-af49z6nf2-fitwis-projects.vercel.app";
-
+  import.meta.env.VITE_API_BASE || "https://booking-api-xi-ivory.vercel.app";
 export const handleLogin = async (formData) => {
   // Remove trailing slash to prevent double slashes
   const baseUrl = API_BASE.replace(/\/$/, "");
