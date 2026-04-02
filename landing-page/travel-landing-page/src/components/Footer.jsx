@@ -20,7 +20,7 @@ export default function Footer() {
         {/* Social Icons */}
         <div className="flex gap-4">
           <a
-            href="https://github.com"
+            href="https://github.com/F-Gebray/FOTO-REPO"
             target="_blank"
             rel="noreferrer"
             className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
