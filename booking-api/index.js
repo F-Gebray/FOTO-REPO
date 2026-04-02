@@ -36,11 +36,8 @@ app.use(
   }),
 );
 
-// ← Add this line right after
-app.options("*", cors());
-
-app.use(express.json());
-app.use(cookieParser());
+// ✅ FIXED - Add parameter name to wildcard
+app.options("/*path", cors());
 
 app.use(express.json());
 app.use(cookieParser());
