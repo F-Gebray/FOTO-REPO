@@ -19,7 +19,7 @@ export default function App() {
         <Route path="projects" element={<Projects />} />
         <Route path="contact" element={<Contact />} />
         <Route path="register" element={<Register />} />
-        {/* <Route path="login" element={<Login />} /> */}
+        <Route path="login" element={<Login />} />
 
         {/* Protected Route: Booking Details */}
         <Route
