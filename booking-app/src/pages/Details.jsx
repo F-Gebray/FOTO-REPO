@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { LISTINGS } from "../data/listings";
 import Swal from "sweetalert2";
 
 export default function Details() {
   const { id } = useParams();
-  const navigate = useNavigate();
 
   const [guestName, setGuestName] = useState("");
   const [guestEmail, setGuestEmail] = useState("");
@@ -13,8 +12,6 @@ export default function Details() {
 
   const item = LISTINGS.find((l) => l.id === parseInt(id));
   const today = new Date().toISOString().split("T")[0];
-
-  const API_BASE = import.meta.env.VITE_API_BASE; // ✅ use env variable
 
   // Validation
   const validateInputs = () => {
@@ -50,71 +47,22 @@ export default function Details() {
     return true;
   };
 
-  const handleReserve = async () => {
+  const handleReserve = () => {
     if (!validateInputs()) return;
 
-    try {
-      const response = await fetch(`${API_BASE}/api/reservations`, {
-        method: "POST",
-        credentials: "include", // ✅ for cookies
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          listingId: item.id,
-          listingName: item.name,
-          checkIn: selectedDate,
-          totalPrice: item.price,
-          guestName,
-          guestEmail,
-        }),
-      });
-
-      if (response.status === 401) {
-        return Swal.fire({
-          title: "Authentication Required",
-          text: "You must log in to continue.",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Login",
-          cancelButtonText: "Register",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            navigate("/login", { state: { from: window.location.pathname } });
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            navigate("/register");
-          }
-        });
-      }
-
-      const data = await response.json();
-
-      if (data.success) {
-        setGuestName("");
-        setGuestEmail("");
-        setSelectedDate("");
-        Swal.fire({
-          title: "Success!",
-          text: "Reservation confirmed.",
-          icon: "success",
-          background: "#0f172a",
-          color: "#fff",
-          timer: 2000,
-          showConfirmButton: false,
-        });
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: data.message,
-          icon: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Reservation fetch error:", error);
-      Swal.fire({
-        title: "Error",
-        text: "Could not connect to the backend.",
-        icon: "error",
-      });
-    }
+    // Simulate successful reservation
+    setGuestName("");
+    setGuestEmail("");
+    setSelectedDate("");
+    Swal.fire({
+      title: "Success!",
+      text: `Reservation for ${item.name} confirmed.`,
+      icon: "success",
+      background: "#0f172a",
+      color: "#fff",
+      timer: 2000,
+      showConfirmButton: false,
+    });
   };
 
   if (!item)

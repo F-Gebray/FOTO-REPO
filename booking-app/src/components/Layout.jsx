@@ -1,36 +1,13 @@
 import { useState, useEffect } from "react";
-import { Outlet, Link, NavLink, useNavigate } from "react-router-dom";
+import { Outlet, NavLink } from "react-router-dom";
 
 export default function Layout() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const navigate = useNavigate();
 
-  // Check auth on load + when storage changes
-  useEffect(() => {
-    const checkAuth = () => {
-      const token = localStorage.getItem("token");
-      setIsLoggedIn(!!token);
-    };
-
-    checkAuth();
-
-    window.addEventListener("storage", checkAuth);
-    return () => window.removeEventListener("storage", checkAuth);
-  }, []);
-
-  // Lock scroll when menu opens
+  // Lock scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "unset";
   }, [isOpen]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setIsLoggedIn(false);
-    setIsOpen(false);
-    navigate("/");
-  };
 
   const navClass = ({ isActive }) =>
     `text-sm font-bold uppercase tracking-widest transition-all ${
@@ -44,9 +21,9 @@ export default function Layout() {
       {/* NAVBAR */}
       <nav className="fixed top-0 left-0 w-full z-[100] bg-slate-950/90 backdrop-blur-xl border-b border-slate-800 px-6 sm:px-10 h-24 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-black text-white">
+        <NavLink to="/" className="text-2xl font-black text-white">
           BOOKING<span className="text-slate-500">.</span>
-        </Link>
+        </NavLink>
 
         {/* Desktop Menu */}
         <div className="hidden sm:flex items-center space-x-8">
@@ -59,28 +36,7 @@ export default function Layout() {
           <NavLink to="/contact" className={navClass}>
             Contact
           </NavLink>
-
-          {isLoggedIn ? (
-            <button
-              onClick={handleLogout}
-              className="text-[10px] font-black uppercase text-red-500 border border-red-500/20 px-4 py-2 rounded-full hover:bg-red-500 hover:text-white transition-all"
-            >
-              Logout
-            </button>
-          ) : (
-            <NavLink to="/login" className={navClass}>
-              Login
-            </NavLink>
-          )}
-
-          {!isLoggedIn && (
-            <Link
-              to="/register"
-              className="bg-white text-slate-950 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-slate-200 transition-all"
-            >
-              Sign Up
-            </Link>
-          )}
+          {/* Removed Login/Sign Up */}
         </div>
 
         {/* Hamburger */}
@@ -121,7 +77,6 @@ export default function Layout() {
         >
           Home
         </NavLink>
-
         <NavLink
           to="/projects"
           onClick={closeMenu}
@@ -129,7 +84,6 @@ export default function Layout() {
         >
           Hotels
         </NavLink>
-
         <NavLink
           to="/contact"
           onClick={closeMenu}
@@ -137,34 +91,7 @@ export default function Layout() {
         >
           Contact
         </NavLink>
-
-        {/* Auth Buttons in Mobile */}
-        {isLoggedIn ? (
-          <button
-            onClick={handleLogout}
-            className="text-3xl font-bold text-red-500 uppercase"
-          >
-            Logout
-          </button>
-        ) : (
-          <NavLink
-            to="/login"
-            onClick={closeMenu}
-            className="text-3xl font-bold text-white uppercase"
-          >
-            Login
-          </NavLink>
-        )}
-
-        {!isLoggedIn && (
-          <Link
-            to="/register"
-            onClick={closeMenu}
-            className="bg-white text-slate-950 px-10 py-4 rounded-full font-black uppercase text-sm"
-          >
-            Sign Up
-          </Link>
-        )}
+        {/* Removed Login/Sign Up */}
       </div>
 
       {/* MAIN CONTENT */}
