@@ -105,6 +105,7 @@ app.get("/api/test", (req, res) => {
 
 // Login
 app.post("/api/auth/login", async (req, res) => {
+  console.log("Login called with", req.body);
   await ensureDbConnection();
 
   try {
@@ -155,12 +156,10 @@ app.post("/api/auth/register", async (req, res) => {
         .json({ success: false, message: "All fields required" });
 
     if (password.length < 6)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "Password must be at least 6 characters",
-        });
+      return res.status(400).json({
+        success: false,
+        message: "Password must be at least 6 characters",
+      });
 
     const existingUser = await User.findOne({ email });
     if (existingUser)
