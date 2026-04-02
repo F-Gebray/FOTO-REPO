@@ -15,8 +15,8 @@ export default function DashboardLayout({ children }) {
       <div className="flex flex-col flex-grow overflow-y-auto">
         <Topbar toggleSidebar={toggleSidebar} />
 
-        {/* Children can now stretch full width */}
-        <div className="w-full">{children}</div>
+        {/* Add mt-16 (margin-top) to push content down */}
+        <div className="w-full px-4 pb-4 mt-16">{children}</div>
       </div>
     </div>
   );

@@ -3,12 +3,25 @@ import {
   List,
   ListItemButton,
   ListItemText,
+  ListItemIcon,
   Typography,
   Box,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
+
 import { Link } from "react-router-dom";
+import Reports from "../Reports";
+import Messages from "../Messages";
+import Notifications from "../Notifications";
+import Help from "../Help";
+
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import BarChartIcon from "@mui/icons-material/BarChart";
+import PeopleIcon from "@mui/icons-material/People";
+import SettingsIcon from "@mui/icons-material/Settings";
+
+// Custom menu item components
 
 export default function Sidebar({ open, onClose }) {
   const theme = useTheme();
@@ -29,21 +42,95 @@ export default function Sidebar({ open, onClose }) {
       </Typography>
 
       <List>
-        <ListItemButton component={Link} to="/" onClick={onClose}>
-          <ListItemText primary="Overview" />
+        {/* OVERVIEW */}
+        <ListItemButton
+          component={Link}
+          to="/"
+          onClick={onClose}
+          sx={{
+            mb: 0.5,
+            borderRadius: 2,
+            transition: "all 0.2s",
+            "&:hover": {
+              backgroundColor: "#2c2c2c",
+              transform: "translateX(5px)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="Overview" sx={{ ml: -1 }} />
         </ListItemButton>
 
-        <ListItemButton component={Link} to="/analytics" onClick={onClose}>
-          <ListItemText primary="Analytics" />
+        {/* ANALYTICS */}
+        <ListItemButton
+          component={Link}
+          to="/analytics"
+          onClick={onClose}
+          sx={{
+            mb: 0.5,
+            borderRadius: 2,
+            transition: "all 0.2s",
+            "&:hover": {
+              backgroundColor: "#2c2c2c",
+              transform: "translateX(5px)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+            <BarChartIcon />
+          </ListItemIcon>
+          <ListItemText primary="Analytics" sx={{ ml: -1 }} />
         </ListItemButton>
 
-        <ListItemButton component={Link} to="/users" onClick={onClose}>
-          <ListItemText primary="Users" />
+        {/* USERS */}
+        <ListItemButton
+          component={Link}
+          to="/users"
+          onClick={onClose}
+          sx={{
+            mb: 0.5,
+            borderRadius: 2,
+            transition: "all 0.2s",
+            "&:hover": {
+              backgroundColor: "#2c2c2c",
+              transform: "translateX(5px)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+            <PeopleIcon />
+          </ListItemIcon>
+          <ListItemText primary="Users" sx={{ ml: -1 }} />
         </ListItemButton>
 
-        <ListItemButton component={Link} to="/settings" onClick={onClose}>
-          <ListItemText primary="Settings" />
+        {/* SETTINGS */}
+        <ListItemButton
+          component={Link}
+          to="/settings"
+          onClick={onClose}
+          sx={{
+            mb: 0.5,
+            borderRadius: 2,
+            transition: "all 0.2s",
+            "&:hover": {
+              backgroundColor: "#2c2c2c",
+              transform: "translateX(5px)",
+            },
+          }}
+        >
+          <ListItemIcon sx={{ color: "white", minWidth: 40 }}>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Settings" sx={{ ml: -1 }} />
         </ListItemButton>
+
+        {/* MODERN CUSTOM ITEMS */}
+        <Reports path="/reports" onClose={onClose} />
+        <Messages path="/messages" onClose={onClose} />
+        <Notifications path="/notifications" onClose={onClose} />
+        <Help path="/help" onClose={onClose} />
       </List>
     </Box>
   );
