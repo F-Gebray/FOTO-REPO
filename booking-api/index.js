@@ -1,6 +1,6 @@
-// const dns = require("node:dns");
-// dns.setServers(["8.8.8.8", "8.8.4.4"]);
-
+// ===============================
+// IMPORTS
+// ===============================
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -14,11 +14,13 @@ const User = require("./models/User");
 const Reservation = require("./models/Reservation");
 const { connectDB } = require("./utils/db");
 
-// Create Express app
+// ===============================
+// CREATE EXPRESS APP
+// ===============================
 const app = express();
 
 // ===============================
-// COMPLETE CORS CONFIGURATION - FIXED
+// CORS CONFIGURATION
 // ===============================
 const allowedOrigins = [
   "https://foto-booking-pypfj9mpg-fitwis-projects.vercel.app",
@@ -32,28 +34,18 @@ const allowedOrigins = [
   /\.vercel\.app$/, // Allows any Vercel preview deployment
 ];
 
-// CORS middleware
 app.use(
   cors({
     origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
+      if (!origin) return callback(null, true); // allow curl or mobile apps
 
-      // Check if origin is allowed
-      const isAllowed = allowedOrigins.some((pattern) => {
-        if (typeof pattern === "string") {
-          return pattern === origin;
-        } else if (pattern instanceof RegExp) {
-          return pattern.test(origin);
-        }
-        return false;
-      });
+      const isAllowed = allowedOrigins.some((pattern) =>
+        typeof pattern === "string" ? pattern === origin : pattern.test(origin),
+      );
 
       if (isAllowed) {
-        console.log("✅ Allowed origin:", origin);
         callback(null, true);
       } else {
-        console.log("❌ Blocked origin:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -70,36 +62,9 @@ app.use(
   }),
 );
 
-// Handle preflight requests explicitly
-app.options("*", (req, res) => {
-  const origin = req.headers.origin;
-
-  // Check if origin is allowed
-  const isAllowed = allowedOrigins.some((pattern) => {
-    if (typeof pattern === "string") {
-      return pattern === origin;
-    } else if (pattern instanceof RegExp) {
-      return pattern.test(origin);
-    }
-    return false;
-  });
-
-  if (isAllowed && origin) {
-    res.header("Access-Control-Allow-Origin", origin);
-  } else if (!origin) {
-    res.header("Access-Control-Allow-Origin", "*");
-  }
-
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, Cookie, X-Requested-With, Accept",
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Max-Age", "86400"); // 24 hours cache for preflight
-  res.sendStatus(200);
-});
-
+// ===============================
+// MIDDLEWARE
+// ===============================
 app.use(express.json());
 app.use(cookieParser());
 
@@ -114,7 +79,7 @@ async function ensureDbConnection() {
 }
 
 // ===============================
-// HEALTH CHECK ENDPOINTS
+// HEALTH CHECK
 // ===============================
 app.get("/", (req, res) => {
   res.json({
@@ -142,38 +107,30 @@ app.get("/api/test", (req, res) => {
 // ===============================
 // AUTH ROUTES
 // ===============================
-// Login endpoint
+
+// Login
 app.post("/api/auth/login", async (req, res) => {
   await ensureDbConnection();
 
   try {
     const { email, password } = req.body;
-
-    // Validate input
     if (!email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Email and password are required",
-      });
+      return res
+        .status(400)
+        .json({ success: false, message: "Email and password required" });
     }
 
     const user = await User.findOne({ email });
-
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid credentials",
-      });
-    }
+    if (!user)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid credentials",
-      });
-    }
+    if (!isPasswordValid)
+      return res
+        .status(401)
+        .json({ success: false, message: "Invalid credentials" });
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
@@ -183,66 +140,43 @@ app.post("/api/auth/login", async (req, res) => {
 
     res.json({
       success: true,
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+      user: { id: user._id, name: user.name, email: user.email },
       token,
     });
   } catch (err) {
     console.error("Login error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error. Please try again later.",
-    });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
-// Register endpoint
+// Register
 app.post("/api/auth/register", async (req, res) => {
   await ensureDbConnection();
 
   try {
     const { name, email, password } = req.body;
+    if (!name || !email || !password)
+      return res
+        .status(400)
+        .json({ success: false, message: "All fields required" });
 
-    // Validate input
-    if (!name || !email || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "All fields are required",
-      });
-    }
+    if (password.length < 6)
+      return res
+        .status(400)
+        .json({
+          success: false,
+          message: "Password must be at least 6 characters",
+        });
 
-    if (password.length < 6) {
-      return res.status(400).json({
-        success: false,
-        message: "Password must be at least 6 characters",
-      });
-    }
-
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({
-        success: false,
-        message: "User already exists with this email",
-      });
-    }
+    if (existingUser)
+      return res
+        .status(400)
+        .json({ success: false, message: "User already exists" });
 
-    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ name, email, password: hashedPassword });
 
-    // Create new user
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-    });
-
-    await user.save();
-
-    // Create token for auto-login after registration
     const token = jwt.sign(
       { id: user._id, email: user.email },
       process.env.JWT_SECRET || "SUPER_SECRET_KEY",
@@ -252,24 +186,17 @@ app.post("/api/auth/register", async (req, res) => {
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+      user: { id: user._id, name: user.name, email: user.email },
       token,
     });
   } catch (err) {
     console.error("Registration error:", err);
-    res.status(500).json({
-      success: false,
-      message: "Server error. Please try again later.",
-    });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 });
 
 // ===============================
-// RESERVATIONS ENDPOINT
+// RESERVATIONS
 // ===============================
 app.post("/api/reservations", async (req, res) => {
   await ensureDbConnection();
@@ -304,14 +231,11 @@ app.use("*", (req, res) => {
 });
 
 // ===============================
-// ERROR HANDLING MIDDLEWARE
+// GLOBAL ERROR HANDLER
 // ===============================
 app.use((err, req, res, next) => {
   console.error("Global error:", err);
-  res.status(500).json({
-    success: false,
-    message: "Internal server error",
-  });
+  res.status(500).json({ success: false, message: "Internal server error" });
 });
 
 // ===============================
