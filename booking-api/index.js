@@ -61,6 +61,22 @@ app.use("/api/auth", require("./routes/auth"));
 
 app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
 
+// ✅ ADDED ROOT ROUTE - Fixes "Cannot GET /"
+app.get("/", (req, res) => {
+  res.json({
+    message: "Booking API is running",
+    status: "active",
+    version: "1.0.0",
+    endpoints: {
+      test: "/api/test",
+      login: "/api/auth/login",
+      register: "/api/auth/register",
+      reservations: "/api/reservations",
+    },
+    documentation: "https://github.com/F-Gebray/FOTO-REPO",
+  });
+});
+
 app.post("/api/reservations", async (req, res) => {
   await connectDB();
   try {
@@ -70,6 +86,21 @@ app.post("/api/reservations", async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false });
   }
+});
+
+// ✅ OPTIONAL: 404 handler for undefined routes
+app.use("/*path", (req, res) => {
+  res.status(404).json({
+    error: "Route not found",
+    message: "The requested endpoint does not exist",
+    availableEndpoints: {
+      root: "/",
+      test: "/api/test",
+      login: "/api/auth/login",
+      register: "/api/auth/register",
+      reservations: "/api/reservations",
+    },
+  });
 });
 
 // ===============================
