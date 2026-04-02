@@ -20,7 +20,7 @@ const { connectDB } = require("./utils/db");
 const app = express();
 
 // ===============================
-// CORS CONFIGURATION
+// CORS CONFIGURATION (Vercel-safe)
 // ===============================
 const allowedOrigins = [
   "https://foto-booking-pypfj9mpg-fitwis-projects.vercel.app",
@@ -31,23 +31,18 @@ const allowedOrigins = [
   "http://localhost:3001",
   "http://localhost:5173",
   "http://localhost:5174",
-  /\.vercel\.app$/, // Allows any Vercel preview deployment
+  /\.vercel\.app$/, // allow any Vercel preview deployment
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow curl or mobile apps
-
+      if (!origin) return callback(null, true); // allow mobile or curl
       const isAllowed = allowedOrigins.some((pattern) =>
         typeof pattern === "string" ? pattern === origin : pattern.test(origin),
       );
-
-      if (isAllowed) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
+      if (isAllowed) return callback(null, true);
+      callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -114,11 +109,10 @@ app.post("/api/auth/login", async (req, res) => {
 
   try {
     const { email, password } = req.body;
-    if (!email || !password) {
+    if (!email || !password)
       return res
         .status(400)
         .json({ success: false, message: "Email and password required" });
-    }
 
     const user = await User.findOne({ email });
     if (!user)
