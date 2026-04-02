@@ -1,109 +1,81 @@
 const dns = require("node:dns");
-dns.setServers(["8.8.8.8", "8.8.4.4"]); // Critical for MongoDB on Vercel
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 require("dotenv").config();
 
-// Models
-const User = require("./models/User");
-const Reservation = require("./models/Reservation");
-
-// Create Express app BEFORE using it
 const app = express();
 
 // ===============================
-// SIMPLIFIED CORS (Monorepo Friendly)
+// CORS Configuration - UPDATED
 // ===============================
 app.use(
   cors({
     origin: function (origin, callback) {
+      // Allow all Vercel deployments and localhost
       if (
         !origin ||
         origin.includes(".vercel.app") ||
-        origin.includes("localhost")
+        origin.includes("localhost") ||
+        origin.includes("127.0.0.1")
       ) {
         callback(null, true);
       } else {
-        callback(new Error("CORS Blocked: Origin not recognized"));
+        console.log("Blocked origin:", origin);
+        callback(null, false);
       }
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Cookie",
+      "X-Requested-With",
+    ],
   }),
 );
 
-// ✅ FIXED - Add parameter name to wildcard
-app.options("/*path", cors());
+// Handle preflight requests explicitly
+app.options("/*path", (req, res) => {
+  res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, Cookie",
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  res.status(200).json({ message: "OK" });
+});
 
 app.use(express.json());
 app.use(cookieParser());
 
 // ===============================
-// DATABASE
-// ===============================
-let isConnected = false;
-async function connectDB() {
-  if (isConnected) return;
-  if (!process.env.MONGODB_URI)
-    throw new Error("MONGODB_URI is missing in Vercel Settings");
-  await mongoose.connect(process.env.MONGODB_URI);
-  isConnected = true;
-}
-
-// ===============================
-// ROUTES
+// Routes
 // ===============================
 app.use("/api/auth", require("./routes/auth"));
 
 app.get("/api/test", (req, res) => res.json({ message: "Backend Live" }));
 
-// ✅ ADDED ROOT ROUTE - Fixes "Cannot GET /"
 app.get("/", (req, res) => {
   res.json({
     message: "Booking API is running",
     status: "active",
-    version: "1.0.0",
     endpoints: {
       test: "/api/test",
       login: "/api/auth/login",
       register: "/api/auth/register",
-      reservations: "/api/reservations",
     },
-    documentation: "https://github.com/F-Gebray/FOTO-REPO",
   });
 });
 
-app.post("/api/reservations", async (req, res) => {
-  await connectDB();
-  try {
-    const newRes = new Reservation(req.body);
-    await newRes.save();
-    res.status(201).json({ success: true, message: "Saved!" });
-  } catch (err) {
-    res.status(500).json({ success: false });
-  }
-});
-
-// ✅ OPTIONAL: 404 handler for undefined routes
+// 404 handler
 app.use("/*path", (req, res) => {
-  res.status(404).json({
-    error: "Route not found",
-    message: "The requested endpoint does not exist",
-    availableEndpoints: {
-      root: "/",
-      test: "/api/test",
-      login: "/api/auth/login",
-      register: "/api/auth/register",
-      reservations: "/api/reservations",
-    },
-  });
+  res.status(404).json({ error: "Route not found" });
 });
 
-// ===============================
-// EXPORT FOR VERCEL
-// ===============================
 module.exports = app;

@@ -3,16 +3,28 @@ import { useState } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import Swal from "sweetalert2";
 
-// ✅ API helper function
-const API_BASE = import.meta.env.VITE_API_BASE;
+// ✅ API helper function with trailing slash fix
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  "https://booking-af49z6nf2-fitwis-projects.vercel.app";
 
 export const handleLogin = async (formData) => {
-  const res = await fetch(`${API_BASE}/api/auth/login`, {
+  // Remove trailing slash to prevent double slashes
+  const baseUrl = API_BASE.replace(/\/$/, "");
+  const url = `${baseUrl}/api/auth/login`;
+
+  console.log("Login URL:", url); // Debug: check the URL in console
+
+  const res = await fetch(url, {
     method: "POST",
-    credentials: "include", // Required for cookies/sessions
-    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
     body: JSON.stringify(formData),
   });
+
   const data = await res.json();
   return data;
 };
@@ -22,6 +34,7 @@ export default function Login() {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -31,25 +44,41 @@ export default function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      Swal.fire({
+        title: "Error",
+        text: "Please fill in all fields",
+        icon: "error",
+        confirmButtonColor: "#000",
+      });
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const data = await handleLogin(formData);
+      console.log("Login response:", data); // Debug: check response
 
       if (data.success) {
-        localStorage.setItem("token", data.token);
+        if (data.token) {
+          localStorage.setItem("token", data.token);
+        }
 
-        // ✅ Updated SweetAlert to prevent mobile focus/file glitches
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
+
         Swal.fire({
           title: "Welcome back!",
           icon: "success",
           timer: 1200,
           showConfirmButton: false,
-          allowOutsideClick: false, // Prevents ghost clicks during redirect
-          focusConfirm: false, // Prevents browser from jumping to next input
+          allowOutsideClick: false,
+          focusConfirm: false,
         }).then(() => {
-          // ✅ USE NAVIGATE INSTEAD OF WINDOW.LOCATION
-          // This keeps it within React, fixing the PC File Explorer popup
-          // and ensuring it works perfectly on mobile browsers.
           navigate(from, { replace: true });
         });
       } else {
@@ -61,16 +90,20 @@ export default function Login() {
         });
       }
     } catch (error) {
+      console.error("Login error:", error);
       Swal.fire({
         title: "Server Error",
-        text: "Backend not reachable. Ensure VITE_API_BASE is correct in Vercel settings.",
+        text: "Backend not reachable. Please try again later.",
         icon: "error",
+        confirmButtonColor: "#000",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-160px)] px-6">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 px-6">
       <div className="w-full max-w-md bg-slate-900 border border-slate-800 p-8 rounded-2xl shadow-2xl">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-black text-white tracking-tight uppercase">
@@ -89,12 +122,13 @@ export default function Login() {
             <input
               type="email"
               required
-              className="w-full bg-slate-950 border border-slate-800 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-white transition-all placeholder:text-slate-700"
+              className="w-full bg-slate-950 border border-slate-800 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition-all placeholder:text-slate-700"
               placeholder="name@company.com"
               value={formData.email}
               onChange={(e) =>
                 setFormData({ ...formData, email: e.target.value })
               }
+              disabled={isLoading}
             />
           </div>
 
@@ -105,31 +139,45 @@ export default function Login() {
             <input
               type="password"
               required
-              className="w-full bg-slate-950 border border-slate-800 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-white transition-all placeholder:text-slate-700"
+              className="w-full bg-slate-950 border border-slate-800 text-white px-5 py-4 rounded-xl focus:outline-none focus:border-white focus:ring-2 focus:ring-white/20 transition-all placeholder:text-slate-700"
               placeholder="••••••••"
               value={formData.password}
               onChange={(e) =>
                 setFormData({ ...formData, password: e.target.value })
               }
+              disabled={isLoading}
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-white text-slate-950 font-black py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-slate-200 transition-all shadow-lg active:scale-[0.98]"
+            disabled={isLoading}
+            className={`w-full bg-white text-slate-950 font-black py-4 rounded-xl uppercase tracking-widest text-xs hover:bg-slate-200 transition-all shadow-lg active:scale-[0.98] ${
+              isLoading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
-            Sign In
+            {isLoading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 
         <div className="mt-8 text-center">
           <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">
             Don't have an account?{" "}
-            <Link to="/register" className="text-white hover:underline">
+            <Link
+              to="/register"
+              className="text-white hover:underline transition-all"
+            >
               Join Us
             </Link>
           </p>
         </div>
+
+        {/* Debug info - only shows in development */}
+        {import.meta.env.DEV && (
+          <div className="mt-4 p-2 bg-slate-800 rounded text-xs text-slate-400 text-center">
+            API URL: {API_BASE}
+          </div>
+        )}
       </div>
     </div>
   );
