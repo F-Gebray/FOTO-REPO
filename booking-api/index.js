@@ -50,6 +50,7 @@ const corsOptions = {
 };
 
 // Apply CORS first before any other middleware
+app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
@@ -140,13 +141,11 @@ app.post("/api/auth/register", async (req, res) => {
       { expiresIn: "7d" },
     );
 
-    res
-      .status(201)
-      .json({
-        success: true,
-        user: { id: user._id, name: user.name, email: user.email },
-        token,
-      });
+    res.status(201).json({
+      success: true,
+      user: { id: user._id, name: user.name, email: user.email },
+      token,
+    });
   } catch (err) {
     res.status(500).json({ success: false, message: "Registration error" });
   }
