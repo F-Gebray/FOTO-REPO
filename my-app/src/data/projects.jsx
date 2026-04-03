@@ -25,7 +25,7 @@ const projects = [
       "SweetAlert2",
       "React Router",
     ],
-    liveUrl: "https://foto-booking-cjrix51i6-fitwis-projects.vercel.app/",
+    liveUrl: "https://foto-booking.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/booking-app",
   },
 
