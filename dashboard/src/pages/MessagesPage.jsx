@@ -24,7 +24,6 @@ import {
   Alert,
   Drawer,
   List,
-  ListItemIcon,
   keyframes,
 } from "@mui/material";
 import { io } from "socket.io-client";
@@ -437,16 +436,14 @@ export default function MessagesPage() {
       response: 98,
       mentions: 4,
     };
-
-    const duration = 2000; // 2 seconds
-    const interval = 20; // Update every 20ms
+    const duration = 2000;
+    const interval = 20;
     const steps = duration / interval;
     let currentStep = 0;
 
     const timer = setInterval(() => {
       currentStep++;
       const progress = currentStep / steps;
-
       setAnimatedStats({
         messages: Math.floor(targetValues.messages * progress),
         active: Math.floor(targetValues.active * progress),
@@ -454,19 +451,11 @@ export default function MessagesPage() {
         response: Math.floor(targetValues.response * progress),
         mentions: Math.floor(targetValues.mentions * progress),
       });
-
       if (currentStep >= steps) {
-        setAnimatedStats({
-          messages: targetValues.messages,
-          active: targetValues.active,
-          increase: targetValues.increase,
-          response: targetValues.response,
-          mentions: targetValues.mentions,
-        });
+        setAnimatedStats(targetValues);
         clearInterval(timer);
       }
     }, interval);
-
     return () => clearInterval(timer);
   }, []);
 
@@ -476,9 +465,19 @@ export default function MessagesPage() {
     setUnreadCount(count);
   }, [notifications]);
 
-  // Socket setup
+  // Socket setup - Fixed version without process.env
   useEffect(() => {
-    const socket = io("http://localhost:8080", { autoConnect: false });
+    // Use localhost for development - change this URL when you deploy your backend
+    const BACKEND_URL = "http://localhost:8080";
+
+    const socket = io(BACKEND_URL, {
+      autoConnect: false,
+      transports: ["websocket", "polling"],
+      reconnection: true,
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
     socketRef.current = socket;
     socket.connect();
 
@@ -494,7 +493,6 @@ export default function MessagesPage() {
         ),
       );
 
-      // Add notification for new message
       const chatName =
         conversations.find((c) => c.id === msg.chatId)?.name || "Unknown";
       const newNotification = {
@@ -509,7 +507,6 @@ export default function MessagesPage() {
       };
       setNotifications((prev) => [newNotification, ...prev]);
 
-      // Show snackbar for new message
       if (msg.sender !== CURRENT_USER) {
         setSnackbar({
           open: true,
@@ -525,7 +522,7 @@ export default function MessagesPage() {
     return () => {
       socket.disconnect();
     };
-  }, [selectedChat, conversations]); // Add dependencies
+  }, [selectedChat, conversations]);
 
   useEffect(() => {
     if (socketRef.current && socketRef.current.connected) {
@@ -538,13 +535,8 @@ export default function MessagesPage() {
   }, [messages]);
 
   // Notification handlers
-  const handleNotificationClick = () => {
-    setNotificationDrawerOpen(true);
-  };
-
-  const handleCloseDrawer = () => {
-    setNotificationDrawerOpen(false);
-  };
+  const handleNotificationClick = () => setNotificationDrawerOpen(true);
+  const handleCloseDrawer = () => setNotificationDrawerOpen(false);
 
   const handleMarkAsRead = (notificationId) => {
     setNotifications((prev) =>
@@ -613,13 +605,9 @@ export default function MessagesPage() {
   };
 
   // Attachment handlers
-  const handleAttachmentClick = (event) => {
+  const handleAttachmentClick = (event) =>
     setAttachmentMenuAnchor(event.currentTarget);
-  };
-
-  const handleAttachmentClose = () => {
-    setAttachmentMenuAnchor(null);
-  };
+  const handleAttachmentClose = () => setAttachmentMenuAnchor(null);
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -672,22 +660,14 @@ export default function MessagesPage() {
   };
 
   // Emoji handler
-  const handleEmojiClick = (event) => {
-    setEmojiAnchor(event.currentTarget);
-  };
-
-  const handleEmojiClose = () => {
-    setEmojiAnchor(null);
-  };
-
+  const handleEmojiClick = (event) => setEmojiAnchor(event.currentTarget);
+  const handleEmojiClose = () => setEmojiAnchor(null);
   const handleEmojiSelect = (emoji) => {
     setMessageInput((prev) => prev + emoji);
     handleEmojiClose();
   };
 
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
+  const handleCloseSnackbar = () => setSnackbar({ ...snackbar, open: false });
 
   const filteredConversations = conversations.filter(
     (c) =>
@@ -709,10 +689,7 @@ export default function MessagesPage() {
         <Box sx={{ display: "flex", alignItems: "baseline", gap: 2 }}>
           <Typography
             variant="h4"
-            sx={{
-              fontWeight: "bold",
-              animation: `${fadeIn} 0.5s ease-out`,
-            }}
+            sx={{ fontWeight: "bold", animation: `${fadeIn} 0.5s ease-out` }}
           >
             Team Messages
           </Typography>
@@ -725,9 +702,7 @@ export default function MessagesPage() {
           sx={{
             animation: unreadCount > 0 ? `${pulse} 1.5s infinite` : "none",
             transition: "transform 0.3s ease",
-            "&:hover": {
-              transform: "rotate(15deg) scale(1.1)",
-            },
+            "&:hover": { transform: "rotate(15deg) scale(1.1)" },
           }}
         >
           <Badge badgeContent={unreadCount} color="error">
@@ -1154,12 +1129,10 @@ export default function MessagesPage() {
                 anchorEl={attachmentMenuAnchor}
                 open={Boolean(attachmentMenuAnchor)}
                 onClose={handleAttachmentClose}
-                anchorOrigin={{ vertical: "top", horizontal: "left" }}
-                transformOrigin={{ vertical: "bottom", horizontal: "left" }}
               >
                 <MenuItem onClick={() => fileInputRef.current?.click()}>
-                  <InsertDriveFileIcon sx={{ mr: 1, fontSize: 20 }} />
-                  Upload File
+                  <InsertDriveFileIcon sx={{ mr: 1, fontSize: 20 }} /> Upload
+                  File
                 </MenuItem>
                 <MenuItem
                   onClick={() => {
@@ -1170,8 +1143,7 @@ export default function MessagesPage() {
                     imageInput.click();
                   }}
                 >
-                  <ImageIcon sx={{ mr: 1, fontSize: 20 }} />
-                  Upload Image
+                  <ImageIcon sx={{ mr: 1, fontSize: 20 }} /> Upload Image
                 </MenuItem>
               </Menu>
 
@@ -1321,7 +1293,7 @@ export default function MessagesPage() {
               />
             </Box>
 
-            {/* Animated Recent Activity Card */}
+            {/* Recent Activity Card */}
             <Paper
               elevation={0}
               sx={{
@@ -1391,7 +1363,7 @@ export default function MessagesPage() {
               </Box>
             </Paper>
 
-            {/* Animated Quick Poll Card */}
+            {/* Quick Poll Card */}
             <Paper
               elevation={0}
               sx={{
@@ -1426,10 +1398,7 @@ export default function MessagesPage() {
                     fontWeight: 500,
                     cursor: "pointer",
                     transition: "all 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      bgcolor: "#bbdef5",
-                    },
+                    "&:hover": { transform: "scale(1.05)", bgcolor: "#bbdef5" },
                   }}
                   onClick={() =>
                     setSnackbar({
@@ -1447,10 +1416,7 @@ export default function MessagesPage() {
                     fontWeight: 500,
                     cursor: "pointer",
                     transition: "all 0.3s ease",
-                    "&:hover": {
-                      transform: "scale(1.05)",
-                      bgcolor: "#e1bee7",
-                    },
+                    "&:hover": { transform: "scale(1.05)", bgcolor: "#e1bee7" },
                   }}
                   onClick={() =>
                     setSnackbar({
@@ -1482,10 +1448,7 @@ export default function MessagesPage() {
         <Alert
           onClose={handleCloseSnackbar}
           severity={snackbar.severity}
-          sx={{
-            width: "100%",
-            animation: `${slideIn} 0.3s ease-out`,
-          }}
+          sx={{ width: "100%", animation: `${slideIn} 0.3s ease-out` }}
         >
           {snackbar.message}
         </Alert>
