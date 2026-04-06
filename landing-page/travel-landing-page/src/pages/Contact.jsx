@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import emailjs from "@emailjs/browser";
 import Swal from "sweetalert2";
 import {
   FiMail,
@@ -16,7 +17,7 @@ const Contact = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const MAX_CHARS = 500;
 
-  // Check if all fields are filled
+  // Form Validation logic
   useEffect(() => {
     const name = formRef.current?.user_name?.value.trim();
     const email = formRef.current?.user_email?.value.trim();
@@ -26,69 +27,59 @@ const Contact = () => {
 
   const sendEmail = async (e) => {
     e.preventDefault();
-    if (isSending || !isFormValid) return; // prevent sending if not valid
+    if (isSending || !isFormValid) return;
 
     setIsSending(true);
 
-    const payload = {
+    // Pull keys from Vite environment variables
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+    const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+
+    const templateParams = {
       user_name: formRef.current.user_name.value.trim(),
       user_email: formRef.current.user_email.value.trim(),
       message: message.trim(),
     };
-    const API_URL = import.meta.env.VITE_CONTACT_API;
 
     try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+      // 4th argument must be the Public Key string
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      Swal.fire({
+        title: "Sent!",
+        text: "Your message has been delivered.",
+        icon: "success",
+        background: "#18181b",
+        color: "#fff",
+        confirmButtonColor: "#3b82f6",
       });
 
-      const data = await res.json();
-
-      if (data.success) {
-        Swal.fire({
-          title: "Sent!",
-          text: "Your message has been delivered.",
-          icon: "success",
-          background: "#18181b",
-          color: "#fff",
-          confirmButtonColor: "#3b82f6",
-        });
-        formRef.current.reset();
-        setMessage("");
-      } else {
-        Swal.fire({
-          title: "Error",
-          text: data.error || "Failed to send your message",
-          icon: "error",
-          background: "#18181b",
-          color: "#fff",
-        });
-      }
+      formRef.current.reset();
+      setMessage("");
     } catch (err) {
-      console.error(err);
+      console.error("EmailJS Error:", err);
       Swal.fire({
         title: "Error",
-        text: "Backend unavailable",
+        text: "Could not connect to EmailJS. Check your console and .env file.",
         icon: "error",
         background: "#18181b",
         color: "#fff",
       });
+    } finally {
+      setIsSending(false);
     }
-
-    setIsSending(false);
   };
 
   return (
     <section className="relative min-h-screen bg-zinc-950 text-white py-32 px-6 overflow-hidden">
-      {/* Background blobs */}
+      {/* Background blobs preserved */}
       <div className="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-sky-600/20 rounded-full blur-[120px] animate-pulse" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[150px]" />
 
       <div className="relative max-w-5xl mx-auto">
         <div className="bg-zinc-900 rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-5 border border-zinc-800">
-          {/* Sidebar */}
+          {/* Sidebar Section - All links preserved */}
           <div className="lg:col-span-2 bg-zinc-900 p-10 text-white flex flex-col justify-between relative overflow-hidden">
             <div className="absolute -top-20 -left-20 w-64 h-64 bg-zinc-800 rounded-full opacity-50"></div>
             <div className="relative z-10">
@@ -128,18 +119,18 @@ const Contact = () => {
               </div>
             </div>
 
+            {/* Social Links preserved */}
             <div className="relative z-10 pt-12 flex gap-4">
               <a
-                href="https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page"
+                href="https://github.com"
                 target="_blank"
                 rel="noreferrer"
                 className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
               >
                 <FiGithub size={20} />
               </a>
-
               <a
-                href="https://www.linkedin.com/in/fitwi-gebray-teklemichael-4aa1a02a4/"
+                href="https://linkedin.com"
                 target="_blank"
                 rel="noreferrer"
                 className="p-3 bg-zinc-800 rounded-xl hover:bg-white hover:text-black transition-all"
@@ -149,7 +140,7 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Form */}
+          {/* Form Section */}
           <div className="lg:col-span-3 p-10 lg:p-14">
             <form ref={formRef} onSubmit={sendEmail} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -158,7 +149,7 @@ const Contact = () => {
                   name="user_name"
                   required
                   placeholder="Your Name"
-                  onChange={() => setMessage((prev) => prev)} // trigger validation
+                  onChange={() => setMessage((prev) => prev)}
                   className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
                 />
                 <input
@@ -166,7 +157,7 @@ const Contact = () => {
                   name="user_email"
                   required
                   placeholder="Your Email"
-                  onChange={() => setMessage((prev) => prev)} // trigger validation
+                  onChange={() => setMessage((prev) => prev)}
                   className="w-full px-5 py-4 bg-zinc-800 text-white rounded-2xl outline-none focus:ring-2 focus:ring-zinc-600"
                 />
               </div>
