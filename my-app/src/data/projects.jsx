@@ -53,7 +53,7 @@ const projects = [
       "Lucide React",
     ],
     liveUrl: "https://web-page-sand-five.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page",
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/webDev-page",
   },
 ];
 
