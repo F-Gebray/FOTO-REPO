@@ -52,7 +52,7 @@ const projects = [
       "Tailwind CSS",
       "Lucide React",
     ],
-    liveUrl: "https://landing-page-omega-two-35.vercel.app/",
+    liveUrl: "https://web-page-sand-five.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page",
   },
 ];
