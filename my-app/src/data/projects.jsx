@@ -39,6 +39,22 @@ const projects = [
     liveUrl: "https://landing-page-omega-two-35.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page",
   },
+  {
+    id: 4,
+    title: "Stellar Web Solutions",
+    role: "Frontend Developer",
+    description:
+      "A high-performance landing page for a next-generation digital agency. Built with React and Framer Motion, it features sophisticated hover-triggered navigation, dynamic UI components, and a sleek dark-mode aesthetic to showcase premium web development services.",
+    tech: [
+      "React",
+      "TypeScript",
+      "Framer Motion",
+      "Tailwind CSS",
+      "Lucide React",
+    ],
+    liveUrl: "https://landing-page-omega-two-35.vercel.app/",
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page",
+  },
 ];
 
 export default projects;
