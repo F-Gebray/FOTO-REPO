@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   Code,
   ChevronDown,
@@ -8,7 +8,6 @@ import {
   MessageSquare,
   Cpu,
   Zap,
-  Layout,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import useScrollSpy from "../hooks/useScrollSpy";
@@ -47,7 +46,7 @@ const NavItem = ({ item, active, scrollToSection }) => {
 
   const handleNav = (id, path) => {
     setIsOpen(false);
-    if (path) return;
+    if (path) return; // Router Link handles this
     if (location.pathname !== "/") {
       window.location.href = `/#${id}`;
     } else {
@@ -73,7 +72,7 @@ const NavItem = ({ item, active, scrollToSection }) => {
         {hasDropdown && (
           <ChevronDown
             size={20}
-            className={`transition-transform ${isOpen ? "rotate-180" : ""}`}
+            className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`}
           />
         )}
       </button>
@@ -119,6 +118,11 @@ export const Navbar = () => {
   const active = useScrollSpy(navLinks.map((l) => l.id));
   const location = useLocation();
 
+  // ⭐ FIX 1: Auto-close menu when the URL changes (e.g. going to /consultancy)
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
@@ -132,7 +136,7 @@ export const Navbar = () => {
       const el = document.getElementById(id);
       if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    setMobileOpen(false);
+    setMobileOpen(false); // ⭐ FIX 2: Close on scroll selection
   };
 
   return (
@@ -144,7 +148,7 @@ export const Navbar = () => {
       }`}
     >
       <div className="max-w-[1400px] mx-auto px-8 flex items-center justify-between">
-        {/* LOGO: Fitwi.G */}
+        {/* LOGO */}
         <div
           className="flex items-center gap-4 cursor-pointer group"
           onClick={() => scrollToSection("home")}
@@ -202,14 +206,18 @@ export const Navbar = () => {
               {navLinks.map((item) => (
                 <div key={item.id}>
                   <button
-                    onClick={() => scrollToSection(item.id)}
-                    className={`text-3xl font-black uppercase tracking-wider ${
+                    onClick={() => {
+                      if (!item.dropdown) {
+                        scrollToSection(item.id);
+                      }
+                    }}
+                    className={`text-3xl font-black uppercase tracking-wider text-left w-full ${
                       active === item.id ? "text-cyan-400" : "text-white"
                     }`}
                   >
                     {item.name}
                   </button>
-                  {/* MOBILE DROPDOWN LINKS */}
+
                   {item.dropdown && (
                     <div className="mt-6 ml-8 border-l-4 border-white/10 space-y-6">
                       {item.dropdown.map((sub, i) =>
@@ -217,7 +225,7 @@ export const Navbar = () => {
                           <Link
                             key={i}
                             to={sub.path}
-                            onClick={() => setMobileOpen(false)}
+                            onClick={() => setMobileOpen(false)} // ⭐ FIX 3: Close on mobile link click
                             className="flex items-center gap-6 text-2xl font-bold text-gray-400 hover:text-white pl-8 py-2"
                           >
                             <span className="text-cyan-500">{sub.icon}</span>{" "}
@@ -227,7 +235,7 @@ export const Navbar = () => {
                           <button
                             key={i}
                             onClick={() => scrollToSection(sub.id)}
-                            className="flex items-center gap-6 text-2xl font-bold text-gray-400 hover:text-white pl-8 py-2"
+                            className="flex items-center gap-6 text-2xl font-bold text-gray-400 hover:text-white pl-8 py-2 text-left"
                           >
                             <span className="text-cyan-500">{sub.icon}</span>{" "}
                             {sub.name}
@@ -238,6 +246,15 @@ export const Navbar = () => {
                   )}
                 </div>
               ))}
+
+              <div className="pt-6">
+                <button
+                  onClick={() => scrollToSection("contact")}
+                  className="w-full bg-white text-black px-10 py-5 rounded-full text-2xl font-black hover:bg-cyan-400 transition-all"
+                >
+                  Hire Me
+                </button>
+              </div>
             </div>
           </motion.div>
         )}
