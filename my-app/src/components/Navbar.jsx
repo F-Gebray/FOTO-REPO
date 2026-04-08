@@ -8,6 +8,7 @@ import {
   MessageSquare,
   Cpu,
   Zap,
+  Layout,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import useScrollSpy from "../hooks/useScrollSpy";
@@ -19,7 +20,7 @@ const navLinks = [
     id: "projects",
     dropdown: [
       { name: "Web Apps", id: "projects", icon: <Code size={20} /> },
-      { name: "Mobile Apps", id: "projects", icon: <Cpu size={20} /> },
+      { name: "Mobile Apps", path: "/mobile-apps", icon: <Cpu size={20} /> },
     ],
   },
   { name: "Skills", id: "skills" },
@@ -27,7 +28,7 @@ const navLinks = [
     name: "Services",
     id: "services",
     dropdown: [
-      { name: "Development", id: "services", icon: <Zap size={20} /> },
+      { name: "Development", id: "services", icon: <Code size={20} /> },
       {
         name: "Consultancy",
         path: "/consultancy",
@@ -62,7 +63,11 @@ const NavItem = ({ item, active, scrollToSection }) => {
     >
       <button
         onClick={() => handleNav(item.id)}
-        className={`flex items-center gap-2 text-xl font-bold transition-all ${active === item.id ? "text-cyan-400" : "text-gray-300 hover:text-white"}`}
+        className={`flex items-center gap-2 text-xl font-bold transition-all ${
+          active === item.id
+            ? "text-cyan-400"
+            : "text-gray-300 hover:text-white"
+        }`}
       >
         {item.name}
         {hasDropdown && (
@@ -86,7 +91,8 @@ const NavItem = ({ item, active, scrollToSection }) => {
                 <Link
                   key={i}
                   to={sub.path}
-                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
                 >
                   <span className="text-cyan-500">{sub.icon}</span> {sub.name}
                 </Link>
@@ -94,7 +100,7 @@ const NavItem = ({ item, active, scrollToSection }) => {
                 <button
                   key={i}
                   onClick={() => handleNav(sub.id)}
-                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
+                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl transition-colors"
                 >
                   <span className="text-cyan-500">{sub.icon}</span> {sub.name}
                 </button>
@@ -131,9 +137,14 @@ export const Navbar = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all ${isScrolled ? "bg-[#0f172a]/95 backdrop-blur-md py-4 shadow-lg" : "bg-transparent py-8"}`}
+      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+        isScrolled
+          ? "bg-[#0f172a]/95 backdrop-blur-md border-b border-white/10 py-4"
+          : "bg-transparent py-8"
+      }`}
     >
       <div className="max-w-[1400px] mx-auto px-8 flex items-center justify-between">
+        {/* LOGO: Fitwi.G */}
         <div
           className="flex items-center gap-4 cursor-pointer group"
           onClick={() => scrollToSection("home")}
@@ -150,6 +161,8 @@ export const Navbar = () => {
             </span>
           </div>
         </div>
+
+        {/* DESKTOP NAV */}
         <nav className="hidden xl:flex items-center space-x-12">
           {navLinks.map((link) => (
             <NavItem
@@ -166,6 +179,8 @@ export const Navbar = () => {
             Hire Me
           </button>
         </nav>
+
+        {/* MOBILE TOGGLE */}
         <button
           className="xl:hidden text-white"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -173,6 +188,60 @@ export const Navbar = () => {
           {mobileOpen ? <X size={40} /> : <Menu size={40} />}
         </button>
       </div>
+
+      {/* MOBILE MENU */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="xl:hidden bg-[#0f172a] border-t border-white/10 overflow-hidden"
+          >
+            <div className="px-10 py-12 space-y-10">
+              {navLinks.map((item) => (
+                <div key={item.id}>
+                  <button
+                    onClick={() => scrollToSection(item.id)}
+                    className={`text-3xl font-black uppercase tracking-wider ${
+                      active === item.id ? "text-cyan-400" : "text-white"
+                    }`}
+                  >
+                    {item.name}
+                  </button>
+                  {/* MOBILE DROPDOWN LINKS */}
+                  {item.dropdown && (
+                    <div className="mt-6 ml-8 border-l-4 border-white/10 space-y-6">
+                      {item.dropdown.map((sub, i) =>
+                        sub.path ? (
+                          <Link
+                            key={i}
+                            to={sub.path}
+                            onClick={() => setMobileOpen(false)}
+                            className="flex items-center gap-6 text-2xl font-bold text-gray-400 hover:text-white pl-8 py-2"
+                          >
+                            <span className="text-cyan-500">{sub.icon}</span>{" "}
+                            {sub.name}
+                          </Link>
+                        ) : (
+                          <button
+                            key={i}
+                            onClick={() => scrollToSection(sub.id)}
+                            className="flex items-center gap-6 text-2xl font-bold text-gray-400 hover:text-white pl-8 py-2"
+                          >
+                            <span className="text-cyan-500">{sub.icon}</span>{" "}
+                            {sub.name}
+                          </button>
+                        ),
+                      )}
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 };

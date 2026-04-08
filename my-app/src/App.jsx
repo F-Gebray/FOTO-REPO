@@ -9,6 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./components/home/HomePage";
 import ConsultancyPage from "./pages/ConsultancyPage";
+import MobileAppsPage from "./pages/MobileAppsPage";
 
 // ⭐ Resets scroll to top on every route change
 const ScrollToTop = () => {
@@ -44,6 +45,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/consultancy" element={<ConsultancyPage />} />
+            <Route path="/mobile-apps" element={<MobileAppsPage />} />{" "}
           </Routes>
         </main>
         <Footer />
