@@ -5,7 +5,7 @@ const projects = [
     description:
       "A modern, production-ready admin dashboard featuring interactive analytics charts and dynamic user tables.",
     tech: ["React", "Material UI", "Recharts"],
-    liveUrl: "https://vercel.app",
+    liveUrl: "https://dashboard-a3wp4hzu7-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO",
   },
   {
@@ -14,7 +14,7 @@ const projects = [
     description:
       "A sophisticated luxury travel platform featuring a dynamic property listing system and real-time reservations.",
     tech: ["Tailwind", "EmailJS", "React Router"],
-    liveUrl: "https://vercel.app",
+    liveUrl: "https://dashboard-a3wp4hzu7-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO",
   },
   {
@@ -23,7 +23,7 @@ const projects = [
     description:
       "User-friendly travel application featuring destination search and a seamless experience across devices.",
     tech: ["React", "Vite", "Material UI"],
-    liveUrl: "https://vercel.app",
+    liveUrl: "https://landing-page-e5wp3codi-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO",
   },
   {
@@ -32,7 +32,7 @@ const projects = [
     description:
       "High-performance agency landing page with sophisticated hover-triggered navigation and premium UI.",
     tech: ["TypeScript", "Framer Motion", "Tailwind"],
-    liveUrl: "https://vercel.app",
+    liveUrl: "https://web-page-no7pgsqms-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO",
   },
 ];
