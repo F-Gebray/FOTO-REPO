@@ -9,7 +9,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./components/home/HomePage";
 import ConsultancyPage from "./pages/ConsultancyPage";
-import MobileAppsPage from "./pages/MobileAppsPage";
+import MobileAppsPage from "./components/home/MobileAppsPage";
 
 // ⭐ Resets scroll to top on every route change
 const ScrollToTop = () => {
