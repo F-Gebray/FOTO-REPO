@@ -123,7 +123,6 @@ interface NavbarProps {
 export const Navbar = ({ onOpenAuth }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  // ⭐ Track which index is expanded (number) or none (null)
   const [mobileExpanded, setMobileExpanded] = useState<number | null>(null);
   const location = useLocation();
 
@@ -133,7 +132,6 @@ export const Navbar = ({ onOpenAuth }: NavbarProps) => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close everything on route change
   useEffect(() => {
     setMobileMenuOpen(false);
     setMobileExpanded(null);
@@ -183,9 +181,9 @@ export const Navbar = ({ onOpenAuth }: NavbarProps) => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 w-full glass border-t border-white/10"
+            className="md:hidden absolute top-full left-0 w-full glass border-t border-white/10 bg-[#0a0a0a]"
           >
-            <div className="px-4 pt-2 pb-6 space-y-4 shadow-xl max-h-[80vh] overflow-y-auto">
+            <div className="px-4 pt-2 pb-6 space-y-2 shadow-xl max-h-[80vh] overflow-y-auto">
               {navItems.map((item, idx) => (
                 <div
                   key={idx}
@@ -204,22 +202,33 @@ export const Navbar = ({ onOpenAuth }: NavbarProps) => {
                     />
                   </button>
 
-                  <AnimatePresence>
+                  {/* ⭐ THIS SECTION IS NOW HIDDEN BY DEFAULT ⭐ */}
+                  <AnimatePresence initial={false}>
                     {mobileExpanded === idx && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden pl-4 border-l-2 border-white/5 ml-3 space-y-1 mb-4"
+                        key="content"
+                        initial="collapsed"
+                        animate="open"
+                        exit="collapsed"
+                        variants={{
+                          open: { opacity: 1, height: "auto" },
+                          collapsed: { opacity: 0, height: 0 },
+                        }}
+                        transition={{
+                          duration: 0.3,
+                          ease: [0.04, 0.62, 0.23, 0.98],
+                        }}
+                        className="overflow-hidden"
                       >
-                        {item.dropdown.map((sub, i) => {
-                          const isRouterLink =
-                            sub.href.startsWith("/") && !sub.href.includes("#");
-                          const linkClasses =
-                            "block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors";
+                        <div className="pl-4 border-l-2 border-white/5 ml-3 space-y-1 pb-4">
+                          {item.dropdown.map((sub, i) => {
+                            const isRouterLink =
+                              sub.href.startsWith("/") &&
+                              !sub.href.includes("#");
+                            const linkClasses =
+                              "block px-3 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors";
 
-                          if (isRouterLink) {
-                            return (
+                            return isRouterLink ? (
                               <Link
                                 key={i}
                                 to={sub.href}
@@ -227,14 +236,17 @@ export const Navbar = ({ onOpenAuth }: NavbarProps) => {
                               >
                                 {sub.name}
                               </Link>
+                            ) : (
+                              <a
+                                key={i}
+                                href={sub.href}
+                                className={linkClasses}
+                              >
+                                {sub.name}
+                              </a>
                             );
-                          }
-                          return (
-                            <a key={i} href={sub.href} className={linkClasses}>
-                              {sub.name}
-                            </a>
-                          );
-                        })}
+                          })}
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
