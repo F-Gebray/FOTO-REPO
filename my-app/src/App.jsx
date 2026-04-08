@@ -1,48 +1,54 @@
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
+import { useEffect } from "react";
 import Navbar from "./components/Navbar";
-import Hero from "./components/hero/Hero";
-import Projects from "./components/Projects";
-import Skills from "./components/Skills";
-import About from "./components/About";
-import Contact from "./components/Contact";
 import Footer from "./components/Footer";
-import Service from "./components/Service";
-import CTA from "./components/CTA";
+import Home from "./components/home/HomePage";
+import ConsultancyPage from "./pages/ConsultancyPage";
+
+// ⭐ Resets scroll to top on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+// ⭐ Handles smooth scrolling to #ids from other pages
+const ScrollToHash = () => {
+  const { hash } = useLocation();
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace("#", ""));
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }, [hash]);
+  return null;
+};
 
 function App() {
   return (
-    <div className="app">
-      <Navbar />
-      <main>
-        <section id="home">
-          <Hero />
-        </section>
-
-        <section id="projects" className="section">
-          <Projects />
-        </section>
-
-        <section id="skills" className="section section-alt">
-          <Skills />
-        </section>
-
-        {/* ⭐ SERVICES SECTION — no .section class */}
-        <section id="services">
-          <Service />
-        </section>
-
-        {/* ⭐ OPTIONAL CTA SECTION */}
-        <CTA />
-
-        <section id="about" className="section">
-          <About />
-        </section>
-
-        <section id="contact" className="section section-alt">
-          <Contact />
-        </section>
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <ScrollToTop />
+      <ScrollToHash />
+      <div className="app bg-[#0f172a] text-white min-h-screen">
+        <Navbar />
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/consultancy" element={<ConsultancyPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
