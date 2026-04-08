@@ -1,8 +1,8 @@
 import React from "react";
-import useReveal from "../hooks/useReveal"; // ⭐ ADD THIS
+import useReveal from "../hooks/useReveal";
 
 const About = () => {
-  const reveal = useReveal(); // ⭐ ADD THIS
+  const reveal = useReveal();
 
   return (
     <section id="about" className="section">
@@ -44,6 +44,22 @@ const About = () => {
             </p>
 
             <ul className="mt-10 space-y-8">
+              <li>
+                <span className="text-[#e5e7eb] font-bold block mb-1">
+                  • Modern Stellar Web App:
+                </span>
+                Demonstrates routing, reusable components, and scalable folder
+                structure.
+                <a
+                  href="https://web-page-sand-five.vercel.app/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
+                >
+                  Live Demo →
+                </a>
+              </li>
+
               <li>
                 <span className="text-[#e5e7eb] font-bold block mb-1">
                   • Modern Booking App:
