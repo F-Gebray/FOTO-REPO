@@ -1,14 +1,13 @@
 import React from "react";
 import projects from "../data/projects";
 import {
-  ExternalLink,
   Code2,
+  ExternalLink,
   Layers,
   Globe,
   Smartphone,
   Cpu,
 } from "lucide-react";
-import useStaggeredReveal from "../hooks/useStaggeredReveal";
 
 const getIcon = (id) => {
   switch (id) {
@@ -26,10 +25,9 @@ const getIcon = (id) => {
 };
 
 const Projects = () => {
-  const stagger = useStaggeredReveal(140);
-
   return (
     <div className="w-full max-w-[1100px] mx-auto px-6 py-16 md:py-24">
+      {/* Section Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           <div className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem] rounded-full border border-white/10 bg-white/5 text-[#9ca3af] mb-4">
@@ -45,44 +43,47 @@ const Projects = () => {
         </p>
       </div>
 
-      <div
-        ref={stagger}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch"
-      >
+      {/* Projects Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
         {projects.map((project) => (
-          <div
+          <a
             key={project.id}
-            className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-700 opacity-0 translate-y-6 flex flex-col h-full overflow-hidden"
+            href={project.liveUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-700 flex flex-col h-full overflow-hidden cursor-pointer"
           >
             <div className="flex justify-between items-start mb-6">
+              {/* Project Icon */}
               <div className="p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300">
                 {getIcon(project.id)}
               </div>
+
+              {/* GitHub + Live Demo Icons */}
               <div className="flex gap-3">
-                {/* GitHub Link */}
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                {/* GitHub */}
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevent triggering the card's link
+                    window.open(project.githubUrl, "_blank");
+                  }}
                   title="View Code"
-                  className="text-gray-400 hover:text-white transition-colors"
+                  className="text-gray-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <Code2 size={20} />
-                </a>
+                </span>
 
-                {/* Live Link */}
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                {/* Live Demo Icon (display only, card link handles click) */}
+                <span
                   title="Live Demo"
                   className="text-gray-400 hover:text-cyan-400 transition-colors"
                 >
-                  <Code2 size={20} />
-                </a>
+                  <ExternalLink size={20} />
+                </span>
               </div>
             </div>
 
+            {/* Project Title & Description */}
             <h3 className="text-xl font-bold text-white mb-3">
               {project.title}
             </h3>
@@ -90,6 +91,7 @@ const Projects = () => {
               {project.description}
             </p>
 
+            {/* Tech Tags */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
               {project.tech.slice(0, 3).map((tag) => (
                 <span
@@ -101,8 +103,9 @@ const Projects = () => {
               ))}
             </div>
 
+            {/* Hover Glow */}
             <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-          </div>
+          </a>
         ))}
       </div>
     </div>
