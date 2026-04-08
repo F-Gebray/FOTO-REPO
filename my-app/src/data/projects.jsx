@@ -14,7 +14,7 @@ const projects = [
     description:
       "A sophisticated luxury travel platform featuring a dynamic property listing system and real-time reservations.",
     tech: ["Tailwind", "EmailJS", "React Router"],
-    liveUrl: "https://dashboard-a3wp4hzu7-fitwis-projects.vercel.app/",
+    liveUrl: "https://foto-booking-llrqcqtf8-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO",
   },
   {
