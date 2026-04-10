@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import projects from "../data/projects";
 import {
   Code2,
@@ -9,7 +10,7 @@ import {
   Cpu,
 } from "lucide-react";
 
-const getIcon = (id: number): React.ReactElement => {
+const getIcon = (id: number) => {
   switch (id) {
     case 1:
       return <Layers size={24} className="text-cyan-400" />;
@@ -24,10 +25,30 @@ const getIcon = (id: number): React.ReactElement => {
   }
 };
 
+const container = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
+
+const card = {
+  hidden: { opacity: 0, y: 30, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.6, ease: "easeOut" },
+  },
+};
+
 const Projects: React.FC = () => {
   return (
     <div className="w-full max-w-[1100px] mx-auto px-6 py-16 md:py-24">
-      {/* Section Header */}
+      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           <div className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem] rounded-full border border-white/10 bg-white/5 text-[#9ca3af] mb-4">
@@ -43,64 +64,103 @@ const Projects: React.FC = () => {
         </p>
       </div>
 
-      {/* Projects Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+      {/* Grid */}
+      <motion.div
+        variants={container}
+        initial="hidden"
+        animate="show"
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch"
+      >
         {projects.map((project) => (
-          <a
+          <motion.a
             key={project.id}
+            variants={card}
+            whileHover={{
+              y: -10,
+              scale: 1.03,
+            }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
             href={project.liveUrl}
             target="_blank"
             rel="noreferrer"
-            className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all duration-700 flex flex-col h-full overflow-hidden cursor-pointer"
+            className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 flex flex-col h-full overflow-hidden cursor-pointer"
           >
+            {/* Icon + actions */}
             <div className="flex justify-between items-start mb-6">
-              <div className="p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300">
+              <motion.div
+                animate={{ y: [0, -3, 0] }}
+                transition={{
+                  repeat: Infinity,
+                  duration: 3,
+                  ease: "easeInOut",
+                }}
+                className="p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300"
+              >
                 {getIcon(project.id)}
-              </div>
+              </motion.div>
 
               <div className="flex gap-3">
                 <span
-                  onClick={(e: React.MouseEvent) => {
+                  onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
                     window.open(project.githubUrl, "_blank");
                   }}
-                  title="View Code"
                   className="text-gray-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <Code2 size={20} />
                 </span>
+
                 <span
-                  title="Live Demo"
-                  className="text-gray-400 hover:text-cyan-400 transition-colors"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    window.open(project.liveUrl, "_blank");
+                  }}
+                  className="text-gray-400 hover:text-cyan-400 transition-colors cursor-pointer"
                 >
                   <ExternalLink size={20} />
                 </span>
               </div>
             </div>
 
-            <h3 className="text-xl font-bold text-white mb-3">
+            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
               {project.title}
             </h3>
+
             <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-grow">
               {project.description}
             </p>
 
+            {/* Tech stack with micro animation */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
-              {project.tech.slice(0, 3).map((tag) => (
-                <span
+              {project.tech.slice(0, 3).map((tag, i) => (
+                <motion.span
                   key={tag}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.1 }}
                   className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-white/5 text-gray-400 border border-white/5"
                 >
                   {tag}
-                </span>
+                </motion.span>
               ))}
             </div>
 
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-          </a>
+            {/* glow effect movement */}
+            <motion.div
+              className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none"
+              animate={{
+                opacity: [0, 0.6, 0],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+              }}
+            />
+          </motion.a>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };
