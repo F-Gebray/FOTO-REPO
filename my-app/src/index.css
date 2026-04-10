@@ -1,6 +1,4 @@
-/* src/index.css */
 @import "tailwindcss";
-
 /* Any custom CSS variables or @theme blocks go below the import */
 @theme {
   --color-brand-blue: #3b82f6;
@@ -33,13 +31,8 @@ body,
   margin: 0;
   padding: 0;
   height: 100%;
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "SF Pro Text",
-    "Segoe UI",
-    sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+    "Segoe UI", sans-serif;
   /* background: radial-gradient(circle at top, #1e293b 0, #020617 55%, #000 100%); */
   background: #020617;
   color: var(--text);
@@ -186,10 +179,7 @@ p {
   align-items: center;
   gap: 0.45rem;
   box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.8);
-  transition:
-    background 0.2s ease,
-    box-shadow 0.2s ease,
-    transform 0.1s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
 }
 
 .nav-cta:hover {
@@ -266,12 +256,8 @@ p {
   gap: 0.45rem;
   cursor: pointer;
   border: none;
-  transition:
-    transform 0.1s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, background 0.2s ease,
+    border-color 0.2s ease, color 0.2s ease;
 }
 
 .btn-primary {
@@ -427,9 +413,7 @@ p {
   display: flex;
   flex-direction: column;
   gap: 0.9rem;
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
+  transition: transform 0.15s ease, box-shadow 0.15s ease,
     border-color 0.15s ease;
 }
 
@@ -515,10 +499,7 @@ p {
   border-radius: var(--radius-full);
   background: rgba(17, 24, 39, 0.9);
   border: 1px solid #1f2937;
-  transition:
-    background 0.15s ease,
-    border-color 0.15s ease,
-    transform 0.1s;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s;
 }
 
 .project-link:hover {
@@ -640,9 +621,7 @@ html {
   color: var(--text);
   font-size: 0.87rem;
   outline: none;
-  transition:
-    border-color 0.15s ease,
-    box-shadow 0.15s ease,
+  transition: border-color 0.15s ease, box-shadow 0.15s ease,
     background 0.15s ease;
 }
 
