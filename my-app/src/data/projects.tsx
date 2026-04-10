@@ -33,7 +33,8 @@ const projects: Project[] = [
       "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Material UI.",
     tech: ["React", "Vite", "Material UI"],
     liveUrl: "https://landing-page-omega-two-35.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page", // TODO: link to specific repo
+    githubUrl:
+      "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page/travel-landing-page", // TODO: link to specific repo
   },
   {
     id: 4,
