@@ -180,7 +180,7 @@ const Contact: React.FC = () => {
 
           <div className="flex gap-4 mt-4">
             <a
-              href="https://github.com/F-Gebray/FOTO-REPO"
+              href="https://github.com/F-Gebray/FOTO-REPO/tree/main/my-app"
               target="_blank"
               rel="noreferrer"
               className="text-[#9ca3af] transition-all duration-300
