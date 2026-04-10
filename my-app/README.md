@@ -1,43 +1,35 @@
-# Modern Frontend Portfolio — React 19 & Tailwind v4
+🚀 AI-Augmented React Developer | North Brabant
+Frontend Developer based near 's-Hertogenbosch. High-performance, accessible web applications are built using a modular React & TypeScript architecture.
 
-A high-performance, accessible portfolio built to showcase modern frontend engineering patterns, modular architecture, and the latest React ecosystem features.
+As an AI-augmented developer, a multi-model LLM stack is used to deliver mid-level productivity, clean code, and rapid deployment cycles while maintaining a focus on "Brabantse" reliability.
 
----
+🌐 Live Portfolio & Demos
+👉 View My Live Portfolio Here: https://my-portfolio-self-alpha-cqjbcnaxdl.vercel.app/ Automated CI/CD via Vercel | Fully Responsive | Accessible UI
 
-## 🛠️ The Tech Stack (2026 Standard)
+🛠️ The AI-Augmented Advantage
+A specialized AI stack is used to accelerate the development lifecycle without compromising on code quality:
 
-This project is built using the latest stable releases to ensure maximum performance and developer experience:
+IDE: Cursor + [GitHub Copilot] for real-time pair programming and refactoring.
+Reasoning & Architecture: [Claude 3.5 Sonnet] & [ChatGPT-4o] for complex state logic and modular design.
+Deep Debugging: [DeepSeek] & [Gemini 1.5 Pro] for performance optimization and edge-case discovery.
+💻 Technical Toolkit
+Core: React, TypeScript, JavaScript (ES6+)
+UI/UX: MUI (Material UI), Tailwind CSS, Lucide Icons, Responsive Design
+Engineering: Modular Component Architecture, Semantic HTML, ARIA Roles
+Testing & Quality: Vitest, React Testing Library (Component & Functional testing)
+DevOps: Vercel (CI/CD), Vite, Git/GitHub, EmailJS
+✨ Engineering Patterns & Quality Assurance
+This portfolio demonstrates more than "just looks"—it prioritizes reliability:
 
-- **React 19** – Utilizing the new `useActionState` for native form handling and improved `ref` patterns.
-- **Tailwind CSS v4** – Leveraging the high-performance engine and zero-runtime CSS variables.
-- **Vite 7** – Optimized build tooling for near-instant HMR (Hot Module Replacement).
-- **Vitest** – A modern testing framework used for component-level unit and integration testing.
-- **EmailJS** – Serverless contact form integration.
-- **Lucide & React Icons** – Consistent, accessible iconography.
+Modular Architecture: Decoupled UI components (Button, Pill, Stat) designed for reusability.
+Native Form Handling: Robust, state-aware contact forms without bloated external libraries.
+Testing-First Mindset: Utilizing Vitest to verify component rendering and functional logic (e.g., scrollToSection and form states).
+Performance Optimized: Lightning-fast HMR via Vite and low-runtime CSS footprints.
+📍 Local Focus & Availability
+Seeking Junior/Starter roles in the Eindhoven (Brainport) and Den Bosch regions.
 
----
-
-## ✨ Key Features & Engineering Patterns
-
-- **Native React 19 Forms**: Implemented the `useActionState` hook for robust, pending-state-aware contact form handling without external state libraries.
-- **Modular Component Architecture**: Decoupled UI components (`Button`, `Pill`, `Stat`) designed for reusability and consistent design language.
-- **Glassmorphism & Modern UI**: A responsive, dark-themed interface featuring blurred navigation, radial gradients, and fluid typography.
-- **Performance Optimized**: Achieved through Tailwind v4's small CSS footprint and Vite's lightning-fast asset pipeline.
-- **Accessible & Semantic**: Built with proper ARIA roles, keyboard navigation (`tabIndex`), and screen-reader-friendly SVG components.
-
----
-
-## 🧪 Testing & Quality Assurance
-
-This project prioritizes reliability over "just looks." I use **Vitest** and **React Testing Library** for:
-
-- **Component Verification**: Ensuring buttons, links, and data-driven stats render correctly.
-- **Functional Testing**: Verifying the `scrollToSection` utility and form submission states.
-- **Logic Tests**: Testing the custom `useActionState` logic for successful and failed email dispatches.
-
-Run the test suite:
-
-```bash
-npm test
-
-```
+Status: Immediate availability.
+Location: Sint-Michielsgestel / Remote (NL).
+📫 Let's Connect
+LinkedIn: https://www.linkedin.com/in/fitwi-teklemichael-4aa1a02a4/
+Email: fitwigebray8@gmail.com
