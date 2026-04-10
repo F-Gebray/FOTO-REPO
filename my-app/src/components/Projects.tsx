@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import projects from "../data/projects";
 import {
   Code2,
@@ -10,7 +10,7 @@ import {
   Cpu,
 } from "lucide-react";
 
-const getIcon = (id: number) => {
+const getIcon = (id: number): React.ReactElement => {
   switch (id) {
     case 1:
       return <Layers size={24} className="text-cyan-400" />;
@@ -25,7 +25,8 @@ const getIcon = (id: number) => {
   }
 };
 
-const container = {
+// Container animation (stagger)
+const container: Variants = {
   hidden: { opacity: 0 },
   show: {
     opacity: 1,
@@ -35,13 +36,17 @@ const container = {
   },
 };
 
-const card = {
+// Card animation
+const card: Variants = {
   hidden: { opacity: 0, y: 30, scale: 0.96 },
   show: {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.6, ease: "easeOut" },
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
   },
 };
 
@@ -58,6 +63,7 @@ const Projects: React.FC = () => {
             Featured Projects
           </h2>
         </div>
+
         <p className="text-[#9ca3af] text-[0.95rem] leading-relaxed max-w-[28rem]">
           A showcase of high-performance web applications built with modern
           architecture and user-centric design.
@@ -74,15 +80,12 @@ const Projects: React.FC = () => {
         {projects.map((project) => (
           <motion.a
             key={project.id}
-            variants={card}
-            whileHover={{
-              y: -10,
-              scale: 1.03,
-            }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
             href={project.liveUrl}
             target="_blank"
             rel="noreferrer"
+            variants={card}
+            whileHover={{ y: -10, scale: 1.03 }}
+            transition={{ type: "spring", stiffness: 200, damping: 15 }}
             className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 flex flex-col h-full overflow-hidden cursor-pointer"
           >
             {/* Icon + actions */}
@@ -90,8 +93,8 @@ const Projects: React.FC = () => {
               <motion.div
                 animate={{ y: [0, -3, 0] }}
                 transition={{
-                  repeat: Infinity,
                   duration: 3,
+                  repeat: Infinity,
                   ease: "easeInOut",
                 }}
                 className="p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300"
@@ -124,15 +127,17 @@ const Projects: React.FC = () => {
               </div>
             </div>
 
+            {/* Title */}
             <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
               {project.title}
             </h3>
 
+            {/* Description */}
             <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-grow">
               {project.description}
             </p>
 
-            {/* Tech stack with micro animation */}
+            {/* Tech stack */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
               {project.tech.slice(0, 3).map((tag, i) => (
                 <motion.span
@@ -147,12 +152,10 @@ const Projects: React.FC = () => {
               ))}
             </div>
 
-            {/* glow effect movement */}
+            {/* glow overlay */}
             <motion.div
               className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none"
-              animate={{
-                opacity: [0, 0.6, 0],
-              }}
+              animate={{ opacity: [0, 0.6, 0] }}
               transition={{
                 duration: 4,
                 repeat: Infinity,
