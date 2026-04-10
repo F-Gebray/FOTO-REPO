@@ -1,14 +1,7 @@
 import React from "react";
-import { motion, type Variants } from "framer-motion";
 import projects from "../data/projects";
-import {
-  Code2,
-  ExternalLink,
-  Layers,
-  Globe,
-  Smartphone,
-  Cpu,
-} from "lucide-react";
+import { ExternalLink, Layers, Globe, Smartphone, Cpu } from "lucide-react";
+import { FiGithub } from "react-icons/fi";
 
 const getIcon = (id: number): React.ReactElement => {
   switch (id) {
@@ -25,35 +18,10 @@ const getIcon = (id: number): React.ReactElement => {
   }
 };
 
-// Container animation (stagger)
-const container: Variants = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-    },
-  },
-};
-
-// Card animation
-const card: Variants = {
-  hidden: { opacity: 0, y: 30, scale: 0.96 },
-  show: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: "easeOut",
-    },
-  },
-};
-
 const Projects: React.FC = () => {
   return (
     <div className="w-full max-w-[1100px] mx-auto px-6 py-16 md:py-24">
-      {/* Header */}
+      {/* HEADER */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
         <div>
           <div className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem] rounded-full border border-white/10 bg-white/5 text-[#9ca3af] mb-4">
@@ -70,100 +38,119 @@ const Projects: React.FC = () => {
         </p>
       </div>
 
-      {/* Grid */}
-      <motion.div
-        variants={container}
-        initial="hidden"
-        animate="show"
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch"
-      >
+      {/* GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
         {projects.map((project) => (
-          <motion.a
+          <a
             key={project.id}
             href={project.liveUrl}
             target="_blank"
             rel="noreferrer"
-            variants={card}
-            whileHover={{ y: -10, scale: 1.03 }}
-            transition={{ type: "spring", stiffness: 200, damping: 15 }}
-            className="group relative p-8 rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 flex flex-col h-full overflow-hidden cursor-pointer"
+            className="
+              group relative p-8 rounded-3xl border border-white/10 bg-white/5
+              transition-all duration-300 ease-out
+              hover:bg-white/10
+              hover:-translate-y-3
+              hover:scale-[1.03]
+              hover:shadow-[0_25px_70px_rgba(0,0,0,0.6)]
+              overflow-hidden flex flex-col h-full cursor-pointer
+            "
           >
-            {/* Icon + actions */}
+            {/* ICON ROW */}
             <div className="flex justify-between items-start mb-6">
-              <motion.div
-                animate={{ y: [0, -3, 0] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-                className="p-3 rounded-2xl bg-white/5 group-hover:scale-110 transition-transform duration-300"
+              <div
+                className="
+                p-3 rounded-2xl bg-white/5
+                transition-all duration-300
+                group-hover:scale-125
+                group-hover:rotate-[-3deg]
+              "
               >
                 {getIcon(project.id)}
-              </motion.div>
+              </div>
 
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
+                {/* GitHub */}
                 <span
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault();
                     e.stopPropagation();
                     window.open(project.githubUrl, "_blank");
                   }}
-                  className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                  title="View Code"
+                  className="
+                    text-gray-400 cursor-pointer
+                    transition-all duration-300
+                    hover:text-white
+                    hover:scale-125
+                    hover:-translate-y-1
+                  "
                 >
-                  <Code2 size={20} />
+                  <FiGithub size={20} />
                 </span>
 
+                {/* Live */}
                 <span
-                  onClick={(e) => {
+                  onClick={(e: React.MouseEvent) => {
                     e.preventDefault();
                     e.stopPropagation();
                     window.open(project.liveUrl, "_blank");
                   }}
-                  className="text-gray-400 hover:text-cyan-400 transition-colors cursor-pointer"
+                  title="Live Demo"
+                  className="
+                    text-gray-400 cursor-pointer
+                    transition-all duration-300
+                    hover:text-cyan-400
+                    hover:scale-125
+                    hover:-translate-y-1
+                  "
                 >
                   <ExternalLink size={20} />
                 </span>
               </div>
             </div>
 
-            {/* Title */}
-            <h3 className="text-xl font-bold text-white mb-3 group-hover:text-cyan-300 transition-colors">
+            {/* TITLE */}
+            <h3 className="text-xl font-bold text-white mb-3 transition-all duration-300 group-hover:translate-x-1">
               {project.title}
             </h3>
 
-            {/* Description */}
-            <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-grow">
+            {/* DESCRIPTION */}
+            <p className="text-gray-400 text-sm leading-relaxed mb-6 flex-grow transition-all duration-300 group-hover:text-gray-300">
               {project.description}
             </p>
 
-            {/* Tech stack */}
+            {/* TECH */}
             <div className="flex flex-wrap gap-2 pt-4 border-t border-white/5">
-              {project.tech.slice(0, 3).map((tag, i) => (
-                <motion.span
+              {project.tech.slice(0, 3).map((tag) => (
+                <span
                   key={tag}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className="text-[10px] uppercase tracking-wider px-2 py-1 rounded-md bg-white/5 text-gray-400 border border-white/5"
+                  className="
+                    text-[10px] uppercase tracking-wider px-2 py-1 rounded-md
+                    bg-white/5 text-gray-400 border border-white/5
+                    transition-all duration-300
+                    group-hover:border-white/20
+                    group-hover:text-gray-300
+                  "
                 >
                   {tag}
-                </motion.span>
+                </span>
               ))}
             </div>
 
-            {/* glow overlay */}
-            <motion.div
-              className="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none"
-              animate={{ opacity: [0, 0.6, 0] }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-              }}
+            {/* GLOW */}
+            <div
+              className="
+              absolute inset-0 rounded-3xl
+              bg-gradient-to-br from-cyan-500/10 to-transparent
+              opacity-0 group-hover:opacity-100
+              transition-opacity duration-300
+              pointer-events-none
+            "
             />
-          </motion.a>
+          </a>
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

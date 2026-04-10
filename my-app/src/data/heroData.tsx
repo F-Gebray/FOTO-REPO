@@ -6,9 +6,9 @@ export interface HeroStat {
 export interface HeroData {
   availabilityText: string;
   heading: {
-    normal: string,
-    highlight: string,
-    suffix: string,
+    normal: string;
+    highlight: string;
+    suffix: string;
   };
   subtitle: string;
   meta: string[];
@@ -39,7 +39,7 @@ export const heroData: HeroData = {
     "Git",
   ],
   stats: [
-    { value: "4+", label: "Deployed projects" },
+    { value: "3+", label: "Deployed projects" },
     { value: "Vitest", label: "Tested" },
   ],
 };

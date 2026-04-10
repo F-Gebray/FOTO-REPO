@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import useReveal from "../hooks/useReveal";
 
 const About: React.FC = () => {
@@ -11,7 +12,7 @@ const About: React.FC = () => {
         className="section-inner w-full max-w-[1100px] mx-auto px-6 pt-24 pb-40
         transition-all duration-700 opacity-0 translate-y-6"
       >
-        {/* Header */}
+        {/* HEADER */}
         <div className="flex justify-between items-end mb-12">
           <div>
             <div
@@ -21,15 +22,16 @@ const About: React.FC = () => {
             >
               Background
             </div>
+
             <h2 className="text-[2rem] font-bold text-[#e5e7eb] tracking-tight">
               About me
             </h2>
           </div>
         </div>
 
-        {/* Grid */}
+        {/* GRID */}
         <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-[4.5rem] items-start">
-          {/* Left Text */}
+          {/* LEFT SIDE */}
           <div className="text-[1.05rem] leading-[1.9] text-[#9ca3af]">
             <p>
               I&apos;m a self-taught frontend developer based near
@@ -48,12 +50,12 @@ const About: React.FC = () => {
               <span className="text-[#e5e7eb] font-semibold">
                 Cursor, Claude, and DeepSeek
               </span>{" "}
-              to write cleaner code faster, without sacrificing quality or
-              reliability. I back every build with{" "}
+              to write cleaner code faster. I back every build with{" "}
               <span className="text-[#e5e7eb] font-semibold">Vitest</span> and
               deploy on Vercel.
             </p>
 
+            {/* PROJECTS LIST WITH LIVE DEMOS RESTORED */}
             <ul className="mt-10 space-y-8">
               <li>
                 <span className="text-[#e5e7eb] font-bold block mb-1">
@@ -126,19 +128,30 @@ const About: React.FC = () => {
                 engineering best practices. Always learning new technologies and
                 applying them to real-world problems.
               </p>
+
               <p>
                 I like working in environments where I can learn quickly, get
-                clear feedback, and collaborate with designers and developers to
-                ship products that users actually enjoy using.
+                clear feedback, and collaborate with designers and developers.
               </p>
             </div>
           </div>
 
-          {/* Right Highlight Card */}
-          <div
+          {/* RIGHT SIDE (ANIMATED + HOVER ONLY HERE) */}
+          <motion.div
+            initial={{ opacity: 0, x: 40, scale: 0.95 }}
+            whileInView={{ opacity: 1, x: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease: "easeOut" }}
+            whileHover={{
+              scale: 1.04,
+              y: -8,
+              boxShadow: "0 35px 90px rgba(59,130,246,0.15)",
+            }}
             className="bg-[radial-gradient(circle_at_top,#020617,#020617)]
-            border border-[rgba(31,41,55,0.9)] rounded-[32px] p-[2.5rem]
-            shadow-[0_30px_70px_rgba(0,0,0,0.8)] sticky top-32"
+            border border-[rgba(31,41,55,0.9)]
+            rounded-[32px] p-[2.5rem]
+            shadow-[0_30px_70px_rgba(0,0,0,0.8)]
+            sticky top-32 transition-all duration-300"
           >
             <p className="text-[1.25rem] font-semibold text-[#e5e7eb] leading-snug">
               I&apos;m currently seeking a junior or frontend role where I can:
@@ -152,15 +165,17 @@ const About: React.FC = () => {
                 Apply and deepen my React and TypeScript skills on real-world,
                 impactful products
               </li>
+
               <li>
                 Grow as a developer within a supportive and collaborative team
                 environment
               </li>
+
               <li>
                 Contribute meaningfully to both UI design and implementation
               </li>
             </ul>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
