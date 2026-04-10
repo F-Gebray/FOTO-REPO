@@ -1,48 +1,50 @@
 import React from "react";
-import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
-import { heroData as defaultHeroData } from "../../data/heroData";
+import { heroData } from "../../data/heroData";
 import { scrollToSection } from "../../utils/scrollToSection";
 import Button from "../ui/Button";
 import Pill from "../ui/Pill";
 import Stat from "../ui/Stat";
+import useReveal from "../../hooks/useReveal";
 
-type HeroData = typeof defaultHeroData;
+const Hero: React.FC = () => {
+  const {
+    availabilityText,
+    heading,
+    subtitle,
+    meta,
+    coreStack,
+    stats,
+  } = heroData;
 
-type HeroProps = {
-  data?: HeroData;
-};
-
-const Hero: React.FC<HeroProps> = ({ data = defaultHeroData }) => {
-  const { availabilityText, heading, subtitle, meta, coreStack, stats } = data;
+  const reveal = useReveal();
 
   return (
     <section className="pt-20 pb-12 px-6 flex justify-center bg-[#0f172a]">
-      <div className="max-w-[1100px] w-full grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12 items-center">
+      <div
+        ref={reveal}
+        className="transition-all duration-700 opacity-0 translate-y-6 max-w-[1100px] w-full grid grid-cols-1 md:grid-cols-[1.4fr_1fr] gap-12 items-center"
+      >
         {/* LEFT SIDE */}
-        <motion.div
-          initial={{ opacity: 0, y: 25 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex flex-col items-start"
-        >
+        <div className="flex flex-col items-start">
           <Pill>
-            <span className="w-[5px] h-[5px] rounded-full bg-green-500 mr-2" />
+            <span className="w-[5px] h-[5px] rounded-full bg-[#22c55e] shadow-[0_0_12px_rgba(34,197,94,0.9)] mr-2" />
             {availabilityText}
           </Pill>
 
-          <h1 className="mt-6 text-[clamp(2.4rem,4vw,3.1rem)] font-bold text-[#e5e7eb] leading-tight">
+          <h1 className="mt-6 text-[clamp(2.4rem,4vw,3.1rem)] font-bold tracking-tight text-[#e5e7eb] leading-tight">
             {heading.normal}{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-500 to-orange-400">
+            <span className="bg-gradient-to-r from-[#60a5fa] via-[#a855f7] to-[#f97316] bg-clip-text text-transparent">
               {heading.highlight}
             </span>{" "}
             {heading.suffix}
           </h1>
 
-          <p className="mt-4 text-[#9ca3af] max-w-[30rem]">{subtitle}</p>
+          <p className="mt-4 text-[#9ca3af] text-[0.98rem] leading-relaxed max-w-[30rem]">
+            {subtitle}
+          </p>
 
-          {/* META */}
-          <div className="flex flex-wrap gap-5 mt-6 mb-8 text-[0.8rem] text-[#9ca3af]">
+          <div className="flex flex-wrap gap-5 mt-7 mb-8 text-[0.8rem] text-[#9ca3af]">
             {meta.map((item) => (
               <span key={item} className="flex items-center gap-2">
                 <span className="w-[1px] h-[10px] bg-[#1f2937]" />
@@ -51,85 +53,68 @@ const Hero: React.FC<HeroProps> = ({ data = defaultHeroData }) => {
             ))}
           </div>
 
-          {/* BUTTONS (HOVER FIXED) */}
           <div className="flex flex-wrap gap-4">
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-              <Button onClick={() => scrollToSection("projects")}>
-                View projects <FiArrowRight size={16} />
-              </Button>
-            </motion.div>
-
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-              <Button
-                variant="secondary"
-                onClick={() => scrollToSection("contact")}
-              >
-                Contact me
-              </Button>
-            </motion.div>
+            <Button onClick={() => scrollToSection("projects")}>
+              View projects <FiArrowRight size={16} />
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={() => scrollToSection("contact")}
+            >
+              Contact me
+            </Button>
           </div>
-        </motion.div>
+        </div>
 
         {/* RIGHT SIDE */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="flex justify-end"
-        >
-          {/* CARD (HOVER FIXED) */}
-          <motion.div
-            whileHover={{ scale: 1.03, y: -6 }}
-            transition={{ type: "spring", stiffness: 200, damping: 18 }}
-            className="bg-[radial-gradient(circle_at_top,#020617,#020617)]
-            border border-[rgba(31,41,55,0.9)]
-            rounded-[24px] p-[1.4rem]
-            shadow-[0_18px_45px_rgba(15,23,42,0.75)]
-            w-full max-w-[340px] flex flex-col gap-6"
-          >
-            {/* TITLE */}
-            <Pill>Portfolio overview</Pill>
-
-            {/* STATS (HOVER FIXED) */}
-            <div className="flex flex-wrap gap-4">
-              {stats.map((stat) => (
-                <motion.div
-                  key={stat.label}
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Stat value={stat.value} label={stat.label} />
-                </motion.div>
-              ))}
+        <div className="flex justify-end">
+          <div className="bg-[radial-gradient(circle_at_top,#020617,#020617)] border border-[rgba(31,41,55,0.9)] rounded-[24px] p-[1.4rem] shadow-[0_18px_45px_rgba(15,23,42,0.75)] w-full max-w-[340px] flex flex-col gap-6">
+            <div>
+              <Pill>Portfolio overview</Pill>
+              <div className="flex flex-wrap gap-4 mt-4">
+                {stats.map((stat) => (
+                  <Stat
+                    key={stat.label}
+                    value={stat.value}
+                    label={stat.label}
+                  />
+                ))}
+              </div>
             </div>
 
-            {/* DIVIDER */}
             <div className="h-[1px] bg-gradient-to-r from-transparent via-[rgba(31,41,55,0.9)] to-transparent" />
 
-            {/* TECH STACK (HOVER FIXED) */}
             <div className="flex flex-wrap gap-2">
               {coreStack.map((tech) => (
-                <motion.span
-                  key={tech}
-                  whileHover={{
-                    scale: 1.1,
-                    backgroundColor: "rgba(59,130,246,0.15)",
-                  }}
-                  className="text-[0.7rem] px-3 py-1 rounded-full border border-[rgba(55,65,81,0.9)]
-                  bg-[rgba(15,23,42,0.9)] text-[#9ca3af] cursor-default"
+                <a
+                  key={tech.name}
+                  href={tech.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="
+                    text-[0.7rem] px-3 py-1 rounded-full no-underline
+                    border border-[rgba(55,65,81,0.9)]
+                    bg-[rgba(15,23,42,0.9)]
+                    text-[#9ca3af]
+                    transition-all duration-200
+                    hover:text-[#e5e7eb]
+                    hover:border-[#3b82f6]
+                    hover:bg-[rgba(59,130,246,0.08)]
+                    hover:scale-105
+                    active:scale-95
+                  "
                 >
-                  {tech}
-                </motion.span>
+                  {tech.name}
+                </a>
               ))}
             </div>
 
-            {/* FOOTER */}
             <div className="flex justify-between items-center text-[0.75rem] text-[#9ca3af]">
               <span>Open to junior / frontend roles</span>
               <span className="text-[10px] opacity-50">🚀</span>
             </div>
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   );
