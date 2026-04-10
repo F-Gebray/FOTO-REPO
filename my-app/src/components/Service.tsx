@@ -1,5 +1,5 @@
 import React from "react";
-import useStaggeredReveal from "../hooks/useStaggeredReveal";
+import { motion, type Variants } from "framer-motion";
 
 interface ServiceItem {
   title: string;
@@ -35,13 +35,36 @@ const services: ServiceItem[] = [
   {
     title: "☁️ Deployment & Hosting",
     description:
-      "End-to-end deployment on Vercel, Netlify, or custom hosting with full optimization。",
+      "End-to-end deployment on Vercel, Netlify, or custom hosting with full optimization.",
   },
 ];
 
-const Services: React.FC = () => {
-  const stagger = useStaggeredReveal(120);
+// container stagger
+const container: Variants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+    },
+  },
+};
 
+// card animation
+const card: Variants = {
+  hidden: { opacity: 0, y: 40, scale: 0.96 },
+  show: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  },
+};
+
+const Services: React.FC = () => {
   return (
     <section
       id="services"
@@ -51,11 +74,7 @@ const Services: React.FC = () => {
         {/* header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div
-              className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem]
-              rounded-full border border-[#1f2937]
-              bg-[rgba(15,23,42,0.9)] text-[#e5e7eb] mb-4"
-            >
+            <div className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem] rounded-full border border-[#1f2937] bg-[rgba(15,23,42,0.9)] text-[#e5e7eb] mb-4">
               What I Offer
             </div>
 
@@ -70,29 +89,57 @@ const Services: React.FC = () => {
           </p>
         </div>
 
-        {/* services grid */}
-        <div
-          ref={stagger}
+        {/* grid */}
+        <motion.div
+          variants={container}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
           {services.map((service, index) => (
-            <div
+            <motion.div
               key={index}
-              className="transition-all duration-700 opacity-0 translate-y-6
-              rounded-[18px] p-6 bg-[#020617]
+              variants={card}
+              whileHover={{
+                y: -10,
+                scale: 1.03,
+              }}
+              transition={{
+                type: "spring",
+                stiffness: 200,
+                damping: 18,
+              }}
+              className="relative overflow-hidden rounded-[18px] p-6
+              bg-[#020617]
               bg-[radial-gradient(circle_at_top,#020617,#000)]
               border border-[rgba(31,41,55,0.9)]
               shadow-[0_14px_30px_rgba(15,23,42,0.9)]
-              hover:shadow-[0_24px_50px_rgba(15,23,42,0.95)]
               hover:border-[#3b82f6]"
             >
-              <h3 className="text-xl font-semibold mb-3 text-[#e5e7eb]">
+              {/* subtle glow animation */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-transparent opacity-0"
+                animate={{
+                  opacity: [0, 0.25, 0],
+                  x: [-20, 0, 20],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                }}
+              />
+
+              <h3 className="text-xl font-semibold mb-3 text-[#e5e7eb] relative z-10">
                 {service.title}
               </h3>
-              <p className="text-[#9ca3af]">{service.description}</p>
-            </div>
+
+              <p className="text-[#9ca3af] relative z-10">
+                {service.description}
+              </p>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
