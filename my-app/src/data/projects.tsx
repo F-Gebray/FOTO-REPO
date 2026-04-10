@@ -15,7 +15,7 @@ const projects: Project[] = [
       "Production-ready admin dashboard with interactive analytics charts, dynamic user tables, and dark mode — built with React, MUI, and Recharts.",
     tech: ["React", "Material UI", "Recharts"],
     liveUrl: "https://dashboard-seven-psi-14.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO", // TODO: link to specific repo
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/dashboard", // TODO: link to specific repo
   },
   {
     id: 2,
@@ -24,7 +24,7 @@ const projects: Project[] = [
       "Luxury travel platform with dynamic property listings, real-time reservations, and email integration via EmailJS — fully responsive across devices.",
     tech: ["Tailwind", "EmailJS", "React Router"],
     liveUrl: "https://foto-booking.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO", // TODO: link to specific repo
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/booking-app", // TODO: link to specific repo
   },
   {
     id: 3,
@@ -33,7 +33,7 @@ const projects: Project[] = [
       "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Material UI.",
     tech: ["React", "Vite", "Material UI"],
     liveUrl: "https://landing-page-omega-two-35.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO", // TODO: link to specific repo
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page", // TODO: link to specific repo
   },
   {
     id: 4,
@@ -42,7 +42,7 @@ const projects: Project[] = [
       "High-performance agency landing page with animated navigation, premium UI components, and fluid motion — built with TypeScript and Framer Motion.",
     tech: ["TypeScript", "Framer Motion", "Tailwind"],
     liveUrl: "https://web-page-sand-five.vercel.app/",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO", // TODO: link to specific repo
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/webDev-page", // TODO: link to specific repo
   },
 ];
 
