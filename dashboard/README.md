@@ -1,76 +1,50 @@
-# React Dashboard (Material UI + Recharts)
+# 📸 FOTO Dashboard
 
-A modern **React dashboard application** built with **Material UI** and **Recharts**.  
-It includes a responsive layout with a sidebar, topbar, theme settings, and data visualization charts.
+A modern React dashboard application built with Material UI and Recharts. Features a responsive layout with a sidebar, topbar, theme settings, and interactive data visualization charts.
 
 ---
 
 ## 🚀 Features
 
-- 📊 Interactive charts using **Recharts**
-- 🎨 Light / Dark theme toggle with **Material UI**
-- 📁 Reusable **Dashboard Layout**
+- 📊 Interactive charts using Recharts
+- 🎨 Light / Dark theme toggle with Material UI
+- 📁 Reusable Dashboard Layout
 - 📱 Responsive design
-- ⚡ Modern React architecture using **Context API**
+- ⚡ Modern React architecture using Context API
 - 🧩 Modular component structure
 
 ---
 
 ## 🛠 Tech Stack
 
-- React
-- Material UI (MUI)
-- Recharts
-- JavaScript (ES6+)
-
----
-
-## 📂 Project Structure
-
-```
-src
-│
-├── components
-│   ├── charts
-│   │   └── SalesBarChart.jsx
-│   │
-│   ├── sidebar
-│   │   └── Sidebar.jsx
-│   │
-│   └── topbar
-│       └── Topbar.jsx
-│
-├── context
-│   └── SettingsContext.jsx
-│
-├── layout
-│   └── DashboardLayout.jsx
-│
-└── pages
-    └── Dashboard.jsx
-```
+| Technology | Purpose |
+|---|---|
+| React | UI framework |
+| Material UI (MUI) | Component library & theming |
+| Recharts | Data visualization |
+| JavaScript (ES6+) | Core language |
 
 ---
 
 ## ⚙️ Installation
 
-Clone the repository:
+1. **Clone the repository**
 
-```bash
-git clone https://github.com/your-username/your-repo-name.git
-```
+   ```bash
+   git clone https://github.com/F-Gebray/FOTO-REPO.git
+   ```
 
-Navigate into the project folder:
+2. **Navigate into the dashboard folder**
 
-```bash
-cd your-repo-name
-```
+   ```bash
+   cd FOTO-REPO/dashboard
+   ```
 
-Install dependencies:
+3. **Install dependencies**
 
-```bash
-npm install
-```
+   ```bash
+   npm install
+   ```
 
 ---
 
@@ -79,39 +53,28 @@ npm install
 Start the development server:
 
 ```bash
-npm start
+npm run dev
 ```
 
-The app will run on:
-
-```
-http://localhost:3000
-```
+The app will run at: **http://localhost:5173**
 
 ---
 
-## 📊 Example Chart
+## 📊 Charts & Data Visualization
 
-The dashboard includes data visualization such as:
+The dashboard includes interactive data visualization built with Recharts:
 
 - Weekly sales bar chart
-- Responsive charts
-- Tooltip interaction
-
-Built using **Recharts**.
+- Responsive chart layouts
+- Tooltip interaction on hover
 
 ---
 
 ## 🎨 Theme Settings
 
-The project uses a **global settings context** to control:
+The project uses a global `SettingsContext` to control app-wide preferences such as dark/light mode.
 
-- Dark / Light mode
-- App settings
-
-Example:
-
-```javascript
+```jsx
 const { darkMode, setDarkMode } = useSettings();
 ```
 
@@ -119,15 +82,7 @@ const { darkMode, setDarkMode } = useSettings();
 
 ## 🧱 Layout System
 
-The dashboard layout includes:
-
-```
-Sidebar
-Topbar
-Main Content
-```
-
-Structure:
+The dashboard layout wraps all pages with a consistent structure:
 
 ```
 DashboardLayout
@@ -138,41 +93,24 @@ DashboardLayout
 
 ---
 
-## 📸 Screenshots
-
-You can add screenshots here:
-
-```
-/screenshots/dashboard.png
-```
-
-Example:
-
-```
-![Dashboard Screenshot](./screenshots/dashboard.png)
-```
-
----
-
 ## 📌 Future Improvements
 
-- Authentication system
-- API integration
-- More charts and analytics
-- Responsive mobile sidebar
-- Notifications system
+- [ ] Authentication system
+- [ ] API integration
+- [ ] More charts and analytics
+- [ ] Responsive mobile sidebar
+- [ ] Notifications system
 
 ---
 
 ## 👤 Author
 
-**Fitwi Gebray Teklemichael**
-
-LinkedIn:  
-https://www.linkedin.com/in/fitwi-gebray-teklemichael-4aa1a02a4/
+**Fitwi Gebray Teklemichael**  
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Self--Taught%20React%20Developer-blue?logo=linkedin)](https://www.linkedin.com/in/fitwi-gebray-teklemichael-4aa1a02a4/)  
+[![GitHub](https://img.shields.io/badge/GitHub-F--Gebray-black?logo=github)](https://github.com/F-Gebray)
 
 ---
 
-## ⭐ Support
+## 📄 License
 
-If you like this project, give it a **star ⭐ on GitHub**.
+This project is for personal use. Feel free to fork and adapt it for your own portfolio.
