@@ -1,4 +1,4 @@
-# 📸 FOTO Dashboard
+# 📸 ADMIN Dashboard
 
 A modern React dashboard application built with Material UI and Recharts. Features a responsive layout with a sidebar, topbar, theme settings, and interactive data visualization charts.
 
