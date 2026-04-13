@@ -23,7 +23,7 @@ const projects: Project[] = [
     description:
       "Luxury travel platform with dynamic property listings, real-time reservations, and email integration via EmailJS — fully responsive across devices.",
     tech: ["Tailwind", "EmailJS", "React Router"],
-    liveUrl: "https://foto-booking.vercel.app/",
+    liveUrl: "https://new-bookingapp-g5ek814l6-fitwis-projects.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/booking-app", // TODO: link to specific repo
   },
   {
