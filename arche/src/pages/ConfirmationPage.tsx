@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams, useSearchParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useSearchParams, useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
 import StepIndicator from "../components/step-indicator/StepIndicator";
 import Confirmation from "../components/confirmation/Confirmation";

@@ -100,10 +100,10 @@ export const paymentSchema = z.object({
 });
 
 export const searchSchema = z.object({
-  destination: z.string().min(1, "Please enter a destination"),
-  checkIn: z.string().min(1, "Please select a check-in date"),
-  checkOut: z.string().min(1, "Please select a check-out date"),
-  guests: z.string().min(1, "Please select number of guests"),
+  destination: z.string().min(1),
+  checkIn: z.string().min(1),
+  checkOut: z.string().min(1),
+  guests: z.number().min(1),
 });
 
 export const bookingDatesSchema = z
@@ -120,6 +120,7 @@ export const bookingDatesSchema = z
     { message: "Check-out must be after check-in", path: ["checkOut"] },
   );
 
+// Types
 export type LoginSchema = z.infer<typeof loginSchema>;
 export type RegisterSchema = z.infer<typeof registerSchema>;
 export type GuestInfoSchema = z.infer<typeof guestInfoSchema>;

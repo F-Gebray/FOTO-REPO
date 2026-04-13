@@ -13,13 +13,16 @@ export interface Property {
   area: number;
   description: string;
   shortDescription: string;
-  features: string[];
+
+  features: string[]; // ✅ ONLY ONE SOURCE OF TRUTH
+
   badge?: string;
   architectName?: string;
   architectTitle?: string;
   style: string[];
   imageUrl: string;
   images: string[];
+
   category: "stays" | "villas" | "penthouses" | "experiences";
   available: boolean;
 }
@@ -34,23 +37,13 @@ export interface Addon {
   selected: boolean;
 }
 
-export interface GuestInfo {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  nationality: string;
-  guests: number;
-  specialRequests: string;
-}
-
 export interface FilterState {
-  propertyTypes: string[];
+  search: "";
+  propertyTypes: string[]; // maps to category
   maxPrice: number;
   minBedrooms: number;
   styles: string[];
-  amenities: string[];
-  search: string;
+  amenities: string[]; // maps to features
 }
 
 export interface User {
@@ -78,43 +71,4 @@ export interface RegisterFormData {
   agreeToTerms: boolean;
 }
 
-export interface BookingFormData {
-  checkIn: string;
-  checkOut: string;
-  guests: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  nationality: string;
-  specialRequests?: string;
-  cardHolder: string;
-  cardNumber: string;
-  expiryMonth: string;
-  expiryYear: string;
-  cvv: string;
-  agreeToTerms: boolean;
-}
-
-export interface SearchFormData {
-  destination: string;
-  checkIn: string;
-  checkOut: string;
-  guests: string;
-}
-
-export type BookingStep = 1 | 2 | 3 | 4;
-
-export interface Reservation {
-  id: string;
-  property: Property;
-  checkIn: string;
-  checkOut: string;
-  nights: number;
-  guests: number;
-  guestInfo: GuestInfo;
-  addons: Addon[];
-  total: number;
-  status: "confirmed" | "pending" | "cancelled";
-  createdAt: string;
-}
+export type BookingStep = number;

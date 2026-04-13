@@ -8,6 +8,7 @@ import { properties } from "../data/properties";
 import { FilterState, Property } from "../types";
 
 const defaultFilters: FilterState = {
+  search: "",
   propertyTypes: ["Villa", "Penthouse"],
   maxPrice: 25000,
   minBedrooms: 4,
@@ -19,13 +20,16 @@ interface SearchResultsPageProps {
   onPropertySelect: (property: Property) => void;
 }
 
-const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ onPropertySelect }) => {
+const SearchResultsPage: React.FC<SearchResultsPageProps> = ({
+  onPropertySelect,
+}) => {
   const [filters, setFilters] = useState<FilterState>(defaultFilters);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortBy, setSortBy] = useState("Recommended");
 
   const handleClear = () => {
     setFilters({
+      search: "",
       propertyTypes: [],
       maxPrice: 50000,
       minBedrooms: 0,
@@ -38,11 +42,16 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ onPropertySelect 
     <div className="bg-[#0e0e0e] min-h-screen">
       <Navbar />
 
-      {/* Search Bar Strip */}
+      {/* Search Bar */}
       <div className="flex items-center px-10 py-5 bg-[#161612] border-b border-white/[0.08]">
         <SearchBar
-          prefilled={{ destination: "Europe", checkIn: "12 Jul 2025", checkOut: "17 Jul 2025", guests: "4 guests" }}
           compact
+          prefilled={{
+            destination: "Europe",
+            checkIn: "2025-07-12",
+            checkOut: "2025-07-17",
+            guests: 4, // IMPORTANT FIX (number, NOT string)
+          }}
         />
       </div>
 
@@ -56,7 +65,6 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ onPropertySelect 
 
         {/* Results */}
         <div className="px-8 py-6">
-          {/* Header */}
           <div className="flex justify-between items-center mb-6">
             <p className="text-[10px] tracking-[1.5px] text-white/40">
               <span className="font-cormorant text-[20px] text-[#f0ede6] mr-1">
@@ -66,15 +74,21 @@ const SearchResultsPage: React.FC<SearchResultsPageProps> = ({ onPropertySelect 
             </p>
 
             <div className="flex items-center gap-4">
-              <span className="text-[9px] tracking-[1.5px] uppercase text-white/30">Sort</span>
+              <span className="text-[9px] uppercase text-white/30">Sort</span>
               <select
-                className="bg-[#161612] border border-white/12 px-4 py-2 font-montserrat text-[10px] text-[#f0ede6] outline-none cursor-pointer"
+                className="bg-[#161612] border border-white/12 px-4 py-2 text-[10px] text-[#f0ede6]"
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                {["Recommended", "Price: Low to High", "Price: High to Low", "Top Rated", "Newest"].map(
-                  (opt) => <option key={opt}>{opt}</option>
-                )}
+                {[
+                  "Recommended",
+                  "Price: Low to High",
+                  "Price: High to Low",
+                  "Top Rated",
+                  "Newest",
+                ].map((opt) => (
+                  <option key={opt}>{opt}</option>
+                ))}
               </select>
             </div>
           </div>
