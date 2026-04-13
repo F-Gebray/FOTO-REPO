@@ -5,7 +5,7 @@ interface StepIndicatorProps {
   currentStep: BookingStep;
 }
 
-const steps = [
+const steps: { num: BookingStep; label: string }[] = [
   { num: 1, label: "Property" },
   { num: 2, label: "Details" },
   { num: 3, label: "Payment" },
