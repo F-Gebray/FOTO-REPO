@@ -64,7 +64,7 @@ const About: React.FC = () => {
                 Agency landing page with animated navigation and premium UI —
                 built with TypeScript and Framer Motion.
                 <a
-                  href="https://web-page-sand-five.vercel.app/"
+                  href="https://vercel.com/fitwis-projects/web-page"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
@@ -96,7 +96,7 @@ const About: React.FC = () => {
                 Analytics charts, dynamic tables, and dark mode built with
                 React, MUI, and Recharts.
                 <a
-                  href="https://dashboard-seven-psi-14.vercel.app/"
+                  href="https://vercel.com/fitwis-projects/dashboard"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
@@ -112,7 +112,7 @@ const About: React.FC = () => {
                 Full-screen UI with destination search and responsive design —
                 built with React and Material UI.
                 <a
-                  href="https://landing-page-omega-two-35.vercel.app/"
+                  href="https://vercel.com/fitwis-projects/landing-page"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"

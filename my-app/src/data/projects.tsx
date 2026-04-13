@@ -14,7 +14,7 @@ const projects: Project[] = [
     description:
       "Production-ready admin dashboard with interactive analytics charts, dynamic user tables, and dark mode — built with React, MUI, and Recharts.",
     tech: ["React", "Material UI", "Recharts"],
-    liveUrl: "https://dashboard-seven-psi-14.vercel.app/",
+    liveUrl: "https://vercel.com/fitwis-projects/dashboard",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/dashboard", // TODO: link to specific repo
   },
   {
@@ -32,7 +32,7 @@ const projects: Project[] = [
     description:
       "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Material UI.",
     tech: ["React", "Vite", "Material UI"],
-    liveUrl: "https://landing-page-omega-two-35.vercel.app/",
+    liveUrl: "https://vercel.com/fitwis-projects/landing-page",
     githubUrl:
       "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page/travel-landing-page", // TODO: link to specific repo
   },
@@ -42,7 +42,7 @@ const projects: Project[] = [
     description:
       "High-performance agency landing page with animated navigation, premium UI components, and fluid motion — built with TypeScript and Framer Motion.",
     tech: ["TypeScript", "Framer Motion", "Tailwind"],
-    liveUrl: "https://web-page-sand-five.vercel.app/",
+    liveUrl: "https://vercel.com/fitwis-projects/web-page",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/webDev-page", // TODO: link to specific repo
   },
 ];
