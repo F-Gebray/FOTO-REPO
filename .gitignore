@@ -4,4 +4,6 @@ backend/.env
 .env*.local
 .env
 api/.env
+BookingApp/
+BookingAppNew/
 
