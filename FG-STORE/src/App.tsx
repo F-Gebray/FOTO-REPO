@@ -1,16 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { Navbar } from './components/Navbar';
-import { Cart } from './components/Cart';
-import { Chatbot } from './components/Chatbot';
-import { Home } from './pages/Home';
-import { Contact } from './pages/Contact';
-import { ProductDetails } from './pages/ProductDetails';
-import { Checkout } from './pages/Checkout';
-import { OrderTracking } from './pages/OrderTracking';
-import { useAppSelector } from './store/hooks';
+import { useState, useEffect } from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+import { Navbar } from "./components/Navbar";
+import { Cart } from "./components/Cart";
+import { Chatbot } from "./components/Chatbot";
+import { Home } from "./pages/Home";
+import { Contact } from "./pages/Contact";
+import { ProductDetails } from "./pages/ProductDetails";
+import { Checkout } from "./pages/Checkout";
+import { OrderTracking } from "./pages/OrderTracking";
+import { useAppSelector } from "./store/hooks";
 
-import type { RootState } from './store/store';
+import type { RootState } from "./store/store";
 
 // Scroll to top on route change component
 const ScrollToTop = () => {
@@ -27,10 +27,11 @@ export default function App() {
   const location = useLocation();
 
   // Hide Navbar and floating cart on Checkout and Tracking pages for realistic full-screen feel
-  const isCheckout = location.pathname === '/checkout' || location.pathname === '/tracking';
+  const isCheckout =
+    location.pathname === "/checkout" || location.pathname === "/tracking";
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
   return (
@@ -51,14 +52,11 @@ export default function App() {
 
       {!isCheckout && (
         <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 py-12 mt-12 text-center text-gray-500 dark:text-gray-400">
-          <p>© 2026 Lumina Retail. All rights reserved.</p>
+          <p>© 2026 FG-Store Retail. All rights reserved.</p>
         </footer>
       )}
 
-      <Cart
-        isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
-      />
+      <Cart isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
 
       {!isCheckout && <Chatbot />}
     </div>
