@@ -28,13 +28,12 @@ const projects: Project[] = [
   },
   {
     id: 3,
-    title: "Travel Planner App",
+    title: "FG-STORE",
     description:
-      "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Material UI.",
-    tech: ["React", "Vite", "Material UI"],
-    liveUrl: "https://vercel.com/fitwis-projects/landing-page",
-    githubUrl:
-      "https://github.com/F-Gebray/FOTO-REPO/tree/main/landing-page/travel-landing-page", // TODO: link to specific repo
+      "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Tailwind CSS.",
+    tech: ["React", "Vite", "Tailwind"],
+    liveUrl: "https://vercel.com/fitwis-projects/fg-store",
+    githubUrl: "https://github.com/F-Gebray/FG-STORE",
   },
   {
     id: 4,
