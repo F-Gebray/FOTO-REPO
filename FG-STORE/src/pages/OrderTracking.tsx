@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Truck, CheckCircle, Package, ArrowRight } from "lucide-react";
 import { useToast } from "../context/ToastContext";
 
