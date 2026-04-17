@@ -38,7 +38,7 @@ export interface Addon {
 }
 
 export interface FilterState {
-  search: "";
+  search: string;
   propertyTypes: string[]; // maps to category
   maxPrice: number;
   minBedrooms: number;
