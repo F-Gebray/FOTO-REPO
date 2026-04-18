@@ -107,7 +107,7 @@ const About: React.FC = () => {
 
               <li>
                 <span className="text-[#e5e7eb] font-bold block mb-1">
-                  • Travel Planner App:
+                  • Modern Shopping Store:
                 </span>
                 Full-screen UI with destination search and responsive design —
                 built with React and Tailwind CSS.
