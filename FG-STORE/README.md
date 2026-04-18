@@ -9,7 +9,7 @@ A professional, production-ready React E-Commerce application utilizing modern R
 - **State Management:** Redux Toolkit (Cart & Products State) + Context API (Theme & Toast Notifications)
 - **Routing:** React Router v6
 - **Icons:** Lucide React
-- **Customer Support Integration:** Tawk.to
+
 
 ## ✨ Key Features
 
