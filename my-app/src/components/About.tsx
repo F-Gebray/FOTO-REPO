@@ -110,9 +110,9 @@ const About: React.FC = () => {
                   • Travel Planner App:
                 </span>
                 Full-screen UI with destination search and responsive design —
-                built with React and Material UI.
+                built with React and Tailwind CSS.
                 <a
-                  href="https://vercel.com/fitwis-projects/landing-page"
+                  href="https://vercel.com/fitwis-projects/fg-store"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
