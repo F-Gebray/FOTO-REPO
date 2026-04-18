@@ -1,20 +1,20 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot } from 'lucide-react';
+import React, { useState, useRef, useEffect } from "react";
+import { MessageCircle, X, Send, Bot } from "lucide-react";
 
 interface ChatMessage {
   id: string;
-  sender: 'user' | 'bot';
+  sender: "user" | "bot";
   text: string;
 }
 
 export const Chatbot: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: 'initial',
-      sender: 'bot',
-      text: 'Hello! Welcome to FG-Store Retail. How can I help you style your day?',
+      id: "initial",
+      sender: "bot",
+      text: "Hello! Welcome to FG-Store Retail. How can I help you style your day?",
     },
   ]);
   const [isTyping, setIsTyping] = useState(false);
@@ -22,7 +22,7 @@ export const Chatbot: React.FC = () => {
 
   // Auto-scroll to bottom
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   const handleSend = (e: React.FormEvent) => {
@@ -32,11 +32,11 @@ export const Chatbot: React.FC = () => {
     // Add user message
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
-      sender: 'user',
+      sender: "user",
       text: input,
     };
-    setMessages(prev => [...prev, userMsg]);
-    setInput('');
+    setMessages((prev) => [...prev, userMsg]);
+    setInput("");
     setIsTyping(true);
 
     // Simulate bot response
@@ -46,14 +46,14 @@ export const Chatbot: React.FC = () => {
         "Yes, we offer free shipping on all orders over $100.",
         "You can find our return policy at the bottom of the page.",
         "Our latest collection just dropped! Have you checked out the home page?",
-        "I'm just a simple bot, but I think you have excellent taste in fashion."
+        "I'm just a simple bot, but I think you have excellent taste in fashion.",
       ];
       const botMsg: ChatMessage = {
         id: (Date.now() + 1).toString(),
-        sender: 'bot',
+        sender: "bot",
         text: responses[Math.floor(Math.random() * responses.length)],
       };
-      setMessages(prev => [...prev, botMsg]);
+      setMessages((prev) => [...prev, botMsg]);
       setIsTyping(false);
     }, 1500); // 1.5 second delay
   };
@@ -63,7 +63,7 @@ export const Chatbot: React.FC = () => {
       {/* Floating Action Button */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[80] p-4 bg-primary-600 text-white rounded-full shadow-2xl shadow-primary-600/30 hover:bg-primary-700 transition-all hover:scale-110 active:scale-95 ${isOpen ? 'scale-0 opacity-0 pointer-events-none' : 'scale-100 opacity-100'}`}
+        className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[80] p-4 bg-primary-600 text-white rounded-full shadow-2xl shadow-primary-600/30 hover:bg-primary-700 transition-all hover:scale-110 active:scale-95 ${isOpen ? "scale-0 opacity-0 pointer-events-none" : "scale-100 opacity-100"}`}
         aria-label="Open support chat"
       >
         <MessageCircle className="w-7 h-7" />
@@ -75,16 +75,17 @@ export const Chatbot: React.FC = () => {
 
       {/* Chat Window */}
       <div
-        className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[90] w-[350px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl flex flex-col transform transition-all duration-300 origin-bottom-right ${isOpen ? 'scale-100 opacity-100' : 'scale-75 opacity-0 pointer-events-none'}`}
+        className={`fixed bottom-6 right-6 lg:bottom-10 lg:right-10 z-[90] w-[350px] max-w-[calc(100vw-3rem)] h-[500px] max-h-[calc(100vh-6rem)] bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-2xl flex flex-col transform transition-all duration-300 origin-bottom-right ${isOpen ? "scale-100 opacity-100" : "scale-75 opacity-0 pointer-events-none"}`}
       >
         {/* Header */}
         <div className="flex justify-between items-center p-4 border-b border-gray-100 dark:border-gray-800 bg-primary-600 text-white rounded-t-2xl">
           <div className="flex items-center gap-2">
             <Bot className="w-5 h-5 opacity-90" />
             <div>
-              <h3 className="font-bold text-sm">Lumina Stylist</h3>
+              <h3 className="font-bold text-sm">FG-store Stylist</h3>
               <p className="text-xs text-primary-100 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span> Online
+                <span className="w-2 h-2 rounded-full bg-green-400 inline-block"></span>{" "}
+                Online
               </p>
             </div>
           </div>
@@ -98,16 +99,17 @@ export const Chatbot: React.FC = () => {
 
         {/* Message Area */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-950">
-          {messages.map(msg => (
+          {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`flex flex-col max-w-[85%] ${msg.sender === 'user' ? 'ml-auto items-end' : 'mr-auto items-start'}`}
+              className={`flex flex-col max-w-[85%] ${msg.sender === "user" ? "ml-auto items-end" : "mr-auto items-start"}`}
             >
               <div
-                className={`py-2 px-4 rounded-2xl shadow-sm text-sm ${msg.sender === 'user'
-                    ? 'bg-primary-600 text-white rounded-br-sm'
-                    : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-bl-sm'
-                  }`}
+                className={`py-2 px-4 rounded-2xl shadow-sm text-sm ${
+                  msg.sender === "user"
+                    ? "bg-primary-600 text-white rounded-br-sm"
+                    : "bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-100 border border-gray-100 dark:border-gray-700 rounded-bl-sm"
+                }`}
               >
                 {msg.text}
               </div>
