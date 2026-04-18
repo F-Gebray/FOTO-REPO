@@ -33,7 +33,7 @@ const projects: Project[] = [
       "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Tailwind CSS.",
     tech: ["React", "Vite", "Tailwind"],
     liveUrl: "https://vercel.com/fitwis-projects/fg-store",
-    githubUrl: "https://github.com/F-Gebray/FG-STORE",
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/FG-STORE",
   },
   {
     id: 4,
