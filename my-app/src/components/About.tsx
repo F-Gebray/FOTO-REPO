@@ -80,7 +80,7 @@ const About: React.FC = () => {
                 Luxury travel platform with real-time reservations and email
                 integration — built with Tailwind and React Router.
                 <a
-                  href="https://vercel.com/fitwis-projects/new-bookingapp"
+                  href="https://vercel.com/fitwis-projects/hotel-reservation"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"

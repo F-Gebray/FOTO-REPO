@@ -23,8 +23,9 @@ const projects: Project[] = [
     description:
       "Luxury travel platform with dynamic property listings, real-time reservations, and email integration via EmailJS — fully responsive across devices.",
     tech: ["Tailwind", "EmailJS", "React Router"],
-    liveUrl: "https://vercel.com/fitwis-projects/new-bookingapp",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/arche", // TODO: link to specific repo
+    liveUrl: "https://vercel.com/fitwis-projects/hotel-reservation",
+    githubUrl:
+      "https://github.com/F-Gebray/FOTO-REPO/tree/main/hotel-reservation", // TODO: link to specific repo
   },
   {
     id: 3,
