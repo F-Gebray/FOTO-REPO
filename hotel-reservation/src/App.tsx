@@ -1,14 +1,15 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Layout/Navbar';
-import Footer from './components/Layout/Footer';
-import Chatbot from './components/Chatbot/Chatbot';
-import Home from './pages/Home';
-import Search from './pages/Search';
-import HotelDetails from './pages/HotelDetails';
-import Checkout from './pages/Checkout';
-import Contact from './pages/Contact';
-import Login from './pages/Login';
-import ContentPage from './pages/ContentPage';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Layout/Navbar";
+import Footer from "./components/Layout/Footer";
+import Chatbot from "./components/Chatbot/Chatbot";
+import Home from "./pages/Home";
+import Search from "./pages/Search";
+import HotelDetails from "./pages/HotelDetails";
+import Checkout from "./pages/Checkout";
+import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import ContentPage from "./pages/ContentPage";
+import SignUp from "./pages/SignUp";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/info/:page" element={<ContentPage />} />
+            <Route path="/signup" element={<SignUp />} />
           </Routes>
         </main>
         <Footer />
