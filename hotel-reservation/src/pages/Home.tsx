@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { mockHotels } from "../lib/mockData";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Star } from "lucide-react";
 
 const images = [
@@ -11,7 +11,6 @@ const images = [
 ];
 
 export default function Home() {
-  const navigate = useNavigate();
   const [index, setIndex] = useState(0);
 
   // auto slide

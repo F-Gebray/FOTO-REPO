@@ -3,7 +3,9 @@ import { useParams, useNavigate, Link } from "react-router-dom";
 import { mockHotels } from "../lib/mockData";
 import { useDispatch } from "react-redux";
 import { setBookingDetails } from "../store/bookingSlice";
+
 import { Star, MapPin, Check, Wifi, Users, ChevronLeft } from "lucide-react";
+
 import { Button } from "../components/ui/Button";
 
 import DatePicker from "react-datepicker";
@@ -20,6 +22,7 @@ export default function HotelDetails() {
     hotel?.roomTypes[0]?.id || "",
   );
   const [guests, setGuests] = useState(2);
+
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
 
@@ -29,20 +32,17 @@ export default function HotelDetails() {
     return <div className="p-20 text-center text-xl">Hotel not found.</div>;
   }
 
-  // ================= PRICE CALCULATION =================
+  // ================= PRICE =================
   const selectedRoomData = hotel.roomTypes.find((r) => r.id === selectedRoom);
 
-  const calculateNights = () => {
-    if (!checkIn || !checkOut) return 0;
+  const nights =
+    checkIn && checkOut
+      ? Math.ceil(
+          (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
+            (1000 * 60 * 60 * 24),
+        )
+      : 0;
 
-    const inDate = new Date(checkIn);
-    const outDate = new Date(checkOut);
-
-    const diff = outDate.getTime() - inDate.getTime();
-    return Math.ceil(diff / (1000 * 60 * 60 * 24));
-  };
-
-  const nights = calculateNights();
   const roomPrice = selectedRoomData?.price || hotel.pricePerNight;
   const totalPrice = nights > 0 ? nights * roomPrice : roomPrice;
 
@@ -50,26 +50,15 @@ export default function HotelDetails() {
   const validate = () => {
     const newErrors: any = {};
 
-    if (!checkIn) newErrors.checkIn = "Check-in date is required";
+    if (!checkIn) newErrors.checkIn = "Select check-in date";
+    if (!checkOut) newErrors.checkOut = "Select check-out date";
 
-    if (!checkOut) newErrors.checkOut = "Check-out date is required";
-
-    if (checkIn && checkOut) {
-      const inDate = new Date(checkIn);
-      const outDate = new Date(checkOut);
-
-      if (outDate <= inDate) {
-        newErrors.checkOut = "Check-out must be after check-in";
-      }
+    if (checkIn && checkOut && new Date(checkOut) <= new Date(checkIn)) {
+      newErrors.checkOut = "Check-out must be after check-in";
     }
 
-    if (!guests || guests < 1) {
-      newErrors.guests = "At least 1 guest required";
-    }
-
-    if (!selectedRoom) {
-      newErrors.room = "Please select a room";
-    }
+    if (!guests || guests < 1) newErrors.guests = "Minimum 1 guest required";
+    if (!selectedRoom) newErrors.room = "Select a room";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -108,11 +97,15 @@ export default function HotelDetails() {
       <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-6">
         <div>
           <h1 className="text-3xl md:text-5xl font-bold mb-2">{hotel.name}</h1>
+
           <div className="flex items-center gap-4 text-muted-foreground">
+            {/* LOCATION */}
             <span className="flex items-center gap-1">
-              <MapPin className="h-4 w-4" /> {hotel.location}
+              <MapPin className="h-4 w-4" />
+              {hotel.location}
             </span>
 
+            {/* RATING */}
             <span className="flex items-center gap-1 text-yellow-500 font-medium bg-yellow-500/10 px-2 py-0.5 rounded text-sm">
               <Star className="h-4 w-4 fill-yellow-500" />
               {hotel.rating} ({hotel.reviews} reviews)
@@ -139,62 +132,69 @@ export default function HotelDetails() {
             <p className="text-muted-foreground text-lg">{hotel.description}</p>
           </section>
 
+          {/* AMENITIES */}
           <section className="mb-12 border-t border-border pt-8">
-            <h2 className="text-2xl font-bold mb-6">Amenities</h2>
+            <h2 className="text-2xl font-bold mb-6">Popular Amenities</h2>
+
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {hotel.amenities.map((a) => (
-                <div key={a} className="flex items-center gap-2">
+                <div
+                  key={a}
+                  className="flex items-center gap-2 text-muted-foreground"
+                >
                   <Check className="h-5 w-5 text-green-500" />
-                  {a}
+                  <span>{a}</span>
                 </div>
               ))}
             </div>
           </section>
 
-          <section className="border-t border-border pt-8">
+          {/* ROOMS */}
+          <section className="mb-12 border-t border-border pt-8">
             <h2 className="text-2xl font-bold mb-6">Room Options</h2>
 
-            {hotel.roomTypes.map((room) => (
-              <div
-                key={room.id}
-                onClick={() => setSelectedRoom(room.id)}
-                className={`p-6 rounded-2xl border-2 mb-4 cursor-pointer ${
-                  selectedRoom === room.id
-                    ? "border-primary bg-primary/5"
-                    : "border-border"
-                }`}
-              >
-                <div className="flex justify-between">
-                  <h3 className="text-xl font-bold">{room.name}</h3>
-                  <span>${room.price}</span>
-                </div>
+            <div className="flex flex-col gap-4">
+              {hotel.roomTypes.map((room) => (
+                <div
+                  key={room.id}
+                  onClick={() => setSelectedRoom(room.id)}
+                  className={`p-6 rounded-2xl border-2 cursor-pointer ${
+                    selectedRoom === room.id
+                      ? "border-primary bg-primary/5"
+                      : "border-border bg-card"
+                  }`}
+                >
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold">{room.name}</h3>
+                    <span className="font-semibold">${room.price}</span>
+                  </div>
 
-                <div className="flex gap-4 text-sm text-muted-foreground mt-2">
-                  <span className="flex items-center gap-1">
-                    <Users className="h-4 w-4" /> {room.capacity}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Wifi className="h-4 w-4" /> Free WiFi
-                  </span>
-                </div>
-              </div>
-            ))}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                      <Users className="h-4 w-4" />
+                      Up to {room.capacity} guests
+                    </span>
 
-            {errors.room && (
-              <p className="text-red-500 text-sm">{errors.room}</p>
-            )}
+                    <span className="flex items-center gap-1">
+                      <Wifi className="h-4 w-4" />
+                      Free WiFi
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </section>
         </div>
 
         {/* RIGHT */}
         <div className="w-full lg:w-[400px]">
           <div className="border rounded-2xl p-6 sticky top-24">
-            <h3 className="text-xl font-bold mb-4">Book Now</h3>
+            <h3 className="text-xl font-bold mb-4">Book your stay</h3>
 
-            {/* CHECK-IN DATE PICKER */}
+            {/* CHECK-IN */}
             <DatePicker
               selected={checkIn ? new Date(checkIn) : null}
-              onChange={(date) =>
+              onChange={(date: Date | null) =>
                 setCheckIn(date ? format(date, "yyyy-MM-dd") : "")
               }
               placeholderText="Check-in date"
@@ -204,10 +204,10 @@ export default function HotelDetails() {
               <p className="text-red-500 text-sm">{errors.checkIn}</p>
             )}
 
-            {/* CHECK-OUT DATE PICKER */}
+            {/* CHECK-OUT */}
             <DatePicker
               selected={checkOut ? new Date(checkOut) : null}
-              onChange={(date) =>
+              onChange={(date: Date | null) =>
                 setCheckOut(date ? format(date, "yyyy-MM-dd") : "")
               }
               placeholderText="Check-out date"
@@ -224,25 +224,22 @@ export default function HotelDetails() {
               min={1}
               value={guests}
               onChange={(e) => setGuests(Number(e.target.value))}
-              className="w-full border p-2 rounded mt-3 mb-1"
+              className="w-full border p-2 rounded mt-3"
             />
-            {errors.guests && (
-              <p className="text-red-500 text-sm">{errors.guests}</p>
-            )}
 
             {/* PRICE */}
-            <div className="border-t border-border mt-4 pt-4 text-sm">
-              <div className="flex justify-between mb-2">
-                <span>Price / night</span>
+            <div className="border-t mt-4 pt-4 text-sm">
+              <div className="flex justify-between">
+                <span>Price/night</span>
                 <span>${roomPrice}</span>
               </div>
 
-              <div className="flex justify-between mb-2">
+              <div className="flex justify-between">
                 <span>Nights</span>
-                <span>{nights || 0}</span>
+                <span>{nights}</span>
               </div>
 
-              <div className="flex justify-between font-bold text-lg">
+              <div className="flex justify-between font-bold text-lg mt-2">
                 <span>Total</span>
                 <span>${totalPrice}</span>
               </div>
@@ -251,10 +248,6 @@ export default function HotelDetails() {
             <Button onClick={handleBookNow} className="w-full mt-4">
               Reserve Now
             </Button>
-
-            <p className="text-xs text-muted-foreground mt-2 text-center">
-              You won’t be charged yet
-            </p>
           </div>
         </div>
       </div>
