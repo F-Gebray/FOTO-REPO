@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 interface BookingDetails {
   hotelId: string;
@@ -6,6 +6,7 @@ interface BookingDetails {
   checkOut: string | null;
   guests: number;
   roomType: string;
+  price: number;
 }
 
 interface BookingState {
@@ -15,20 +16,24 @@ interface BookingState {
 
 const initialState: BookingState = {
   currentBooking: {
-    hotelId: '',
+    hotelId: "",
     checkIn: null,
     checkOut: null,
     guests: 2,
-    roomType: 'standard',
+    roomType: "standard",
+    price: 0,
   },
   favorites: [],
 };
 
 const bookingSlice = createSlice({
-  name: 'booking',
+  name: "booking",
   initialState,
   reducers: {
-    setBookingDetails: (state, action: PayloadAction<Partial<BookingDetails>>) => {
+    setBookingDetails: (
+      state,
+      action: PayloadAction<Partial<BookingDetails>>,
+    ) => {
       state.currentBooking = { ...state.currentBooking, ...action.payload };
     },
     toggleFavorite: (state, action: PayloadAction<string>) => {
@@ -44,5 +49,6 @@ const bookingSlice = createSlice({
   },
 });
 
-export const { setBookingDetails, toggleFavorite, clearBooking } = bookingSlice.actions;
+export const { setBookingDetails, toggleFavorite, clearBooking } =
+  bookingSlice.actions;
 export default bookingSlice.reducer;
