@@ -4,7 +4,8 @@ import { Button } from "../ui/Button";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleTheme } from "../../store/themeSlice";
 import { logout } from "../../store/authSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { mockHotels } from "../../lib/mockData";
 import type { RootState } from "../../store/store";
 
 export default function Navbar() {
@@ -15,92 +16,160 @@ export default function Navbar() {
   const { isAuthenticated, user } = useSelector(
     (state: RootState) => state.auth,
   );
+
   const isDark = useSelector((state: RootState) => state.theme.isDark);
 
-  // ================= STATES =================
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // ================= AUTO CLOSE MENU =================
+  // close dropdown on route change
   useEffect(() => {
     setOpen(false);
+    setShowSuggestions(false);
   }, [location.pathname]);
 
-  // ================= SEARCH =================
-  const handleSearch = () => {
-    if (!query.trim()) return;
+  // ================= FILTER REAL mockHotels =================
+  const suggestions = useMemo(() => {
+    const q = query.toLowerCase().trim();
+    if (!q) return [];
 
-    navigate(`/search?destination=${encodeURIComponent(query.trim())}`);
+    return mockHotels.filter(
+      (hotel) =>
+        hotel.name.toLowerCase().includes(q) ||
+        hotel.location.toLowerCase().includes(q),
+    );
+  }, [query]);
+
+  // ================= SEARCH HANDLER =================
+  const handleSearch = (value?: string) => {
+    const term = (value || query).trim();
+    if (!term) return;
+
+    navigate(`/search?destination=${encodeURIComponent(term)}`);
+
     setQuery("");
+    setShowSuggestions(false);
     setOpen(false);
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-border">
+      <div className="max-w-7xl mx-auto px-4">
         {/* ================= TOP BAR ================= */}
-        <div className="flex justify-between h-[72px] items-center">
+        <div className="flex justify-between items-center h-[72px]">
           {/* LOGO */}
           <Link to="/" className="flex items-center gap-2">
-            <div className="bg-primary/10 p-2 rounded-xl">
-              <Plane className="h-6 w-6 text-primary" />
-            </div>
+            <Plane className="h-6 w-6 text-primary" />
             <span className="font-bold text-xl">StayScout</span>
           </Link>
 
-          {/* ================= DESKTOP SEARCH ================= */}
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          {/* ================= SEARCH ================= */}
+          <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" />
 
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearch();
-                }}
-                placeholder="Where to next?"
-                className="w-full pl-10 pr-20 py-2.5 rounded-full border bg-muted/50 focus:outline-none"
-              />
+            <input
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              onFocus={() => setShowSuggestions(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSearch();
+              }}
+              placeholder="Where to next?"
+              className="w-full pl-10 pr-20 py-2.5 rounded-full border"
+            />
 
-              {/* GO BUTTON */}
-              <button
-                onClick={handleSearch}
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-full text-sm hover:opacity-90"
+            <button
+              onClick={() => handleSearch()}
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white px-4 py-1.5 rounded-full text-sm"
+            >
+              Go
+            </button>
+
+            {/* ================= IMAGE SUGGESTIONS ================= */}
+            {showSuggestions && query && (
+              <div
+                className={`absolute top-full mt-2 w-full border rounded-xl shadow-lg max-h-80 overflow-y-auto z-50 ${
+                  isDark
+                    ? "bg-zinc-900 border-zinc-700"
+                    : "bg-white border-gray-200"
+                }`}
               >
-                Go
-              </button>
-            </div>
+                {suggestions.length === 0 ? (
+                  <div
+                    className={`p-3 text-sm ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                  >
+                    No hotels found
+                  </div>
+                ) : (
+                  suggestions.map((hotel) => (
+                    <div
+                      key={hotel.id}
+                      onClick={() => handleSearch(hotel.name)}
+                      className={`flex items-center gap-3 p-3 cursor-pointer transition ${
+                        isDark ? "hover:bg-zinc-800" : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {/* IMAGE */}
+                      <img
+                        src={hotel.image}
+                        alt={hotel.name}
+                        className="h-12 w-12 rounded-lg object-cover"
+                      />
+
+                      {/* TEXT */}
+                      <div className="flex flex-col">
+                        <div
+                          className={`font-medium text-sm ${isDark ? "text-white" : "text-black"}`}
+                        >
+                          {hotel.name}
+                        </div>
+
+                        <div
+                          className={`text-xs ${isDark ? "text-gray-400" : "text-gray-500"}`}
+                        >
+                          {hotel.location}
+                        </div>
+
+                        <div
+                          className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}
+                        >
+                          ${hotel.pricePerNight} / night
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
           </div>
 
           {/* ================= RIGHT SIDE ================= */}
           <div className="flex items-center gap-4">
-            {/* DESKTOP LINKS */}
-            <div className="hidden sm:flex items-center gap-6">
-              <Link to="/search" className="text-sm hover:text-primary">
-                Explore
-              </Link>
-              <Link to="/contact" className="text-sm hover:text-primary">
-                Contact
-              </Link>
-            </div>
+            <Link to="/search" className="hidden sm:block">
+              Explore
+            </Link>
 
-            {/* THEME */}
+            <Link to="/contact" className="hidden sm:block">
+              Contact
+            </Link>
+
             <button onClick={() => dispatch(toggleTheme())}>
               {isDark ? <Sun /> : <Moon />}
             </button>
 
-            {/* AUTH */}
             {isAuthenticated ? (
               <div className="hidden sm:flex items-center gap-3">
-                <span className="text-sm">{user?.name}</span>
+                <span>{user?.name}</span>
                 <Button variant="ghost" onClick={() => dispatch(logout())}>
                   <LogOut />
                 </Button>
               </div>
             ) : (
-              <Link to="/login" className="hidden sm:flex">
+              <Link to="/login" className="hidden sm:block">
                 <Button>
                   <User className="h-4 w-4 mr-1" />
                   Sign In
@@ -108,7 +177,6 @@ export default function Navbar() {
               </Link>
             )}
 
-            {/* HAMBURGER */}
             <Button
               variant="ghost"
               className="sm:hidden"
@@ -121,65 +189,31 @@ export default function Navbar() {
 
         {/* ================= MOBILE MENU ================= */}
         {open && (
-          <div className="sm:hidden flex flex-col gap-3 py-4 border-t border-border">
-            {/* MOBILE SEARCH */}
-            <div className="px-2">
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearch();
-                }}
-                placeholder="Search hotels..."
-                className="w-full border rounded-md p-2 mb-2"
-              />
+          <div className="sm:hidden py-4 border-t border-border">
+            <input
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setShowSuggestions(true);
+              }}
+              placeholder="Search hotels..."
+              className="w-full border p-2 rounded mb-2"
+            />
 
-              <button
-                onClick={handleSearch}
-                className="w-full bg-primary text-white py-2 rounded-md"
-              >
-                Go
-              </button>
-            </div>
-
-            {/* LINKS */}
-            <Link
-              to="/search"
-              onClick={() => setOpen(false)}
-              className="px-2 py-2 hover:bg-muted rounded-md"
+            <button
+              onClick={() => handleSearch()}
+              className="w-full bg-primary text-white py-2 rounded"
             >
+              Go
+            </button>
+
+            <Link to="/search" className="block mt-3">
               Explore
             </Link>
 
-            <Link
-              to="/contact"
-              onClick={() => setOpen(false)}
-              className="px-2 py-2 hover:bg-muted rounded-md"
-            >
+            <Link to="/contact" className="block mt-2">
               Contact
             </Link>
-
-            {/* AUTH */}
-            {isAuthenticated ? (
-              <button
-                onClick={() => {
-                  dispatch(logout());
-                  setOpen(false);
-                }}
-                className="text-left px-2 py-2 hover:bg-muted rounded-md"
-              >
-                Logout
-              </button>
-            ) : (
-              <Link
-                to="/login"
-                onClick={() => setOpen(false)}
-                className="px-2 py-2 hover:bg-muted rounded-md"
-              >
-                Sign In
-              </Link>
-            )}
           </div>
         )}
       </div>
