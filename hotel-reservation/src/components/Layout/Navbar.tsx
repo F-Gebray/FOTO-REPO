@@ -28,7 +28,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* TOP BAR */}
         <div className="flex justify-between h-[72px] items-center">
-          {/* Logo */}
+          {/* LOGO */}
           <Link to="/" className="flex items-center gap-2">
             <div className="bg-primary/10 p-2 rounded-xl">
               <Plane className="h-6 w-6 text-primary" />
@@ -36,19 +36,31 @@ export default function Navbar() {
             <span className="font-bold text-xl">StayScout</span>
           </Link>
 
-          {/* Desktop Links */}
-          <div className="hidden sm:flex items-center gap-6">
-            <Link to="/search" className="text-sm hover:text-primary">
-              Explore
-            </Link>
-            <Link to="/contact" className="text-sm hover:text-primary">
-              Contact
-            </Link>
+          {/* DESKTOP SEARCH */}
+          <div className="hidden md:flex flex-1 max-w-md mx-8">
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Where to next?"
+                className="w-full pl-10 pr-4 py-2.5 rounded-full border border-input bg-muted/50 focus:bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+            </div>
           </div>
 
-          {/* Right Actions */}
+          {/* RIGHT SIDE */}
           <div className="flex items-center gap-3">
-            {/* Theme */}
+            {/* DESKTOP LINKS */}
+            <div className="hidden sm:flex items-center gap-6">
+              <Link to="/search" className="text-sm hover:text-primary">
+                Explore
+              </Link>
+              <Link to="/contact" className="text-sm hover:text-primary">
+                Contact
+              </Link>
+            </div>
+
+            {/* THEME TOGGLE */}
             <button
               onClick={() => dispatch(toggleTheme())}
               className="p-2 rounded-full hover:bg-muted"
@@ -56,7 +68,7 @@ export default function Navbar() {
               {isDark ? <Sun size={18} /> : <Moon size={18} />}
             </button>
 
-            {/* Auth (desktop only) */}
+            {/* AUTH (DESKTOP) */}
             <div className="hidden sm:flex items-center gap-3">
               {isAuthenticated ? (
                 <>
@@ -79,7 +91,7 @@ export default function Navbar() {
               )}
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* MOBILE MENU BUTTON */}
             <button
               className="sm:hidden p-2"
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -92,6 +104,17 @@ export default function Navbar() {
         {/* MOBILE MENU */}
         {mobileOpen && (
           <div className="sm:hidden flex flex-col gap-4 py-4 border-t border-border">
+            {/* MOBILE SEARCH */}
+            <div className="flex items-center gap-2 px-3 py-2 bg-muted rounded-lg">
+              <Search size={18} className="text-muted-foreground" />
+              <input
+                type="text"
+                placeholder="Search hotels..."
+                className="w-full bg-transparent outline-none text-sm"
+              />
+            </div>
+
+            {/* LINKS */}
             <button
               onClick={() => handleNav("/search")}
               className="text-left py-2"
@@ -106,6 +129,7 @@ export default function Navbar() {
               Contact
             </button>
 
+            {/* AUTH */}
             {!isAuthenticated ? (
               <button
                 onClick={() => handleNav("/login")}
