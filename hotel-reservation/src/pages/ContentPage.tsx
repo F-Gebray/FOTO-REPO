@@ -129,16 +129,6 @@ const css = `
 /* ═══════════════════════════════════════════════════════════════════
    TYPES
 ═══════════════════════════════════════════════════════════════════ */
-type PageId =
-  | "about-us"
-  | "careers"
-  | "help-center"
-  | "trust-and-safety"
-  | "cancellation-options"
-  | "privacy-policy"
-  | "terms-of-service"
-  | "contact";
-
 interface Job {
   id: number;
   title: string;
