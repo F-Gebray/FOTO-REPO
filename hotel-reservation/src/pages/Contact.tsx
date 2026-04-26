@@ -28,7 +28,7 @@ export default function Contact() {
           </div>
           <h3 className="font-bold text-lg mb-2">Phone</h3>
           <p className="text-muted-foreground text-sm">
-            +1 (800) 123-4567
+            +31 (800) 123-456
             <br />
             Mon-Fri, 9am - 6pm EST
           </p>
@@ -39,7 +39,7 @@ export default function Contact() {
           </div>
           <h3 className="font-bold text-lg mb-2">Email</h3>
           <p className="text-muted-foreground text-sm">
-            support@stayscout.com
+            support@stay-comfort.com
             <br />
             We reply within 24 hours
           </p>
@@ -52,7 +52,7 @@ export default function Contact() {
           <p className="text-muted-foreground text-sm">
             10 Sint-Michielgestel
             <br />
-            nOORD-Brabant, NB 10001
+            Noord-Brabant, NB 10001
           </p>
         </div>
       </div>
