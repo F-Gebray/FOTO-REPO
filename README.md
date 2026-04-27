@@ -17,7 +17,7 @@ All projects listed below are integrated and viewable through my main portfolio 
 
 - **Status:** Premium Project - Focused on advanced state management and UI/UX.
 - Features a responsive booking flow, dynamic filtering, and a clean, modern interface.
-- **[View Hotel Reservation Demo](https://vercel.app)**
+- **[View Hotel Reservation Demo](https://vercel.com/fitwis-projects/hotel-reservation)**
 
 ---
 
