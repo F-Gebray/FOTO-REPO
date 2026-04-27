@@ -1,4 +1,0 @@
-{
-  "buildCommand": "cd travel-landing-page && npm install --include=dev && npm run build",
-  "outputDirectory": "travel-landing-page/dist"
-}

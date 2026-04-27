@@ -6,4 +6,9 @@ backend/.env
 api/.env
 BookingApp/
 BookingAppNew/
+booking-api/
+backend/
+node_modules/
+.env
+
 
