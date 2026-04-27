@@ -17,7 +17,7 @@ All projects listed below are integrated and viewable through my main portfolio 
 
 - **Status:** Premium Project - Focused on advanced state management and UI/UX.
 - Features a responsive booking flow, dynamic filtering, and a clean, modern interface.
-- **[View Hotel Reservation Demo](https://vercel.com/fitwis-projects/hotel-reservation)**
+- **[View Hotel Reservation Demo](https://vercel.app)**
 
 ---
 
@@ -25,6 +25,7 @@ All projects listed below are integrated and viewable through my main portfolio 
 
 | Project                          | Description                                     | Tech Stack                 |
 | :------------------------------- | :---------------------------------------------- | :------------------------- |
+| **[Portfolio Hub](./my-app)**    | The main application hosting all featured work. | React, Vite, React-Router  |
 | **[FG-STORE](./FG-STORE)**       | E-commerce storefront with cart functionality.  | React, CSS Modules         |
 | **[Dashboard](./dashboard)**     | Interactive data visualization and admin panel. | JS, Chart.js, HTML5        |
 | **[WebDev Page](./webDev-page)** | Personal branding and service showcase.         | Advanced CSS, Flexbox/Grid |
