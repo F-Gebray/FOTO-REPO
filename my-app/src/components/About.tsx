@@ -96,7 +96,7 @@ const About: React.FC = () => {
                 Analytics charts, dynamic tables, and dark mode built with
                 React, MUI, and Recharts.
                 <a
-                  href="https://vercel.com/fitwis-projects/dashboard"
+                  href="https://vercel.com/fitwis-projects/my-dashboard"
                   target="_blank"
                   rel="noreferrer"
                   className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"

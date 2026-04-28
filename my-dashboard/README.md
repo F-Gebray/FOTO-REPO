@@ -1,16 +1,69 @@
-# React + Vite
+📊 React Admin Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive Admin Dashboard built with React, Vite, and Tailwind CSS.
+It includes authentication flow, dynamic user management, charts, and a clean UI with dark mode support.
 
-Currently, two official plugins are available:
+🚀 Features
+🔐 Authentication system (Login / Logout / Protected Routes)
+👤 Dynamic user profile (no hardcoded data)
+📊 Dashboard analytics overview
+🧑‍💼 User management (CRUD ready)
+🛒 Orders management system
+🌗 Light / Dark mode support
+📱 Fully responsive design
+🔔 Notifications system
+⚡ Fast performance with Vite
+🧱 Tech Stack
+React 18
+Vite
+React Router DOM
+Context API (state management)
+Tailwind CSS
+Lucide Icons
+Recharts (charts & analytics)
+📁 Project Structure
+src/
+├── components/
+├── context/
+├── pages/
+├── data/
+├── hooks/
+├── App.jsx
+└── main.jsx
+🔐 Authentication Flow
+Login stores user in Context + LocalStorage
+User session persists on refresh
+Protected routes block unauthorized access
+Logout clears session and redirects to login
+🎯 Core Pages
+Dashboard
+Users Management
+Orders
+Analytics
+Profile
+Settings
+Login
+🖥️ UI Highlights
+Modern dashboard layout
+Collapsible sidebar
+Responsive navbar
+Card-based UI system
+Smooth dark mode transitions
+⚙️ Setup Instructions
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+# install dependencies
 
-## React Compiler
+npm install
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+# start development server
 
-## Expanding the ESLint configuration
+npm run dev
+📌 Future Improvements
+Backend integration (Node / Firebase)
+JWT authentication
+Role-based access control
+Real API data fetching
+Advanced analytics dashboard
+👨‍💻 Author
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Built as a learning + portfolio project for mastering modern React dashboard architecture.
