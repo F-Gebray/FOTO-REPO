@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme {
+  --color-brand-50: #f5ebff;
+  --color-brand-500: #aa3bff;
+  --color-brand-600: #9333ea;
+  --color-brand-700: #7e22ce;
+}
+
+:root {
+  --text: #6b6375;
+  --text-h: #08060d;
+  --bg: #ffffff;
+  --border: #e5e4e7;
+  --code-bg: #f4f3ec;
+}
+
+.dark {
+  --text: #9ca3af;
+  --text-h: #f3f4f6;
+  --bg: #16171d;
+  --border: #2e303a;
+  --code-bg: #1f2028;
+}
+
+html {
+  @apply antialiased scroll-smooth;
+}
+
+body {
+  @apply m-0 bg-gray-50 text-gray-900 dark:bg-gray-950 dark:text-gray-100;
+  font-family: system-ui, "Segoe UI", Roboto, sans-serif;
+}
+
+#root {
+  @apply mx-auto flex min-h-screen w-full max-w-6xl flex-col border-x border-gray-200 dark:border-gray-800;
+}
+
+h1,
+h2,
+h3 {
+  color: var(--text-h);
+}
+
+h1 {
+  @apply text-4xl md:text-6xl font-medium tracking-tight my-6 md:my-8;
+}
+
+h2 {
+  @apply text-2xl md:text-3xl font-medium mb-2;
+}
+
+p {
+  @apply m-0 leading-7;
+  color: var(--text);
+}
+
+code {
+  @apply rounded px-2 py-1 text-sm;
+  background: var(--code-bg);
+  color: var(--text-h);
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition
+           bg-purple-600 text-white hover:bg-purple-700;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 font-medium transition
+           bg-gray-100 text-gray-800 hover:bg-gray-200;
+  }
+}
