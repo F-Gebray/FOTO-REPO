@@ -9,10 +9,11 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  Check,
 } from "lucide-react";
 import OrderTable from "../components/orders/OrderTable";
 import { useApp } from "../context/AppContext";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 export default function Orders() {
   const { state, showToast } = useApp();
@@ -20,7 +21,49 @@ export default function Orders() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [isDateDropdownOpen, setIsDateDropdownOpen] = useState(false);
+  const [isStatusDropdownOpen, setIsStatusDropdownOpen] = useState(false);
+  const dateDropdownRef = useRef(null);
+  const statusDropdownRef = useRef(null);
   const itemsPerPage = 10;
+
+  // Date range options
+  const dateOptions = [
+    { value: "today", label: "Today" },
+    { value: "last7", label: "Last 7 days" },
+    { value: "last30", label: "Last 30 days" },
+    { value: "last90", label: "Last 90 days" },
+    { value: "thisyear", label: "This year" },
+  ];
+
+  // Status options
+  const statusOptions = [
+    { value: "all", label: "All Status" },
+    { value: "pending", label: "Pending" },
+    { value: "processing", label: "Processing" },
+    { value: "completed", label: "Completed" },
+    { value: "cancelled", label: "Cancelled" },
+  ];
+
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        dateDropdownRef.current &&
+        !dateDropdownRef.current.contains(event.target)
+      ) {
+        setIsDateDropdownOpen(false);
+      }
+      if (
+        statusDropdownRef.current &&
+        !statusDropdownRef.current.contains(event.target)
+      ) {
+        setIsStatusDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Calculate stats
   const totalOrders = state.orders.length;
@@ -88,8 +131,17 @@ export default function Orders() {
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
-    // Scroll to top when changing pages
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const getDateLabel = () => {
+    const option = dateOptions.find((opt) => opt.value === dateRange);
+    return option ? option.label : "Last 30 days";
+  };
+
+  const getStatusLabel = () => {
+    const option = statusOptions.find((opt) => opt.value === statusFilter);
+    return option ? option.label : "All Status";
   };
 
   return (
@@ -197,56 +249,67 @@ export default function Orders() {
               </span>
             </div>
 
-            {/* Date Range Dropdown - Dark */}
-            <div className="relative">
-              <select
-                value={dateRange}
-                onChange={(e) => setDateRange(e.target.value)}
-                className="appearance-none px-4 py-2 pr-10 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all [&>option]:bg-gray-800 [&>option]:text-white"
+            {/* Custom Date Range Dropdown */}
+            <div className="relative" ref={dateDropdownRef}>
+              <button
+                onClick={() => setIsDateDropdownOpen(!isDateDropdownOpen)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700 text-sm cursor-pointer hover:bg-gray-700 transition-all"
               >
-                <option value="today" className="bg-gray-800 text-white">
-                  Today
-                </option>
-                <option value="last7" className="bg-gray-800 text-white">
-                  Last 7 days
-                </option>
-                <option value="last30" className="bg-gray-800 text-white">
-                  Last 30 days
-                </option>
-                <option value="last90" className="bg-gray-800 text-white">
-                  Last 90 days
-                </option>
-                <option value="thisyear" className="bg-gray-800 text-white">
-                  This year
-                </option>
-              </select>
-              <Calendar className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <Calendar className="w-4 h-4" />
+                <span>{getDateLabel()}</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+
+              {isDateDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-lg z-50 overflow-hidden">
+                  {dateOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setDateRange(option.value);
+                        setIsDateDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 transition-colors flex items-center justify-between"
+                    >
+                      <span className="text-sm">{option.label}</span>
+                      {dateRange === option.value && (
+                        <Check className="w-4 h-4 text-purple-500" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
-            {/* Status Dropdown - Dark */}
-            <div className="relative">
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="appearance-none px-4 py-2 pr-10 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all [&>option]:bg-gray-800 [&>option]:text-white"
+            {/* Custom Status Dropdown */}
+            <div className="relative" ref={statusDropdownRef}>
+              <button
+                onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700 text-sm cursor-pointer hover:bg-gray-700 transition-all"
               >
-                <option value="all" className="bg-gray-800 text-white">
-                  All Status
-                </option>
-                <option value="pending" className="bg-gray-800 text-white">
-                  Pending
-                </option>
-                <option value="processing" className="bg-gray-800 text-white">
-                  Processing
-                </option>
-                <option value="completed" className="bg-gray-800 text-white">
-                  Completed
-                </option>
-                <option value="cancelled" className="bg-gray-800 text-white">
-                  Cancelled
-                </option>
-              </select>
-              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+                <span>{getStatusLabel()}</span>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+
+              {isStatusDropdownOpen && (
+                <div className="absolute top-full left-0 mt-1 w-48 bg-gray-800 border border-gray-700 rounded-xl shadow-lg z-50 overflow-hidden">
+                  {statusOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        setStatusFilter(option.value);
+                        setIsStatusDropdownOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-white hover:bg-gray-700 transition-colors flex items-center justify-between"
+                    >
+                      <span className="text-sm">{option.label}</span>
+                      {statusFilter === option.value && (
+                        <Check className="w-4 h-4 text-purple-500" />
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Search Input */}
@@ -256,7 +319,7 @@ export default function Orders() {
                 placeholder="Search orders..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+                className="w-full px-4 py-2 rounded-xl bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
               />
             </div>
 
@@ -285,7 +348,7 @@ export default function Orders() {
           </div>
         </div>
 
-        {/* Pagination - Fixed Layout */}
+        {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6">
             <div className="text-sm text-gray-500 dark:text-gray-400">
@@ -305,7 +368,6 @@ export default function Orders() {
             </div>
 
             <div className="flex items-center gap-2">
-              {/* Previous Button */}
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
@@ -315,7 +377,6 @@ export default function Orders() {
                 <span className="text-sm">Prev</span>
               </button>
 
-              {/* Page Numbers */}
               <div className="flex gap-1">
                 {getPageNumbers().map((page) => (
                   <button
@@ -332,7 +393,6 @@ export default function Orders() {
                 ))}
               </div>
 
-              {/* Next Button */}
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
