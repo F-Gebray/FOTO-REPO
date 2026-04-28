@@ -8,8 +8,14 @@ import HotelDetails from "./pages/HotelDetails";
 import Checkout from "./pages/Checkout";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
-import ContentPage from "./pages/ContentPage";
 import SignUp from "./pages/SignUp";
+import AboutUs from "./pages/info/AboutUs";
+import Careers from "./pages/info/Careers";
+import HelpCenter from "./pages/info/HelpCenter";
+import CancellationOptions from "./pages/info/CancellationOptions";
+import PrivacyPolicy from "./pages/info/PrivacyPolicy";
+import TrustSafety from "./pages/info/TrustSafety";
+import Terms from "./pages/info/Terms";
 
 function App() {
   return (
@@ -24,8 +30,17 @@ function App() {
             <Route path="/checkout" element={<Checkout />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/info/:page" element={<ContentPage />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/info/about-us" element={<AboutUs />} />
+            <Route path="/info/careers" element={<Careers />} />
+            <Route path="/info/help-center" element={<HelpCenter />} />
+            <Route path="/info/privacy-policy" element={<PrivacyPolicy />} />
+            <Route
+              path="/info/cancellation-options"
+              element={<CancellationOptions />}
+            />
+            <Route path="/info/trust-and-safety" element={<TrustSafety />} />
+            <Route path="/info/terms-of-service" element={<Terms />} />
           </Routes>
         </main>
         <Footer />
