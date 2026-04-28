@@ -9,7 +9,6 @@ import Settings from "./pages/Settings";
 import Profile from "./pages/Profile";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import UserSettings from "./pages/UserSettings";
 import Help from "./pages/Help";
 
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -33,7 +32,6 @@ export default function App() {
         <Route path="analytics" element={<Analytics />} />
         <Route path="settings" element={<Settings />} />
         <Route path="profile" element={<Profile />} />
-        <Route path="user-settings" element={<UserSettings />} />
         <Route path="help" element={<Help />} />
       </Route>
 
