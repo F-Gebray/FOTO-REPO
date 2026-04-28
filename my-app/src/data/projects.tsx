@@ -14,7 +14,7 @@ const projects: Project[] = [
     description:
       "Production-ready admin dashboard with interactive analytics charts, dynamic user tables, and dark mode — built with React, MUI, and Recharts.",
     tech: ["React", "Material UI", "Recharts"],
-    liveUrl: "https://vercel.com/fitwis-projects/my-dashboard",
+    liveUrl: "https://my-dashboard-zeta-ten.vercel.app/",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/dashboard", // TODO: link to specific repo
   },
   {
