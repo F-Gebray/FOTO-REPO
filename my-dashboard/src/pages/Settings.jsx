@@ -18,6 +18,9 @@ import {
   EyeOff,
   Trash2,
   AlertTriangle,
+  Smartphone,
+  Check,
+  X,
 } from "lucide-react";
 
 export default function Settings() {
@@ -37,8 +40,11 @@ export default function Settings() {
   const [isSaving, setIsSaving] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [show2FAModal, setShow2FAModal] = useState(false);
   const [deleteConfirmText, setDeleteConfirmText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isVerifying, setIsVerifying] = useState(false);
   const [passwordData, setPasswordData] = useState({
     currentPassword: "",
     newPassword: "",
@@ -47,6 +53,18 @@ export default function Settings() {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [passwordError, setPasswordError] = useState("");
+
+  // Load saved settings from localStorage
+  useEffect(() => {
+    const savedLanguage = localStorage.getItem("user_language");
+    const saved2FA = localStorage.getItem("user_2fa");
+    if (savedLanguage) {
+      setSettings((prev) => ({ ...prev, language: savedLanguage }));
+    }
+    if (saved2FA) {
+      setSettings((prev) => ({ ...prev, twoFactor: saved2FA === "true" }));
+    }
+  }, []);
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -57,6 +75,14 @@ export default function Settings() {
     // Update user email if changed
     if (updateUser && settings.email !== user?.email) {
       updateUser({ ...user, email: settings.email });
+    }
+
+    // Save language preference
+    localStorage.setItem("user_language", settings.language);
+
+    // Show language change message
+    if (settings.language !== "english") {
+      showToast(`${settings.language} language selected (demo mode)`, "info");
     }
 
     showToast("Settings saved successfully", "success");
@@ -105,18 +131,52 @@ export default function Settings() {
     // Clear all user data from localStorage
     localStorage.removeItem("user");
     localStorage.removeItem("theme");
+    localStorage.removeItem("user_language");
+    localStorage.removeItem("user_2fa");
+    localStorage.removeItem("app_state");
 
-    // Clear all app state (you can add more cleanup here)
+    // Clear all app state
     dispatch({ type: "CLEAR_ALL_DATA" });
 
-    // Show success message
     showToast("Account deleted successfully", "success");
 
-    // Logout and redirect to login
     setTimeout(() => {
       logout();
       navigate("/login");
     }, 500);
+  };
+
+  const handleEnable2FA = () => {
+    setShow2FAModal(true);
+  };
+
+  const handleVerify2FA = () => {
+    if (!verificationCode || verificationCode.length !== 6) {
+      showToast("Please enter a valid 6-digit code", "error");
+      return;
+    }
+
+    setIsVerifying(true);
+
+    // Simulate verification
+    setTimeout(() => {
+      setIsVerifying(false);
+      setSettings((prev) => ({ ...prev, twoFactor: true }));
+      localStorage.setItem("user_2fa", "true");
+      setShow2FAModal(false);
+      setVerificationCode("");
+      showToast("Two-factor authentication enabled successfully", "success");
+    }, 1500);
+  };
+
+  const handleDisable2FA = () => {
+    setSettings((prev) => ({ ...prev, twoFactor: false }));
+    localStorage.setItem("user_2fa", "false");
+    showToast("Two-factor authentication disabled", "info");
+  };
+
+  const handleLanguageChange = (lang) => {
+    setSettings((prev) => ({ ...prev, language: lang }));
   };
 
   return (
@@ -233,7 +293,7 @@ export default function Settings() {
                     </button>
                   </div>
 
-                  {/* Two-Factor Toggle */}
+                  {/* Two-Factor Toggle - NOW FUNCTIONAL */}
                   <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <div className="flex items-center gap-4">
                       <div className="p-2 rounded-xl bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400">
@@ -244,26 +304,30 @@ export default function Settings() {
                           Two-Factor Authentication
                         </p>
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Add an extra layer of security
+                          {settings.twoFactor
+                            ? "2FA is enabled - Your account is more secure"
+                            : "Add an extra layer of security to your account"}
                         </p>
                       </div>
                     </div>
-                    <button
-                      onClick={() =>
-                        setSettings({
-                          ...settings,
-                          twoFactor: !settings.twoFactor,
-                        })
-                      }
-                      className={`relative w-12 h-6 rounded-full transition-colors ${settings.twoFactor ? "bg-purple-600" : "bg-gray-300 dark:bg-gray-700"}`}
-                    >
-                      <div
-                        className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transform transition-transform ${settings.twoFactor ? "translate-x-6" : "translate-x-0.5"}`}
-                      />
-                    </button>
+                    {settings.twoFactor ? (
+                      <button
+                        onClick={handleDisable2FA}
+                        className="relative w-12 h-6 rounded-full bg-purple-600 transition-colors"
+                      >
+                        <div className="absolute top-0.5 right-0.5 w-5 h-5 rounded-full bg-white shadow transform translate-x-0" />
+                      </button>
+                    ) : (
+                      <button
+                        onClick={handleEnable2FA}
+                        className="px-3 py-1.5 text-xs bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors"
+                      >
+                        Enable 2FA
+                      </button>
+                    )}
                   </div>
 
-                  {/* Language Select */}
+                  {/* Language Select - NOW FUNCTIONAL */}
                   <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800/50 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <div className="flex items-center gap-4">
                       <div className="p-2 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400">
@@ -280,15 +344,14 @@ export default function Settings() {
                     </div>
                     <select
                       value={settings.language}
-                      onChange={(e) =>
-                        setSettings({ ...settings, language: e.target.value })
-                      }
-                      className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 outline-none"
+                      onChange={(e) => handleLanguageChange(e.target.value)}
+                      className="px-3 py-1.5 rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 outline-none cursor-pointer"
                     >
                       <option value="english">English</option>
-                      <option value="spanish">Spanish</option>
-                      <option value="french">French</option>
-                      <option value="german">German</option>
+                      <option value="spanish">Español (Spanish)</option>
+                      <option value="french">Français (French)</option>
+                      <option value="german">Deutsch (German)</option>
+                      <option value="dutch">Nederlands (Dutch)</option>
                     </select>
                   </div>
                 </div>
@@ -372,7 +435,7 @@ export default function Settings() {
                 </div>
               </div>
 
-              {/* Danger Zone - Updated with functional delete */}
+              {/* Danger Zone */}
               <div className="bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-2xl border border-red-200 dark:border-red-800/50 shadow-sm overflow-hidden">
                 <div className="border-b border-red-200 dark:border-red-800/50 px-6 py-4">
                   <h3 className="font-semibold text-red-600 dark:text-red-400">
@@ -396,6 +459,88 @@ export default function Settings() {
           </div>
         </div>
       </div>
+
+      {/* 2FA Enable Modal */}
+      {show2FAModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl max-w-md w-full border border-gray-200 dark:border-gray-700 shadow-2xl">
+            <div className="border-b border-gray-200 dark:border-gray-700 p-6">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-purple-100 dark:bg-purple-900/30 rounded-xl">
+                  <Smartphone className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white">
+                    Enable 2FA
+                  </h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                    Add an extra layer of security to your account
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 text-center">
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  Scan this QR code with your authenticator app
+                </p>
+                <div className="w-32 h-32 mx-auto bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center border border-gray-200 dark:border-gray-700">
+                  <div className="text-center">
+                    <Shield className="w-12 h-12 text-purple-500 mx-auto mb-2" />
+                    <p className="text-xs text-gray-500">Demo QR Code</p>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Verification Code
+                </label>
+                <input
+                  type="text"
+                  value={verificationCode}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  placeholder="Enter 6-digit code"
+                  maxLength={6}
+                  className="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none text-center text-lg font-mono"
+                  autoFocus
+                />
+                <p className="text-xs text-gray-500 mt-2">
+                  Enter the 6-digit code from your authenticator app
+                </p>
+              </div>
+
+              <div className="flex gap-3 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShow2FAModal(false);
+                    setVerificationCode("");
+                  }}
+                  className="flex-1 py-2.5 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded-xl transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleVerify2FA}
+                  disabled={isVerifying || verificationCode.length !== 6}
+                  className="flex-1 py-2.5 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white font-medium rounded-xl transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {isVerifying ? (
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Check className="w-4 h-4" />
+                      Verify & Enable
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Change Password Modal */}
       {showPasswordModal && (

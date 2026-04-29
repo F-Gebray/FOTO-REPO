@@ -1,36 +1,17 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 import { initialUsers, initialOrders } from "../data/mockData";
 
 const AppContext = createContext();
 
-// Load initial state from localStorage
-const loadInitialState = () => {
-  const saved = localStorage.getItem("app_state");
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      return {
-        ...parsed,
-        theme: localStorage.getItem("theme") || parsed.theme || "light",
-        toasts: [],
-      };
-    } catch (error) {
-      console.error("Error loading state:", error);
-    }
-  }
-
-  // Return default state if nothing saved
-  return {
-    users: initialUsers,
-    orders: initialOrders,
-    notifications: [],
-    theme: localStorage.getItem("theme") || "light",
-    sidebarOpen: true,
-    toasts: [],
-  };
+const initialState = {
+  users: initialUsers,
+  orders: initialOrders,
+  notifications: [],
+  theme: localStorage.getItem("theme") || "light",
+  sidebarOpen: true,
+  toasts: [],
 };
-
-const initialState = loadInitialState();
 
 function appReducer(state, action) {
   switch (action.type) {
@@ -104,27 +85,35 @@ function appReducer(state, action) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
-  // 🔥 SAVE ENTIRE STATE TO LOCALSTORAGE WHENEVER IT CHANGES
+  // Save entire state to localStorage whenever it changes
   useEffect(() => {
     const stateToSave = {
       users: state.users,
       orders: state.orders,
       notifications: state.notifications,
       sidebarOpen: state.sidebarOpen,
-      theme: state.theme,
     };
     localStorage.setItem("app_state", JSON.stringify(stateToSave));
-    console.log(
-      "State saved to localStorage. Users count:",
-      state.users.length,
-    );
-  }, [
-    state.users,
-    state.orders,
-    state.notifications,
-    state.sidebarOpen,
-    state.theme,
-  ]);
+    console.log("State saved to localStorage. Users:", state.users.length);
+  }, [state.users, state.orders, state.notifications, state.sidebarOpen]);
+
+  // Load saved state on initial load
+  useEffect(() => {
+    const saved = localStorage.getItem("app_state");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        console.log("Loaded saved state:", parsed.users?.length, "users");
+        // Merge saved state with current state
+        if (parsed.users)
+          dispatch({ type: "LOAD_SAVED_USERS", payload: parsed.users });
+        if (parsed.orders)
+          dispatch({ type: "LOAD_SAVED_ORDERS", payload: parsed.orders });
+      } catch (error) {
+        console.error("Error loading saved state:", error);
+      }
+    }
+  }, []);
 
   // Apply theme to document
   useEffect(() => {
