@@ -1,6 +1,13 @@
 import { useState, useMemo } from "react";
 import { useApp } from "../../context/AppContext";
-import { Edit, Trash2, Search, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Edit,
+  Trash2,
+  Search,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+} from "lucide-react";
 import ConfirmDialog from "../ui/ConfirmDialog";
 
 export default function UserTable({ onEdit }) {
@@ -57,6 +64,16 @@ export default function UserTable({ onEdit }) {
     setDeleteId(null);
   };
 
+  const clearFilters = () => {
+    setSearch("");
+    setRoleFilter("all");
+    setStatusFilter("all");
+    setPage(1);
+  };
+
+  const isFiltersActive =
+    search !== "" || roleFilter !== "all" || statusFilter !== "all";
+
   const statusBadge = {
     active:
       "inline-flex px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400",
@@ -68,51 +85,69 @@ export default function UserTable({ onEdit }) {
 
   return (
     <>
-      {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4 mb-6">
-        <div className="relative flex-1">
+      {/* Filters - DARK THEMED */}
+      <div className="space-y-4 mb-6">
+        <div className="flex flex-wrap items-center gap-4">
+          <div className="flex items-center gap-2">
+            <Filter className="w-4 h-4 text-gray-400" />
+            <span className="text-sm font-medium text-gray-300">Filters:</span>
+          </div>
+
+          {/* Role Filter - Dark Dropdown */}
+          <select
+            value={roleFilter}
+            onChange={(e) => {
+              setRoleFilter(e.target.value);
+              setPage(1);
+            }}
+            className="px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700 text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+          >
+            <option value="all">All Roles</option>
+            <option value="Admin">Admin</option>
+            <option value="Editor">Editor</option>
+            <option value="Viewer">Viewer</option>
+          </select>
+
+          {/* Status Filter - Dark Dropdown */}
+          <select
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setPage(1);
+            }}
+            className="px-4 py-2 rounded-xl bg-gray-800 text-white border border-gray-700 text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
+          >
+            <option value="all">All Status</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+            <option value="pending">Pending</option>
+          </select>
+
+          {/* Clear Filters Button */}
+          {isFiltersActive && (
+            <button
+              onClick={clearFilters}
+              className="px-3 py-1.5 text-xs bg-purple-900/30 text-purple-400 rounded-lg hover:bg-purple-900/50 transition-colors"
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
+
+        {/* Search Input - Dark Themed */}
+        <div className="relative">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
           <input
             type="text"
-            placeholder="Search users..."
+            placeholder="Search users by name or email..."
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
               setPage(1);
             }}
-            className="input pl-10"
+            className="w-full pl-10 pr-4 py-2 rounded-xl bg-gray-800 text-white placeholder-gray-400 border border-gray-700 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
           />
         </div>
-
-        {/* Role Filter */}
-        <select
-          value={roleFilter}
-          onChange={(e) => {
-            setRoleFilter(e.target.value);
-            setPage(1);
-          }}
-          className="input w-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-        >
-          <option value="all">All Roles</option>
-          <option value="Admin">Admin</option>
-          <option value="Editor">Editor</option>
-          <option value="Viewer">Viewer</option>
-        </select>
-
-        {/* Status Filter */}
-        <select
-          value={statusFilter}
-          onChange={(e) => {
-            setStatusFilter(e.target.value);
-            setPage(1);
-          }}
-          className="input w-auto bg-white text-gray-900 dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700"
-        >
-          <option value="all">All Status</option>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-          <option value="pending">Pending</option>
-        </select>
       </div>
 
       {/* Table */}
@@ -121,7 +156,7 @@ export default function UserTable({ onEdit }) {
           <thead>
             <tr className="border-b border-gray-200 dark:border-gray-800">
               <th
-                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
+                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                 onClick={() => handleSort("name")}
               >
                 User{" "}
@@ -129,7 +164,7 @@ export default function UserTable({ onEdit }) {
                   (sortConfig.direction === "asc" ? "↑" : "↓")}
               </th>
               <th
-                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
+                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                 onClick={() => handleSort("role")}
               >
                 Role{" "}
@@ -137,7 +172,7 @@ export default function UserTable({ onEdit }) {
                   (sortConfig.direction === "asc" ? "↑" : "↓")}
               </th>
               <th
-                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300"
+                className="text-left py-3 px-4 text-sm font-medium text-gray-500 cursor-pointer hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
                 onClick={() => handleSort("status")}
               >
                 Status{" "}
@@ -154,92 +189,106 @@ export default function UserTable({ onEdit }) {
           </thead>
 
           <tbody>
-            {paginatedUsers.map((user) => (
-              <tr
-                key={user.id}
-                className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50"
-              >
-                <td className="py-3 px-4">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 flex items-center justify-center font-medium">
-                      {user.avatar}
-                    </div>
-                    <div>
-                      <p className="font-medium">{user.name}</p>
-                      <p className="text-sm text-gray-500">{user.email}</p>
-                    </div>
-                  </div>
-                </td>
-
-                <td className="py-3 px-4">
-                  <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
-                    {user.role}
-                  </span>
-                </td>
-
-                <td className="py-3 px-4">
-                  <span className={statusBadge[user.status]}>
-                    {user.status}
-                  </span>
-                </td>
-
-                <td className="py-3 px-4 text-sm text-gray-500">
-                  {new Date(user.joinDate).toLocaleDateString()}
-                </td>
-
-                <td className="py-3 px-4">
-                  <div className="flex justify-end gap-2">
-                    <button
-                      onClick={() => onEdit(user)}
-                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-purple-600"
-                    >
-                      <Edit className="w-4 h-4" />
-                    </button>
-
-                    <button
-                      onClick={() => setDeleteId(user.id)}
-                      className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-red-600"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
-                  </div>
+            {paginatedUsers.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="5"
+                  className="text-center py-8 text-gray-500 dark:text-gray-400"
+                >
+                  No users found matching your filters
                 </td>
               </tr>
-            ))}
+            ) : (
+              paginatedUsers.map((user) => (
+                <tr
+                  key={user.id}
+                  className="border-b border-gray-100 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors"
+                >
+                  <td className="py-3 px-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400 flex items-center justify-center font-medium">
+                        {user.avatar || user.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="font-medium text-gray-900 dark:text-white">
+                          {user.name}
+                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className="inline-flex px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                      {user.role}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4">
+                    <span className={statusBadge[user.status]}>
+                      {user.status}
+                    </span>
+                  </td>
+                  <td className="py-3 px-4 text-sm text-gray-500 dark:text-gray-400">
+                    {user.joinDate
+                      ? new Date(user.joinDate).toLocaleDateString()
+                      : "N/A"}
+                  </td>
+                  <td className="py-3 px-4">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => onEdit(user)}
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 transition-colors"
+                      >
+                        <Edit className="w-4 h-4" />
+                      </button>
+                      <button
+                        onClick={() => setDeleteId(user.id)}
+                        className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Pagination */}
-      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
-        <p className="text-sm text-gray-500">
-          Showing {Math.min((page - 1) * pageSize + 1, filteredUsers.length)} to{" "}
-          {Math.min(page * pageSize, filteredUsers.length)} of{" "}
-          {filteredUsers.length} users
-        </p>
+      {filteredUsers.length > 0 && (
+        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-200 dark:border-gray-800">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            Showing {Math.min((page - 1) * pageSize + 1, filteredUsers.length)}{" "}
+            to {Math.min(page * pageSize, filteredUsers.length)} of{" "}
+            {filteredUsers.length} users
+          </p>
 
-        <div className="flex gap-2">
-          <button
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            className="btn-secondary p-2"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
 
-          <span className="flex items-center px-3 text-sm">
-            {page} / {totalPages || 1}
-          </span>
+            <span className="flex items-center px-3 text-sm text-gray-600 dark:text-gray-400">
+              {page} / {totalPages || 1}
+            </span>
 
-          <button
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page >= totalPages}
-            className="btn-secondary p-2"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+              className="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Delete confirmation */}
       <ConfirmDialog

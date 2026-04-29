@@ -136,46 +136,9 @@ export default function Users() {
           </div>
         </div>
 
-        {/* Filters Bar */}
-        <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 p-4 mb-6 shadow-sm">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center gap-2">
-              <UsersIcon className="w-4 h-4 text-gray-500 dark:text-gray-400" />
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                Quick Filters:
-              </span>
-            </div>
-
-            {/* Role Filter */}
-            <select className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all [&>option]:bg-gray-800 [&>option]:text-white">
-              <option className="bg-gray-800 text-white">All Roles</option>
-              <option className="bg-gray-800 text-white">Admin</option>
-              <option className="bg-gray-800 text-white">Manager</option>
-              <option className="bg-gray-800 text-white">User</option>
-            </select>
-
-            {/* Status Filter */}
-            <select className="px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white text-sm cursor-pointer focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all [&>option]:bg-gray-800 [&>option]:text-white">
-              <option className="bg-gray-800 text-white">All Status</option>
-              <option className="bg-gray-800 text-white">Active</option>
-              <option className="bg-gray-800 text-white">Inactive</option>
-              <option className="bg-gray-800 text-white">Pending</option>
-            </select>
-
-            {/* Search Input */}
-            <div className="flex-1 min-w-[200px]">
-              <input
-                type="text"
-                placeholder="Search users by name, email, or role..."
-                className="w-full px-4 py-2 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Users Table */}
+        {/* Users Table - All filters are inside UserTable */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm overflow-hidden">
-          <div className="overflow-x-auto">
+          <div className="p-6">
             <UserTable onEdit={handleEdit} />
           </div>
         </div>
