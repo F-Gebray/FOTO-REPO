@@ -3,14 +3,34 @@ import { initialUsers, initialOrders } from "../data/mockData";
 
 const AppContext = createContext();
 
-const initialState = {
-  users: initialUsers,
-  orders: initialOrders,
-  notifications: [],
-  theme: localStorage.getItem("theme") || "light",
-  sidebarOpen: true,
-  toasts: [],
+// Load initial state from localStorage
+const loadInitialState = () => {
+  const saved = localStorage.getItem("app_state");
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return {
+        ...parsed,
+        theme: localStorage.getItem("theme") || parsed.theme || "light",
+        toasts: [],
+      };
+    } catch (error) {
+      console.error("Error loading state:", error);
+    }
+  }
+
+  // Return default state if nothing saved
+  return {
+    users: initialUsers,
+    orders: initialOrders,
+    notifications: [],
+    theme: localStorage.getItem("theme") || "light",
+    sidebarOpen: true,
+    toasts: [],
+  };
 };
+
+const initialState = loadInitialState();
 
 function appReducer(state, action) {
   switch (action.type) {
@@ -22,9 +42,10 @@ function appReducer(state, action) {
       return { ...state, sidebarOpen: !state.sidebarOpen };
 
     case "ADD_USER":
+      const newUser = { ...action.payload, id: Date.now() };
       return {
         ...state,
-        users: [...state.users, { ...action.payload, id: Date.now() }],
+        users: [...state.users, newUser],
       };
 
     case "UPDATE_USER":
@@ -83,6 +104,29 @@ function appReducer(state, action) {
 export function AppProvider({ children }) {
   const [state, dispatch] = useReducer(appReducer, initialState);
 
+  // 🔥 SAVE ENTIRE STATE TO LOCALSTORAGE WHENEVER IT CHANGES
+  useEffect(() => {
+    const stateToSave = {
+      users: state.users,
+      orders: state.orders,
+      notifications: state.notifications,
+      sidebarOpen: state.sidebarOpen,
+      theme: state.theme,
+    };
+    localStorage.setItem("app_state", JSON.stringify(stateToSave));
+    console.log(
+      "State saved to localStorage. Users count:",
+      state.users.length,
+    );
+  }, [
+    state.users,
+    state.orders,
+    state.notifications,
+    state.sidebarOpen,
+    state.theme,
+  ]);
+
+  // Apply theme to document
   useEffect(() => {
     document.documentElement.classList.toggle("dark", state.theme === "dark");
   }, [state.theme]);

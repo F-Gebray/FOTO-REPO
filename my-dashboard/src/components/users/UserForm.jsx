@@ -3,7 +3,7 @@ import Modal from "../ui/Modal";
 import { useApp } from "../../context/AppContext";
 
 export default function UserForm({ isOpen, onClose, user }) {
-  const { dispatch, showToast } = useApp();
+  const { state, dispatch, showToast } = useApp();
 
   const [formData, setFormData] = useState({
     name: "",
@@ -33,15 +33,47 @@ export default function UserForm({ isOpen, onClose, user }) {
     setErrors({});
   }, [user, isOpen]);
 
+  // Check if email already exists (excluding current user when editing)
+  const isEmailDuplicate = (email, currentUserId = null) => {
+    return state.users.some((existingUser) => {
+      if (currentUserId && existingUser.id === currentUserId) {
+        return false; // Skip checking the current user when editing
+      }
+      return existingUser.email.toLowerCase() === email.toLowerCase();
+    });
+  };
+
+  // Check if name already exists (for username uniqueness)
+  const isNameDuplicate = (name, currentUserId = null) => {
+    return state.users.some((existingUser) => {
+      if (currentUserId && existingUser.id === currentUserId) {
+        return false;
+      }
+      return existingUser.name.toLowerCase() === name.toLowerCase();
+    });
+  };
+
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
+    // Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    } else if (formData.name.length < 2) {
+      newErrors.name = "Name must be at least 2 characters";
+    } else if (!user && isNameDuplicate(formData.name)) {
+      newErrors.name =
+        "Username already exists. Please choose a different name.";
+    }
 
+    // Email validation
     if (!formData.email.trim()) {
       newErrors.email = "Email is required";
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       newErrors.email = "Invalid email format";
+    } else if (!user && isEmailDuplicate(formData.email)) {
+      newErrors.email =
+        "Email already registered. Please use a different email.";
     }
 
     setErrors(newErrors);
@@ -98,7 +130,7 @@ export default function UserForm({ isOpen, onClose, user }) {
         {/* Name */}
         <div>
           <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-            Full Name
+            Full Name *
           </label>
           <input
             type="text"
@@ -115,7 +147,7 @@ export default function UserForm({ isOpen, onClose, user }) {
         {/* Email */}
         <div>
           <label className="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">
-            Email Address
+            Email Address *
           </label>
           <input
             type="email"
@@ -165,12 +197,17 @@ export default function UserForm({ isOpen, onClose, user }) {
           </select>
         </div>
 
+        {/* Info message */}
+        <div className="text-xs text-center text-gray-500 dark:text-gray-400 pt-2">
+          <p>* Required fields. Email and Name must be unique.</p>
+        </div>
+
         {/* Buttons */}
         <div className="flex justify-end gap-3 pt-4">
           <button
             type="button"
             onClick={onClose}
-            className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:opacity-80"
+            className="px-4 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 hover:opacity-80 transition-colors"
           >
             Cancel
           </button>

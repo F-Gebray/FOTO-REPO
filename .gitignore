@@ -1,17 +1,33 @@
+# Dependencies
 node_modules/
-backend/.env
-.vercel
-.env*.local
+
+# Build outputs
+dist/
+build/
+.vite/
+
+# Environment files
 .env
+.env*.local
+.env.local
+backend/.env
 api/.env
+
+# Vercel
+.vercel
+
+# IDE files
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Project specific (if you want to exclude these folders)
 BookingApp/
 BookingAppNew/
 booking-api/
 backend/
-node_modules/
-.env
-.vite/
-.vscode/
 dashboard/
 
 
