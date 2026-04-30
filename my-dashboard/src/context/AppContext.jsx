@@ -1,16 +1,37 @@
 import { createContext, useContext, useReducer, useEffect } from "react";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import { initialUsers, initialOrders } from "../data/mockData";
 
 const AppContext = createContext();
 
-const initialState = {
-  users: initialUsers,
-  orders: initialOrders,
-  notifications: [],
-  theme: localStorage.getItem("theme") || "light",
-  sidebarOpen: true,
-  toasts: [],
+// Load initial state from localStorage
+const loadInitialState = () => {
+  try {
+    const saved = localStorage.getItem("app_state");
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      console.log("✅ Loading saved state:", parsed.users?.length, "users");
+      return {
+        users: parsed.users || initialUsers,
+        orders: parsed.orders || initialOrders,
+        notifications: parsed.notifications || [],
+        theme: localStorage.getItem("theme") || "light",
+        sidebarOpen:
+          parsed.sidebarOpen !== undefined ? parsed.sidebarOpen : true,
+        toasts: [],
+      };
+    }
+  } catch (error) {
+    console.error("Error loading state:", error);
+  }
+
+  return {
+    users: initialUsers,
+    orders: initialOrders,
+    notifications: [],
+    theme: localStorage.getItem("theme") || "light",
+    sidebarOpen: true,
+    toasts: [],
+  };
 };
 
 function appReducer(state, action) {
@@ -24,12 +45,14 @@ function appReducer(state, action) {
 
     case "ADD_USER":
       const newUser = { ...action.payload, id: Date.now() };
+      console.log("📝 Adding user:", newUser.name);
       return {
         ...state,
         users: [...state.users, newUser],
       };
 
     case "UPDATE_USER":
+      console.log("✏️ Updating user:", action.payload.name);
       return {
         ...state,
         users: state.users.map((u) =>
@@ -38,6 +61,7 @@ function appReducer(state, action) {
       };
 
     case "DELETE_USER":
+      console.log("🗑️ Deleting user ID:", action.payload);
       return {
         ...state,
         users: state.users.filter((u) => u.id !== action.payload),
@@ -77,13 +101,23 @@ function appReducer(state, action) {
     case "CLEAR_NOTIFICATIONS":
       return { ...state, notifications: [] };
 
+    case "CLEAR_ALL_DATA":
+      return {
+        users: [],
+        orders: [],
+        notifications: [],
+        theme: "light",
+        sidebarOpen: true,
+        toasts: [],
+      };
+
     default:
       return state;
   }
 }
 
 export function AppProvider({ children }) {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+  const [state, dispatch] = useReducer(appReducer, loadInitialState());
 
   // Save entire state to localStorage whenever it changes
   useEffect(() => {
@@ -94,26 +128,8 @@ export function AppProvider({ children }) {
       sidebarOpen: state.sidebarOpen,
     };
     localStorage.setItem("app_state", JSON.stringify(stateToSave));
-    console.log("State saved to localStorage. Users:", state.users.length);
+    console.log("💾 State saved. Users:", state.users.length);
   }, [state.users, state.orders, state.notifications, state.sidebarOpen]);
-
-  // Load saved state on initial load
-  useEffect(() => {
-    const saved = localStorage.getItem("app_state");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        console.log("Loaded saved state:", parsed.users?.length, "users");
-        // Merge saved state with current state
-        if (parsed.users)
-          dispatch({ type: "LOAD_SAVED_USERS", payload: parsed.users });
-        if (parsed.orders)
-          dispatch({ type: "LOAD_SAVED_ORDERS", payload: parsed.orders });
-      } catch (error) {
-        console.error("Error loading saved state:", error);
-      }
-    }
-  }, []);
 
   // Apply theme to document
   useEffect(() => {
@@ -134,7 +150,7 @@ export function AppProvider({ children }) {
       const random =
         notifications[Math.floor(Math.random() * notifications.length)];
       dispatch({ type: "ADD_NOTIFICATION", payload: random });
-    }, 30000); // Every 30 seconds
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
