@@ -31,12 +31,15 @@ const getIcon = (id: number): React.ReactElement => {
 const Projects: React.FC = () => {
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
+  const handleCardClick = (liveUrl: string) => {
+    window.open(liveUrl, "_blank");
+  };
+
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950">
       <div className="w-full max-w-[1200px] mx-auto px-6 py-20 md:py-28">
         {/* HEADER - Centered */}
         <div className="text-center mb-20">
-          {/* Badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-6">
             <Sparkles size={14} className="text-cyan-400" />
             <span className="text-xs text-gray-300 uppercase tracking-wider font-medium">
@@ -44,7 +47,6 @@ const Projects: React.FC = () => {
             </span>
           </div>
 
-          {/* Title */}
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             <span className="text-white">Featured </span>
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
@@ -52,18 +54,16 @@ const Projects: React.FC = () => {
             </span>
           </h2>
 
-          {/* Centered Subtitle */}
           <p className="text-gray-400 text-base md:text-lg max-w-2xl mx-auto leading-relaxed">
             Building scalable, performant, and user-centric web applications
             with modern technologies.
           </p>
 
-          {/* Animated underline */}
           <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mx-auto mt-6" />
         </div>
 
         {/* Stats Bar */}
-        <div className="flex flex-wrap justify-center gap-8 mb-16 pb-8 border-b border-white/10">
+        <div className="flex flex-wrap justify-center gap-8 mb-16 pb-8 border-t border-b border-white/10 py-6">
           <div className="text-center">
             <div className="text-2xl font-bold text-white">
               {projects.length}
@@ -86,14 +86,15 @@ const Projects: React.FC = () => {
           </div>
         </div>
 
-        {/* PROJECTS GRID - 2x2 Layout */}
+        {/* PROJECTS GRID - 2x2 Layout with Clickable Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {projects.map((project, index) => (
             <div
               key={project.id}
-              className="group relative"
+              className="group relative cursor-pointer"
               onMouseEnter={() => setHoveredId(project.id)}
               onMouseLeave={() => setHoveredId(null)}
+              onClick={() => handleCardClick(project.liveUrl)}
             >
               {/* Glow effect behind card */}
               {hoveredId === project.id && (
@@ -108,6 +109,7 @@ const Projects: React.FC = () => {
                 border border-white/10
                 transition-all duration-500
                 hover:border-cyan-500/30
+                hover:-translate-y-2
               "
               >
                 {/* Animated gradient overlay */}
@@ -131,11 +133,11 @@ const Projects: React.FC = () => {
                       {getIcon(project.id)}
                     </div>
 
-                    {/* Action Buttons */}
+                    {/* Action Buttons - Prevent card click when clicking buttons */}
                     <div className="flex gap-2">
                       <button
                         onClick={(e) => {
-                          e.preventDefault();
+                          e.stopPropagation();
                           window.open(project.githubUrl, "_blank");
                         }}
                         className="
@@ -153,7 +155,7 @@ const Projects: React.FC = () => {
                       </button>
                       <button
                         onClick={(e) => {
-                          e.preventDefault();
+                          e.stopPropagation();
                           window.open(project.liveUrl, "_blank");
                         }}
                         className="
@@ -203,22 +205,14 @@ const Projects: React.FC = () => {
                     )}
                   </div>
 
-                  {/* Learn More Button */}
-                  <button
-                    onClick={() => window.open(project.liveUrl, "_blank")}
-                    className="
-                      mt-2 inline-flex items-center gap-2 text-sm font-medium
-                      text-cyan-400 hover:text-cyan-300
-                      transition-all duration-300
-                      group/btn w-fit
-                    "
-                  >
-                    <span>View Project</span>
+                  {/* Click indicator */}
+                  <div className="mt-2 inline-flex items-center gap-2 text-sm font-medium text-gray-500 group-hover:text-cyan-400 transition-all duration-300">
+                    <span>Click to view project</span>
                     <ArrowRight
                       size={14}
-                      className="group-hover/btn:translate-x-1 transition-transform"
+                      className="group-hover:translate-x-1 transition-transform"
                     />
-                  </button>
+                  </div>
                 </div>
 
                 {/* Bottom Gradient Line */}

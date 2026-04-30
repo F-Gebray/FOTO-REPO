@@ -14,6 +14,7 @@ interface ServiceItem {
   title: string;
   description: string;
   icon: React.ReactNode;
+  id: string;
 }
 
 const services: ServiceItem[] = [
@@ -21,33 +22,46 @@ const services: ServiceItem[] = [
     title: "Landing Page Development",
     description: "High-converting, fast, and modern landing pages built with React and Tailwind CSS.",
     icon: <Rocket size={32} />,
+    id: "landing",
   },
   {
     title: "Business Website Development",
     description: "Fully responsive websites for small businesses, freelancers, and agencies.",
     icon: <Building2 size={32} />,
+    id: "business",
   },
   {
     title: "Dashboard & Web App UI",
     description: "Custom dashboards, admin panels, and interactive UIs using React and Tailwind.",
     icon: <LayoutDashboard size={32} />,
+    id: "dashboard",
   },
   {
     title: "Design to Code Conversion",
     description: "Pixel-perfect implementation of your Figma or Sketch designs into clean React components.",
     icon: <PenTool size={32} />,
+    id: "design-to-code",
   },
   {
     title: "Performance Optimization",
     description: "Fixing UI issues, improving load times, and optimizing React components.",
     icon: <Zap size={32} />,
+    id: "performance",
   },
   {
     title: "Deployment & Hosting",
     description: "End-to-end deployment on Vercel, Netlify, or custom hosting with full optimization.",
     icon: <Cloud size={32} />,
+    id: "deployment",
   },
 ];
+
+const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId);
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+};
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -72,6 +86,10 @@ const card: Variants = {
 };
 
 const Services: React.FC = () => {
+  const handleServiceClick = () => {
+    scrollToSection("contact");
+  };
+
   return (
     <section id="services" className="relative bg-black py-28 md:py-36 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_#0a0a0a_0%,_#000000_100%)]" />
@@ -108,6 +126,7 @@ const Services: React.FC = () => {
               key={index}
               variants={card}
               className="group cursor-pointer"
+              onClick={handleServiceClick}
             >
               <div className="relative p-8 bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 hover:bg-white/10 transition-all duration-500 hover:-translate-y-2">
                 <div className="mb-6">
@@ -126,8 +145,14 @@ const Services: React.FC = () => {
                   {service.description}
                 </p>
 
+                {/* Functional Arrow */}
                 <div className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 group-hover:translate-x-0">
                   <ArrowRight size={16} className="text-cyan-400" />
+                </div>
+
+                {/* Click hint */}
+                <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                  <span className="text-[10px] text-gray-500">Click to inquire →</span>
                 </div>
               </div>
             </motion.div>
