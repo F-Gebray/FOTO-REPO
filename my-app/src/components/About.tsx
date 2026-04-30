@@ -1,181 +1,191 @@
 import React from "react";
 import { motion } from "framer-motion";
-import useReveal from "../hooks/useReveal";
+import { Code2, Briefcase, Rocket, Sparkles, ArrowRight } from "lucide-react";
 
 const About: React.FC = () => {
-  const reveal = useReveal();
+  const projects = [
+    {
+      title: "Admin Dashboard",
+      description: "Analytics charts, dynamic tables, and dark mode",
+      tech: ["React", "Recharts", "Tailwind"],
+      liveUrl: "https://vercel.com/fitwis-projects/my-dashboard",
+    },
+    {
+      title: "Hotel Booking Platform",
+      description: "Luxury travel platform with real-time reservations",
+      tech: ["React Router", "Tailwind", "API Integration"],
+      liveUrl: "https://vercel.com/fitwis-projects/hotel-reservation",
+    },
+    {
+      title: "Agency Landing Page",
+      description: "Animated navigation and premium UI",
+      tech: ["TypeScript", "Framer Motion", "Tailwind"],
+      liveUrl: "https://vercel.com/fitwis-projects/web-page",
+    },
+    {
+      title: "Modern Shopping Store",
+      description: "Full-screen UI with destination search",
+      tech: ["React", "Tailwind CSS", "Responsive Design"],
+      liveUrl: "https://vercel.com/fitwis-projects/fg-store",
+    },
+  ];
 
   return (
-    <section id="about" className="section">
-      <div
-        ref={reveal}
-        className="section-inner w-full max-w-[1100px] mx-auto px-6 pt-24 pb-40
-        transition-all duration-700 opacity-0 translate-y-6"
-      >
+    <section
+      id="about"
+      className="relative bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-24 md:py-32"
+    >
+      <div className="max-w-[1200px] mx-auto px-6">
         {/* HEADER */}
-        <div className="flex justify-between items-end mb-12">
-          <div>
-            <div
-              className="inline-block px-[0.7rem] py-[0.25rem] text-[0.75rem]
-              rounded-full border border-[#1f2937]
-              bg-[rgba(15,23,42,0.9)] text-[#9ca3af] mb-4"
-            >
-              Background
-            </div>
-
-            <h2 className="text-[2rem] font-bold text-[#e5e7eb] tracking-tight">
-              About me
-            </h2>
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 mb-6">
+            <Sparkles size={14} className="text-cyan-400" />
+            <span className="text-xs text-gray-300 uppercase tracking-wider font-medium">
+              Who I Am
+            </span>
           </div>
+
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+            <span className="text-white">About </span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400">
+              Me
+            </span>
+          </h2>
+
+          <div className="w-24 h-1 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full mx-auto" />
         </div>
 
-        {/* GRID */}
-        <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] gap-[4.5rem] items-start">
-          {/* LEFT SIDE */}
-          <div className="text-[1.05rem] leading-[1.9] text-[#9ca3af]">
-            <p>
-              I&apos;m a self-taught frontend developer based near
-              &apos;s-Hertogenbosch, passionate about building scalable,
-              maintainable, and production-ready React applications. I focus on
-              <span className="text-[#e5e7eb] font-semibold">
-                {" "}
-                modular architecture, reusable components, clean routing, and
-                data-driven UI composition
-              </span>
-              .
-            </p>
+        {/* MAIN CONTENT */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+          {/* LEFT SIDE - Bio */}
+          <div className="space-y-6">
+            <div className="p-6 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/10">
+              <p className="text-gray-300 text-base leading-relaxed">
+                I'm a{" "}
+                <span className="text-cyan-400 font-semibold">
+                  self-taught frontend developer
+                </span>{" "}
+                based near 's-Hertogenbosch, passionate about building scalable,
+                maintainable, and production-ready React applications.
+              </p>
+            </div>
 
-            <p className="mt-6">
-              I work with an AI-augmented workflow — using tools like{" "}
-              <span className="text-[#e5e7eb] font-semibold">
-                Cursor, Claude, and DeepSeek
-              </span>{" "}
-              to write cleaner code faster. I back every build with{" "}
-              <span className="text-[#e5e7eb] font-semibold">Vitest</span> and
-              deploy on Vercel.
-            </p>
+            <div className="space-y-4 text-gray-400 leading-relaxed">
+              <p>
+                I focus on{" "}
+                <span className="text-white font-medium">
+                  modular architecture, reusable components, clean routing, and
+                  data-driven UI composition
+                </span>{" "}
+                to create seamless user experiences.
+              </p>
 
-            {/* PROJECTS LIST WITH LIVE DEMOS RESTORED */}
-            <ul className="mt-10 space-y-8">
-              <li>
-                <span className="text-[#e5e7eb] font-bold block mb-1">
-                  • Stellar Web Solutions:
-                </span>
-                Agency landing page with animated navigation and premium UI —
-                built with TypeScript and Framer Motion.
-                <a
-                  href="https://vercel.com/fitwis-projects/web-page"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
-                >
-                  Live Demo →
-                </a>
-              </li>
+              <p>
+                I work with an{" "}
+                <span className="text-cyan-400 font-medium">
+                  AI-augmented workflow
+                </span>{" "}
+                — using tools like Cursor, Claude, and DeepSeek to write cleaner
+                code faster. I back every build with testing and deploy on
+                Vercel.
+              </p>
 
-              <li>
-                <span className="text-[#e5e7eb] font-bold block mb-1">
-                  • Premium Architecture Booking:
-                </span>
-                Luxury travel platform with real-time reservations and email
-                integration — built with Tailwind and React Router.
-                <a
-                  href="https://vercel.com/fitwis-projects/hotel-reservation"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
-                >
-                  Live Demo →
-                </a>
-              </li>
-
-              <li>
-                <span className="text-[#e5e7eb] font-bold block mb-1">
-                  • Admin Dashboard:
-                </span>
-                Analytics charts, dynamic tables, and dark mode built with
-                React, MUI, and Recharts.
-                <a
-                  href="https://vercel.com/fitwis-projects/my-dashboard"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
-                >
-                  Live Demo →
-                </a>
-              </li>
-
-              <li>
-                <span className="text-[#e5e7eb] font-bold block mb-1">
-                  • Modern Shopping Store:
-                </span>
-                Full-screen UI with destination search and responsive design —
-                built with React and Tailwind CSS.
-                <a
-                  href="https://vercel.com/fitwis-projects/fg-store"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-[#3b82f6] hover:text-[#60a5fa] ml-1 transition-colors underline underline-offset-4 decoration-[#3b82f6]/30 font-medium"
-                >
-                  Live Demo →
-                </a>
-              </li>
-            </ul>
-
-            <div className="mt-12 space-y-6">
               <p>
                 I enjoy creating applications that balance user experience with
                 engineering best practices. Always learning new technologies and
                 applying them to real-world problems.
               </p>
+            </div>
 
-              <p>
-                I like working in environments where I can learn quickly, get
-                clear feedback, and collaborate with designers and developers.
-              </p>
+            {/* Quick Facts */}
+            <div className="grid grid-cols-2 gap-4 pt-4">
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <Code2 size={24} className="text-cyan-400 mx-auto mb-2" />
+                <div className="text-white font-bold text-xl">4+</div>
+                <div className="text-gray-500 text-xs">Projects Completed</div>
+              </div>
+              <div className="p-4 rounded-xl bg-white/5 border border-white/10 text-center">
+                <Rocket size={24} className="text-purple-400 mx-auto mb-2" />
+                <div className="text-white font-bold text-xl">100%</div>
+                <div className="text-gray-500 text-xs">Deployed</div>
+              </div>
             </div>
           </div>
 
-          {/* RIGHT SIDE (ANIMATED + HOVER ONLY HERE) */}
-          <motion.div
-            initial={{ opacity: 0, x: 40, scale: 0.95 }}
-            whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            whileHover={{
-              scale: 1.04,
-              y: -8,
-              boxShadow: "0 35px 90px rgba(59,130,246,0.15)",
-            }}
-            className="bg-[radial-gradient(circle_at_top,#020617,#020617)]
-            border border-[rgba(31,41,55,0.9)]
-            rounded-[32px] p-[2.5rem]
-            shadow-[0_30px_70px_rgba(0,0,0,0.8)]
-            sticky top-32 transition-all duration-300"
-          >
-            <p className="text-[1.25rem] font-semibold text-[#e5e7eb] leading-snug">
-              I&apos;m currently seeking a junior or frontend role where I can:
-            </p>
+          {/* RIGHT SIDE - Featured Projects */}
+          <div className="space-y-6">
+            <div className="flex items-center gap-2 mb-4">
+              <Briefcase size={20} className="text-cyan-400" />
+              <h3 className="text-white font-semibold text-lg">
+                Featured Projects
+              </h3>
+            </div>
 
-            <ul
-              className="mt-8 pl-[1.5rem] text-[1.05rem] leading-[1.8]
-              text-[#9ca3af] list-disc marker:text-[#3b82f6] space-y-6"
+            {projects.map((project, index) => (
+              <motion.a
+                key={project.title}
+                href={project.liveUrl}
+                target="_blank"
+                rel="noreferrer"
+                initial={{ opacity: 0, x: 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+                whileHover={{ scale: 1.02, x: 5 }}
+                className="block p-5 rounded-xl bg-gradient-to-br from-gray-900 to-gray-800 border border-white/10 hover:border-cyan-500/30 transition-all duration-300 group cursor-pointer"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h4 className="text-white font-semibold group-hover:text-cyan-400 transition-colors">
+                    {project.title}
+                  </h4>
+                  <ArrowRight
+                    size={16}
+                    className="text-gray-500 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all"
+                  />
+                </div>
+                <p className="text-gray-400 text-sm mb-3">
+                  {project.description}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {project.tech.map((tech) => (
+                    <span
+                      key={tech}
+                      className="text-xs px-2 py-1 rounded-md bg-white/5 border border-white/10 text-gray-500"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </motion.a>
+            ))}
+
+            {/* Availability Card */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              whileHover={{ scale: 1.02, y: -5 }}
+              className="mt-6 p-6 rounded-2xl bg-gradient-to-r from-cyan-500/10 to-purple-500/10 border border-cyan-500/20 text-center"
             >
-              <li>
-                Apply and deepen my React and TypeScript skills on real-world,
-                impactful products
-              </li>
-
-              <li>
-                Grow as a developer within a supportive and collaborative team
-                environment
-              </li>
-
-              <li>
-                Contribute meaningfully to both UI design and implementation
-              </li>
-            </ul>
-          </motion.div>
+              <p className="text-white font-semibold mb-2">
+                🌟 Open for Opportunities
+              </p>
+              <p className="text-gray-400 text-sm">
+                Currently seeking a junior or frontend role where I can
+                contribute, learn, and grow with a collaborative team.
+              </p>
+              <div className="flex items-center justify-center gap-2 mt-4">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                </span>
+                <span className="text-xs text-green-400">
+                  Available for work
+                </span>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </div>
     </section>

@@ -34,8 +34,8 @@ const navLinks: NavLinkItem[] = [
     name: "Projects",
     id: "projects",
     dropdown: [
-      { name: "Web Apps", id: "projects", icon: <Code size={20} /> },
-      { name: "Mobile Apps", path: "/mobile-apps", icon: <Cpu size={20} /> },
+      { name: "Web Apps", id: "projects", icon: <Code size={18} /> },
+      { name: "Mobile Apps", path: "/mobile-apps", icon: <Cpu size={18} /> },
     ],
   },
   { name: "Skills", id: "skills" },
@@ -43,11 +43,11 @@ const navLinks: NavLinkItem[] = [
     name: "Services",
     id: "services",
     dropdown: [
-      { name: "Development", id: "services", icon: <Code size={20} /> },
+      { name: "Development", id: "services", icon: <Code size={18} /> },
       {
         name: "Consultancy",
         path: "/consultancy",
-        icon: <MessageSquare size={20} />,
+        icon: <MessageSquare size={18} />,
       },
     ],
   },
@@ -77,13 +77,13 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
 
   return (
     <div
-      className="relative group py-6"
+      className="relative"
       onMouseEnter={() => hasDropdown && setIsOpen(true)}
       onMouseLeave={() => hasDropdown && setIsOpen(false)}
     >
       <button
         onClick={() => handleNav(item.id, item.path)}
-        className={`flex items-center gap-2 text-xl font-bold transition-all ${
+        className={`flex items-center gap-1 text-sm font-medium transition-all ${
           active === item.id
             ? "text-cyan-400"
             : "text-gray-300 hover:text-white"
@@ -92,7 +92,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
         {item.name}
         {hasDropdown && (
           <ChevronDown
-            size={20}
+            size={14}
             className={`transition-transform duration-200 ${
               isOpen ? "rotate-180" : ""
             }`}
@@ -104,10 +104,10 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
       <AnimatePresence>
         {isOpen && hasDropdown && (
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 15 }}
-            className="absolute left-0 top-full mt-[-10px] min-w-[240px] bg-[#1e293b] border border-white/10 rounded-2xl shadow-2xl p-3 backdrop-blur-xl z-50"
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute left-0 top-full mt-2 min-w-[200px] bg-gray-900 border border-white/10 rounded-xl shadow-2xl p-2 z-50"
           >
             {item.dropdown!.map((sub, i) =>
               sub.path ? (
@@ -115,7 +115,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
                   key={i}
                   to={sub.path}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
+                  className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors"
                 >
                   <span className="text-cyan-500">{sub.icon}</span> {sub.name}
                 </Link>
@@ -123,7 +123,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
                 <button
                   key={i}
                   onClick={() => handleNav(sub.id)}
-                  className="flex items-center gap-4 w-full px-5 py-4 text-xl font-bold text-gray-400 hover:text-white hover:bg-white/5 rounded-xl"
+                  className="flex items-center gap-3 w-full px-4 py-2.5 text-sm font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors text-left"
                 >
                   <span className="text-cyan-500">{sub.icon}</span> {sub.name}
                 </button>
@@ -138,7 +138,7 @@ const NavItem: React.FC<NavItemProps> = ({ item, active, scrollToSection }) => {
 
 // --- NAVBAR COMPONENT -----------------------------------------
 
-export const Navbar: React.FC = () => {
+const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState<string | null>(null);
@@ -161,6 +161,7 @@ export const Navbar: React.FC = () => {
 
   const scrollToSection = (id: string) => {
     setMobileOpen(false);
+    setMobileExpanded(null);
 
     if (location.pathname !== "/") {
       window.location.href = `/#${id}`;
@@ -176,31 +177,31 @@ export const Navbar: React.FC = () => {
     <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled
-          ? "bg-[#0f172a]/95 backdrop-blur-md border-b border-white/10 py-4"
-          : "bg-transparent py-8"
+          ? "bg-gray-900/95 backdrop-blur-md border-b border-white/10 py-3"
+          : "bg-transparent py-5"
       }`}
     >
-      <div className="max-w-[1400px] mx-auto px-8 flex items-center justify-between">
+      <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between">
         {/* LOGO */}
-        <div
-          className="flex items-center gap-4 cursor-pointer group"
+        <button
+          className="flex items-center gap-3 group cursor-pointer"
           onClick={() => scrollToSection("home")}
         >
-          <div className="bg-gradient-to-tr from-cyan-500 to-blue-600 w-14 h-14 rounded-2xl flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg shadow-cyan-500/30">
-            <Code size={32} className="text-white" />
+          <div className="bg-gradient-to-tr from-cyan-500 to-purple-600 w-10 h-10 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform shadow-lg">
+            <Code size={20} className="text-white" />
           </div>
           <div className="flex flex-col leading-none">
-            <span className="text-3xl font-black text-white uppercase tracking-tighter">
+            <span className="text-xl font-bold text-white">
               Fitwi<span className="text-cyan-500">.</span>G
             </span>
-            <span className="text-[12px] uppercase tracking-[0.4em] text-gray-500 font-bold mt-2">
-              Creative Dev
+            <span className="text-[10px] uppercase tracking-wider text-gray-500">
+              Frontend Dev
             </span>
           </div>
-        </div>
+        </button>
 
         {/* DESKTOP NAV */}
-        <nav className="hidden xl:flex items-center space-x-12">
+        <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <NavItem
               key={link.id}
@@ -211,7 +212,7 @@ export const Navbar: React.FC = () => {
           ))}
           <button
             onClick={() => scrollToSection("contact")}
-            className="bg-white text-black px-10 py-4 rounded-full text-xl font-black hover:bg-cyan-400 hover:text-white transition-all transform hover:scale-105"
+            className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:scale-105 transition-all shadow-lg hover:shadow-cyan-500/25"
           >
             Hire Me
           </button>
@@ -219,10 +220,10 @@ export const Navbar: React.FC = () => {
 
         {/* MOBILE TOGGLE */}
         <button
-          className="xl:hidden text-white"
+          className="md:hidden text-white p-2"
           onClick={() => setMobileOpen(!mobileOpen)}
         >
-          {mobileOpen ? <X size={40} /> : <Menu size={40} />}
+          {mobileOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
@@ -233,9 +234,9 @@ export const Navbar: React.FC = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="xl:hidden bg-[#0f172a] border-t border-white/10 overflow-hidden"
+            className="md:hidden bg-gray-900 border-t border-white/10 overflow-hidden"
           >
-            <div className="px-10 py-12 space-y-8">
+            <div className="px-6 py-6 space-y-4">
               {navLinks.map((item) => (
                 <div key={item.id}>
                   <button
@@ -248,14 +249,14 @@ export const Navbar: React.FC = () => {
                         scrollToSection(item.id);
                       }
                     }}
-                    className={`flex items-center justify-between w-full text-3xl font-black uppercase tracking-wider ${
+                    className={`flex items-center justify-between w-full text-base font-medium py-2 ${
                       active === item.id ? "text-cyan-400" : "text-white"
                     }`}
                   >
                     {item.name}
                     {item.dropdown && (
                       <ChevronDown
-                        size={28}
+                        size={16}
                         className={`transition-transform ${
                           mobileExpanded === item.id ? "rotate-180" : ""
                         }`}
@@ -270,7 +271,7 @@ export const Navbar: React.FC = () => {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="mt-6 ml-8 border-l-4 border-white/10 space-y-6 overflow-hidden"
+                        className="ml-4 border-l-2 border-white/10 space-y-2 overflow-hidden"
                       >
                         {item.dropdown.map((sub, i) =>
                           sub.path ? (
@@ -278,7 +279,7 @@ export const Navbar: React.FC = () => {
                               key={i}
                               to={sub.path}
                               onClick={() => setMobileOpen(false)}
-                              className="flex items-center gap-6 text-2xl font-bold text-gray-400 pl-8 py-2 block"
+                              className="flex items-center gap-3 text-sm text-gray-400 pl-4 py-2 block"
                             >
                               <span className="text-cyan-500">{sub.icon}</span>
                               {sub.name}
@@ -287,7 +288,7 @@ export const Navbar: React.FC = () => {
                             <button
                               key={i}
                               onClick={() => sub.id && scrollToSection(sub.id)}
-                              className="flex items-center gap-6 text-2xl font-bold text-gray-400 pl-8 py-2 block text-left w-full"
+                              className="flex items-center gap-3 text-sm text-gray-400 pl-4 py-2 block text-left w-full"
                             >
                               <span className="text-cyan-500">{sub.icon}</span>
                               {sub.name}
@@ -299,6 +300,13 @@ export const Navbar: React.FC = () => {
                   </AnimatePresence>
                 </div>
               ))}
+
+              <button
+                onClick={() => scrollToSection("contact")}
+                className="w-full mt-4 bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-5 py-2.5 rounded-full text-sm font-medium hover:scale-105 transition-all"
+              >
+                Hire Me
+              </button>
             </div>
           </motion.div>
         )}
