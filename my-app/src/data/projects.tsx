@@ -14,8 +14,8 @@ const projects: Project[] = [
     description:
       "Production-ready admin dashboard with interactive analytics charts, dynamic user tables, and dark mode — built with React, Tailwind CSS, and Recharts.",
     tech: ["React", "Tailwind CSS", "Recharts"],
-    liveUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/my-dashboard",
-    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/dashboard", // TODO: link to specific repo
+    liveUrl: "https://vercel.com/fitwis-projects/my-dashboard",
+    githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/my-dashboard", // TODO: link to specific repo
   },
   {
     id: 2,
@@ -23,8 +23,7 @@ const projects: Project[] = [
     description:
       "Luxury travel platform with dynamic property listings, real-time reservations, and email integration via EmailJS — fully responsive across devices.",
     tech: ["Tailwind CSS", "EmailJS", "React Router", "TypeScript"],
-    liveUrl:
-      "https://github.com/F-Gebray/FOTO-REPO/tree/main/hotel-reservation",
+    liveUrl: "https://vercel.com/fitwis-projects/hotel-reservation",
     githubUrl:
       "https://github.com/F-Gebray/FOTO-REPO/tree/main/hotel-reservation", // TODO: link to specific repo
   },
