@@ -22,7 +22,7 @@ const projects: Project[] = [
     title: "Premium Architecture Booking",
     description:
       "Luxury travel platform with dynamic property listings, real-time reservations, and email integration via EmailJS — fully responsive across devices.",
-    tech: ["Tailwind CSS", "EmailJS", "React Router"],
+    tech: ["Tailwind CSS", "EmailJS", "React Router", "TypeScript"],
     liveUrl: "https://vercel.com/fitwis-projects/hotel-reservation",
     githubUrl:
       "https://github.com/F-Gebray/FOTO-REPO/tree/main/hotel-reservation", // TODO: link to specific repo
@@ -32,7 +32,7 @@ const projects: Project[] = [
     title: "FG-STORE",
     description:
       "Full-screen travel application with destination search, responsive layout, and smooth navigation — built with React and Tailwind CSS.",
-    tech: ["React", "Vite", "Tailwind CSS"],
+    tech: ["React", "Vite", "Tailwind CSS", "TypeScript"],
     liveUrl: "https://vercel.com/fitwis-projects/fg-store",
     githubUrl: "https://github.com/F-Gebray/FOTO-REPO/tree/main/FG-STORE",
   },
